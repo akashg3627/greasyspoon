@@ -1,7 +1,6 @@
 {
   "name": "reactapp",
   "version": "1.0.0",
-  "description": "The Tuition",
   "main": "index.js",
   "dependencies": {
     "bootstrap": "^4.4.1",
