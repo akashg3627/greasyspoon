@@ -1,39 +1,43 @@
-const express = require('express');
+const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const app = express();
 //const flash = require('connect-flash');
-const session = require('express-session');
-const passport = require('passport');
+const session = require("express-session");
+const passport = require("passport");
 //Passport config
-require('./config/passport')(passport);
+require("./config/passport")(passport);
 //passport is for authenticating only
 //flash message is a message stored in a session and displayed after a redirect of some sort
 
 //DB Config
-const db = require('./config/keys').MongoURI;
+const db = require("./config/keys").MongoURI;
 //Connect to mongo
-mongoose.connect(db, {
+mongoose
+    .connect(db, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-    }).then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
+    })
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.log(err));
 
 //EJS
 //app.use(expressLayouts);
 //app.set('view engine', 'ejs');
 //Bodyparser
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);
 //Express session
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-
-}))
+app.use(
+    session({
+        secret: "keyboard cat",
+        resave: false,
+        saveUninitialized: false,
+    })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 //Connect flash
@@ -48,8 +52,8 @@ app.use(passport.session());
 // });
 
 //Routes
-app.use('/api/menu', require('./routes/api_menu'));
-app.use('/api/dish', require('./routes/api_dish'));
+app.use("/api/menu", require("./routes/api_menu"));
+app.use("/api/dish", require("./routes/api_dish"));
 const PORT = process.env.PORT || 3000;
 app.listen(3000, () => {
     console.log(`Server started on ${PORT}`);
