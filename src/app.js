@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
@@ -5,8 +6,9 @@ const app = express();
 //const flash = require('connect-flash');
 const session = require("express-session");
 const passport = require("passport");
+const bodyParser = require("body-parser");
 //Passport config
-require("./config/passport")(passport);
+require("./config/passport-google")(passport);
 //passport is for authenticating only
 //flash message is a message stored in a session and displayed after a redirect of some sort
 
@@ -54,6 +56,7 @@ app.use(passport.session());
 //Routes
 app.use("/api/menu", require("./routes/api_menu"));
 app.use("/api/dish", require("./routes/api_dish"));
+app.use("/api/profile", require("./routes/api_profile"));
 const PORT = process.env.PORT || 3000;
 app.listen(3000, () => {
     console.log(`Server started on ${PORT}`);
