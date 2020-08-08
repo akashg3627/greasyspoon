@@ -22,7 +22,9 @@ router.post("/:cafeName", (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.status(200).json({ message: "Added menu successfully" });
+            res.status(200).json({
+                message: "Added menu successfully"
+            });
         }
     });
 });
@@ -68,3 +70,4 @@ router.delete("/:cafeName", (req, res) => {
         }
     );
 });
+module.exports = router;
