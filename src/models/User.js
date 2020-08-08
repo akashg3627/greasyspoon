@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     }],
     mobNumber: {
         type: Number,
+        //required:true
     },
     role: {
         type: String,

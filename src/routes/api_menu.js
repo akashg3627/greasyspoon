@@ -3,6 +3,11 @@ const router = express.Router();
 const _ = require("lodash");
 const Menu = require("../models/Menu");
 const Dish = require("../models/Dish");
+//working api endpoint /api/menu
+
+//returns the menu document by searching for the cafe name
+//for more details regarding case sensitivity find lodash lowercase documentation
+//_.lowercase(LDFDsJSD-dsaddsJDS) == ldfdsjsd dsaddsjds
 router.get("/:cafeName", (req, res) => {
     Menu.findOne({
             cafe_name: _.lowerCase(req.params.cafeName),
@@ -16,6 +21,8 @@ router.get("/:cafeName", (req, res) => {
         })
         .catch((err) => console.log(err));
 });
+
+//post a menu for a particular cafe(only if a menu for the cafe doesn't exist)
 router.post("/:cafeName", (req, res) => {
     let newMenu = new Menu(req.body);
     newMenu.save((err) => {
@@ -29,6 +36,7 @@ router.post("/:cafeName", (req, res) => {
     });
 });
 
+//edit the menu for the cafe
 router.patch("/:cafeName", (req, res) => {
     Menu.updateOne({
             cafe_name: _.lowerCase(req.params.cafeName),
@@ -42,6 +50,7 @@ router.patch("/:cafeName", (req, res) => {
         }
     );
 });
+//replace the menu for cafe
 router.put("/:cafeName", (req, res) => {
     Menu.replaceOne({
             cafe_name: _.lowerCase(req.params.cafeName),
@@ -55,7 +64,7 @@ router.put("/:cafeName", (req, res) => {
         }
     );
 });
-
+//delete a menu for a cafe
 router.delete("/:cafeName", (req, res) => {
     Dish.deleteOne({
             cafe_name: req.params.cafeName,

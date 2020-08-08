@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Dish = require("../models/Dish");
+// working route situated at /api/dish/
+// send post request to the working route with dish schema as specified in /models/Dish.js with forms having same names.
 router.post("/", (req, res) => {
     let newDish = new Dish(req.body);
     newDish.save((err) => {
@@ -13,7 +15,7 @@ router.post("/", (req, res) => {
             });
         }
     });
-
+    //get endpoint for getting dish details by id
     router.get("/:dishID", (req, res) => {
         Dish.findById(req.params.dishID), {
                 lean: true,
@@ -29,6 +31,7 @@ router.post("/", (req, res) => {
                 }
             };
     });
+    //replace a dish
     router.put("/:dishID", (req, res) => {
         Dish.replaceOne({
                 _id: req.params.dishID,
@@ -42,7 +45,7 @@ router.post("/", (req, res) => {
             }
         );
     });
-
+    //change dish price or name etc.
     router.patch("/:dishID", (req, res) => {
         Dish.updateOne({
                 _id: req.params.articleName,
@@ -56,6 +59,7 @@ router.post("/", (req, res) => {
             }
         );
     });
+    //delete a dish
     router.delete("/:dishID", (req, res) => {
         Dish.deleteOne({
                 _id: req.params.articleName,

@@ -3,12 +3,15 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Cafe = require("../models/Cafe").Cafe;
 const bcrypt = require("bcryptjs");
+//contains much of the logic for logging in
+//should be renamed passport.js
 
 var LocalStrategy = require("passport-local").Strategy;
 
+//function to help in the serialization and desirialisation of cookies
 function SessionConstructor(userId, userGroup, details) {
     this.userId = userId;
-    this.userGroup = userGroup;
+    this.userGroup = userGroup; //User or Cafe
     this.details = details;
 }
 module.exports = function(passport) {
@@ -18,12 +21,13 @@ module.exports = function(passport) {
                 clientSecret: process.env.CLIENT_SECRET,
                 callbackURL: process.env.CALLBACK_URL,
             },
-            //callback url = "http://localhost:3000/auth/google/secrets"
+            //callback url = "http://localhost:3000/api/profile/auth/google/callback"
             function(accessToken, refreshToken, profile, done) {
+                //callback function called when loggen into user
                 //check user table for anyone with a google ID of profile.id
                 if (!profile._json.hd || !profile._json.hd == "iiti.ac.in") {
-                    return done(new Error("Invalid host domain"));
-                }
+-                    return done(new Error("Invalid host domain"));
+-                }
                 User.findOne({
                         google_id: profile.id,
                     },
@@ -38,7 +42,7 @@ module.exports = function(passport) {
                             user = new User({
                                 name: profile.displayName,
                                 google_id: profile.id,
-                                role: "User",
+                                role: 'User'
                             });
                             user.save(function(err) {
                                 if (err) console.log(err);
@@ -54,29 +58,35 @@ module.exports = function(passport) {
         )
     );
     passport.use(
+        //fot cafe login
         new LocalStrategy({
                 usernameField: "email",
                 passwordField: "password",
             },
             function(username, password, done) {
-                console.log(username, password);
+                console.log(username, password)
                 Cafe.findOne({
                         email_id: username,
                     },
                     function(err, user) {
                         if (err) {
+                            //error
                             return done(err);
                         }
                         if (!user) {
-                            console.log("cafe not found");
+                            //user with the email not found
+                            console.log('cafe not found');
                             return done(null, false);
                         }
                         bcrypt.compare(password, user.password, (err, isMatch) => {
                             if (isMatch) {
+                                //password correct logged in
                                 return done(null, user);
                             } else {
-                                console.log("password incorrect");
+                                //password incorrect
+                                console.log('password incorrect')
                                 return done(null, false);
+
                             }
                         });
                     }
@@ -85,8 +95,9 @@ module.exports = function(passport) {
         )
     );
     passport.serializeUser(function(userObject, done) {
-        console.log("serialising", userObject);
-        // userObject could be a Model1 or a Model2... or Model3, Model4, etc.
+        //adds the userObject currently logged in session to browser cookie
+        console.log('serialising', userObject)
+            // userObject could be a Model1 or a Model2... or Model3, Model4, etc.
         let userGroup = "";
         if (userObject.role == "User") {
             userGroup = "User";
@@ -99,10 +110,14 @@ module.exports = function(passport) {
             ""
         );
         done(null, sessionConstructor);
+        //returns a javascript object with id and usergroup
     });
     passport.deserializeUser(function(sessionConstructor, done) {
-        console.log("deserializing", sessionConstructor);
+        //finds a session using received cookie
+        //receives a sessionConstructor object created in the serializer function
+        console.log('deserializing', sessionConstructor)
         if (sessionConstructor.userGroup == "User") {
+            //user object search in the User model
             User.findOne({
                     _id: sessionConstructor.userId,
                 },
@@ -115,6 +130,7 @@ module.exports = function(passport) {
                 }
             );
         } else if (sessionConstructor.userGroup == "Cafe") {
+            //search in the Cafe model
             Cafe.findOne({
                     _id: sessionConstructor.userId,
                 },

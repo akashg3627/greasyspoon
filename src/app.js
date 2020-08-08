@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config(); //for env vars
 const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
