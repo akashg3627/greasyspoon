@@ -26,7 +26,6 @@ router.get('/', ensureAuthenticated, (req, res) => {
     res.json(deepClone);
 });
 //provides ability to edit user document details.
-//warning: do not provide password field using this route as this route does not encrypt the password
 
 router.patch('/', ensureAuthenticated, (req, res) => {
         if (req.user.role == 'User') {
@@ -39,20 +38,24 @@ router.patch('/', ensureAuthenticated, (req, res) => {
                     if (err) {
                         console.log(err);
                     }
-                    writeOpResult[userType] = 'User'
+                    writeOpResult['userType'] = 'User'
                     res.json(writeOpResult);
                 }
             );
 
         } else {
-            Model.updateOne({
+            let deepClone = JSON.parse(JSON.stringify(req.body));
+            if (req.body.password) {
+                deepClone.password = bcrypt.hashSync(deepClone.password, 10)
+            }
+            Cafe.updateOne({
                         _id: req.user.id,
                     },
-                    req.body, (err, writeOpResult) => {
+                    deepClone, (err, writeOpResult) => {
                         if (err) {
                             console.log(err);
                         }
-                        writeOpResult[userType] = 'Cafe'
+                        writeOpResult['userType'] = 'Cafe'
                         res.json(writeOpResult);
                     }
                 )

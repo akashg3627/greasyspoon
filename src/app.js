@@ -32,6 +32,8 @@ app.use(
         extended: true,
     })
 );
+app.use(bodyParser.json());
+
 //Express session
 app.use(
     session({
@@ -40,7 +42,16 @@ app.use(
         saveUninitialized: false,
     })
 );
+//when user is authenticated its serialised to cookies and then attached to req.user(as well as req.session.passport.user)
+//on subsequent requests, passport.initialize() middleware is called. 
+//It finds the passport.user attached to the session, if it doesnt(user yet not authenticated) it creates it like req.passport.user={}
+//passport.initialize middleware is invoked on every request. It ensures the session contains a passport.user object, which may be empty
 app.use(passport.initialize());
+//next passport.session() is invoked. If it finds a serialised user object in the session, it considers the request to be authenticated. 
+//it then calls the passport.deserializeUser whule attaching the loaded user ibject to req as req.user()
+//passport.session middleware is a Passport Strategy which will load the user object onto req.user if a serialised user object was found in the server.
+//passport.deserializeUser is invoked on every request by passport.session. It enables us to load additional user information on every request. This user object is attached to the request as req.user making it accessible in our request handling.
+//
 app.use(passport.session());
 //Connect flash
 // app.use(flash());
@@ -55,8 +66,14 @@ app.use(passport.session());
 
 //Routes
 app.use("/api/menu", require("./routes/api_menu"));
-app.use("/api/dish", require("./routes/api_dish"));
+//app.use("/api/dish", require("./routes/api_dish")); no use as all the dishes are inside the Menu
 app.use("/api/profile", require("./routes/api_profile"));
+app.use("/api/cart", require("./routes/api_cart"));
+app.use("/api/order", require("./routes/api_order"));
+app.use("/api/cafe", require("./routes/api_cafe"));
+const router = require('express').Router();
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(3000, () => {
     console.log(`Server started on ${PORT}`);

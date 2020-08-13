@@ -3,14 +3,39 @@ const router = express.Router();
 const _ = require("lodash");
 const Menu = require("../models/Menu");
 const Dish = require("../models/Dish");
-//working api endpoint /api/menu
+const {
+    ensureAuthenticated,
+    ensureCafe
+} = require("../config/auth");
+const {
+    Cafe
+} = require('../models/Cafe')
+    //working api endpoint /api/menu
+    //returns list of all cafes
+router.get('/', (req, res) => {
+    Cafe.find({}, (err, cafes) => {
+        if (err) {
+            res.status(501).json({
+                error: err
+            })
+        } else {
+            cafesCopy = JSON.parse(JSON.stringify(cafes))
+            for (let i = 0; i < cafesCopy.length; i++) {
+                let workingCafe = cafesCopy[i];
+                delete workingCafe.password;
+                delete workingCafe.orders;
 
-//returns the menu document by searching for the cafe name
-//for more details regarding case sensitivity find lodash lowercase documentation
-//_.lowercase(LDFDsJSD-dsaddsJDS) == ldfdsjsd dsaddsjds
-router.get("/:cafeName", (req, res) => {
+            }
+            res.json(cafesCopy);
+        }
+    })
+});
+
+//working
+//returns menu of cafe with cafeid
+router.get("/:cafeid", (req, res) => {
     Menu.findOne({
-            cafe_name: _.lowerCase(req.params.cafeName),
+            cafe_id: req.params.cafeid,
         })
         .then((menu) => {
             if (menu) {
@@ -22,60 +47,53 @@ router.get("/:cafeName", (req, res) => {
         .catch((err) => console.log(err));
 });
 
-//post a menu for a particular cafe(only if a menu for the cafe doesn't exist)
-router.post("/:cafeName", (req, res) => {
-    let newMenu = new Menu(req.body);
-    newMenu.save((err) => {
-        if (err) {
-            res.send(err);
-        } else {
-            res.status(200).json({
-                message: "Added menu successfully"
-            });
-        }
-    });
-});
 
-//edit the menu for the cafe
-router.patch("/:cafeName", (req, res) => {
+router.post("/", ensureCafe, (req, res) => {
+    console.log(req.body);
+    console.log(req.user._id);
     Menu.updateOne({
-            cafe_name: _.lowerCase(req.params.cafeName),
-        },
-        req.body,
-        (err, writeOpResult) => {
-            if (err) {
-                console.log(err);
+            cafe_id: req.user._id
+        }, {
+            $push: {
+                items: req.body
             }
-            res.json(writeOpResult);
-        }
-    );
-});
-//replace the menu for cafe
-router.put("/:cafeName", (req, res) => {
-    Menu.replaceOne({
-            cafe_name: _.lowerCase(req.params.cafeName),
         },
-        req.body,
-        (err, writeOpResult) => {
+        (err, result) => {
             if (err) {
-                console.log(err);
+                res.json({
+                    'error': err
+                })
+            } else {
+                res.send(result);
             }
-            res.json(writeOpResult);
-        }
-    );
-});
-//delete a menu for a cafe
-router.delete("/:cafeName", (req, res) => {
-    Dish.deleteOne({
-            cafe_name: req.params.cafeName,
+        })
+})
+
+
+
+
+router.delete("/dish/:dishID", ensureCafe, (req, res) => {
+
+    Menu.findOneAndUpdate({
+            cafe_id: req.user._id,
+        }, {
+            $pull: {
+                items: {
+                    _id: req.params.dishID
+                }
+            }
+        }, {
+            new: true
         },
-        (err) => {
+        (err, response) => {
             if (!err) {
                 res.status(200).json({
                     status: "deleted",
+                    response: response
                 });
+            } else {
+                res.send(err);
             }
-            res.send(err);
         }
     );
 });

@@ -25,9 +25,6 @@ module.exports = function(passport) {
             function(accessToken, refreshToken, profile, done) {
                 //callback function called when loggen into user
                 //check user table for anyone with a google ID of profile.id
-                if (!profile._json.hd || !profile._json.hd == "iiti.ac.in") {
--                    return done(new Error("Invalid host domain"));
--                }
                 User.findOne({
                         google_id: profile.id,
                     },
@@ -36,13 +33,17 @@ module.exports = function(passport) {
                             return done(err);
                         }
                         console.log(profile);
+                        if (!profile._json.hd || !profile._json.hd == "iiti.ac.in") {
 
+                            return done(new Error("Invalid host domain"));
+                        }
                         //No user was found... so create a new user with values from Google (all the profile. stuff)
                         if (!user) {
                             user = new User({
                                 name: profile.displayName,
                                 google_id: profile.id,
-                                role: 'User'
+                                role: 'User',
+
                             });
                             user.save(function(err) {
                                 if (err) console.log(err);

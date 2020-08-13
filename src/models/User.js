@@ -1,25 +1,21 @@
-const mongoose = require('mongoose');
-const orderSchema = require('./Order').orderSchema
+const mongoose = require("mongoose");
+const { orderSchema } = require("./Order");
 const userSchema = new mongoose.Schema({
-
     name: {
         type: String,
-        required: true
+        required: true,
+        immutable: true,
     },
-    google_id: String,
-    previousOrders: [{
-        type: orderSchema,
-        immutable: true
-    }],
+    google_id: { type: String, immutable: true },
+    orders: [orderSchema],
     mobNumber: {
         type: Number,
         //required:true
     },
     role: {
         type: String,
-        immutable: true
+        immutable: true,
     },
-
-})
-const User = mongoose.model('User', userSchema)
+});
+const User = mongoose.model("User", userSchema);
 module.exports = User;
