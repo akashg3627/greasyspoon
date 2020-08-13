@@ -35,10 +35,14 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
     //mantain only one cart at a time
     //find all carts first
     //make sure only one cart is present at a time
-    let workingMenu = Menu.findOne({
-        cafe_id: req.params.cafe_id
-    });
-
+    let workingMenu;
+    try {
+        workingMenu = await Menu.findOne({
+            cafe_id: req.params.cafe_id
+        }).exec();
+    } catch (err) {
+        console.log(err);
+    }
     Cart.findOne({
         user_id: req.user._id,
     }, async(err, cart) => {
@@ -46,9 +50,19 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
             console.log(err)
             res.status(501).send('error');
         }
-        let dish = workingMenu.items.id(req.params.dish_id);
+        console.log(workingMenu.items);
+        let dish = await workingMenu.items.id(req.params.dish_id);
+        // for (let i = 0; i < workingMenu.items.length; i++) {
+        //     let workingDish = workingMenu.items[i];
+        //     if (workingDish._id == req.params.dish_id) {
+        //         dish = workingMenu.items[i];
+        //         break;
+        //     }
+
+        // }
         let cafe_id = req.params.cafe_id;
         if (cart) {
+            console.log(cart)
             if (cart.cafe_id == cafe_id) {
                 let dishesCopy = JSON.parse(JSON.stringify(cart.dishes));
                 let dishExists = false;
@@ -77,7 +91,15 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
                 cart.total_price = cart.total_price + dish.price;
 
                 cart.dishes = dishesCopy;
-                cart.save();
+                cart.save((err, saved) => {
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        res.json({
+                            success: 'added successfully'
+                        });
+                    }
+                });
             } else {
                 // contains dish of some other cafe //overwrite it 
                 const tobepushed = new cartDish({
@@ -97,7 +119,15 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
                     total_price: dish.price,
                     dishes: [tobepushed]
                 });
-                await cart.save();
+                await cart.save((err, saved) => {
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        res.json({
+                            success: 'added successfully'
+                        });
+                    }
+                });
             }
         } else { //no cart for the user
             const tobepushed = new cartDish({
@@ -117,7 +147,15 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
                 total_price: dish.price,
                 dishes: [tobepushed]
             })
-            newCart.save();
+            newCart.save((err, saved) => {
+                if (err) {
+                    res.send(err)
+                } else {
+                    res.json({
+                        success: 'added successfully'
+                    });
+                }
+            });
         }
 
 
@@ -126,7 +164,7 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
 
 router.delete('/:dish_id/', ensureUser, async(req, res) => {
     try {
-        await Cart.updateOne({
+        let resp1 = await Cart.updateOne({
             user_id: req.user._id,
             "dishes.dish_id": req.params.dish_id
         }, {
@@ -134,7 +172,7 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
                 "dishes.$.quantity": -1
             }
         }).exec();
-        await Cart.updateOne({
+        let resp2 = await Cart.updateOne({
             user_id: req.user._id
         }, {
             $pull: {
@@ -144,7 +182,9 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
             }
         }).exec()
         res.json({
-            message: 'removed one instance of the dish'
+            message: 'removed one instance of the dish',
+            resp1,
+            resp2
         })
     } catch (err) {
         res.send(err);

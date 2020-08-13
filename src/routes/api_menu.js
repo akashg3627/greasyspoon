@@ -57,6 +57,8 @@ router.post("/", ensureCafe, (req, res) => {
             $push: {
                 items: req.body
             }
+        }, {
+            upsert: true
         },
         (err, result) => {
             if (err) {
