@@ -3,14 +3,16 @@ const {
     ensureAuthenticated
 } = require('../config/auth');
 const Dish = require('../models/Dish');
-const Cart = require('../models/Cart');
+const User = require('../models/User')
+const {
+    Cart
+} = require('../models/Cart');
 const {
     Order
 } = require('../models/Order');
 const {
     Cafe
 } = require('../models/Cafe');
-
 const router = require('express').Router();
 
 router.post('/', ensureUser, async(req, res) => {
@@ -34,17 +36,29 @@ router.post('/', ensureUser, async(req, res) => {
         currUser = await User.findOne({
             _id: req.user._id
         })
-        currUser.Orders.push(workingOrder);
+        currUser.orders.push(workingOrder);
         currCafe = await Cafe.findOne({
             _id: workingCart.cafe_id
         })
         currCafe.orders.push(workingOrder);
         currUser.save(err => {
-            res.send(err)
+            if (err) {
+                res.send(err)
+            }
         });
         currCafe.save(err => {
-            res.send(err)
+            if (err) {
+                res.send(err)
+            }
         });
+        Cart.deleteOne({
+            user_id: req.user._id
+        }, (err, result) => {
+            if (err) throw err;
+            else {
+                console.log(result);
+            }
+        })
         res.json({
             message: 'success',
             orderStatus: 'pending',
@@ -58,7 +72,7 @@ router.get('/:user_id/:order_id', ensureAuthenticated, async(req, res) => {
         _id: req.params.user_id
     })
     try {
-        workingOrder = workingUser.Orders.id(req.params.order_id);
+        workingOrder = workingUser.orders.id(req.params.order_id);
         res.json({
             order: workingOrder
         });
