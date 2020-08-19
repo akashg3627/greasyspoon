@@ -2,11 +2,12 @@ const dishImport = require("./Dish");
 const dishSchema = dishImport.dishSchema;
 const mongoose = require("mongoose");
 const menuSchema = new mongoose.Schema({
-    cafe_name: String,
     cafe_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Cafe',
         unique: true,
-        dropDups: true
+        dropDups: true,
     },
     items: [dishSchema],
 });

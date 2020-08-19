@@ -4,12 +4,19 @@ var Currency = mongoose.Types.Currency;
 
 const dishSchema = new mongoose.Schema({
     dish_name: String,
-    cafe_id: String,
-    price: Currency,
+    cafe_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Cafe'
+    },
+    price: {
+        type: Number
+    },
     availability: Boolean,
     totalRating: Number,
     ratingCount: Number,
     pictureURL: String,
+    description: String,
 }, {
     discriminatorKey: 'kind'
 });

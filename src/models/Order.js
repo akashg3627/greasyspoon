@@ -6,13 +6,21 @@ const {
     cartDishSchema
 } = require('./Cart')
 const orderSchema = new mongoose.Schema({
-    user_id: String,
-    cafe_id: String,
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
+    cafe_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Cafe'
+    },
     dishes: [
         cartDishSchema
     ],
     status: String,
-    total_price: Number,
+    total_price: Number, //in paisas
     time_placed: {
         type: Date,
         default: Date.now

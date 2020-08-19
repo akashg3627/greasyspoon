@@ -4,10 +4,12 @@ const cafeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true
     },
     email_id: {
         type: String,
         required: true,
+        unique: true,
     },
     orders: [orderSchema],
     mobNumber: {
@@ -21,6 +23,8 @@ const cafeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    logoURL: String, //to display on list of cafes
+    imageURL: String, //to display on the menu page
+    description: String,
 });
-const Cafe = mongoose.model("Cafe", cafeSchema);
-module.exports.Cafe = Cafe;
+module.exports.Cafe = Cafe = mongoose.model("Cafe", cafeSchema);

@@ -7,6 +7,7 @@ const app = express();
 const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -21,8 +22,7 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.log(err));
-
+    .catch((err) => console.log(err.message));
 //EJS
 //app.use(expressLayouts);
 //app.set('view engine', 'ejs');
@@ -33,8 +33,8 @@ app.use(
     })
 );
 app.use(bodyParser.json());
-
-//Express session
+app.use(helmet())
+    //Express session
 app.use(
     session({
         secret: "keyboard cat",
@@ -63,6 +63,7 @@ app.use(passport.session());
 //     res.locals.error_msg = req.flash('error')
 //     next();
 // });
+app.use('/public', express.static('public'))
 
 //Routes
 app.use("/api/menu", require("./routes/api_menu"));

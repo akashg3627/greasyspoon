@@ -20,14 +20,16 @@ router.get('/', ensureUser, async(req, res) => {
             user_id: req.user._id
         }).exec();
         if (cart) {
-            res.send(cart);
+            res.status(200).json(cart);
         } else {
             res.status(404).json({
                 message: 'cart not found'
             })
         }
     } catch (err) {
-        res.send(err);
+        res.status(500).json({
+            error: err.message
+        });
     }
 });
 
@@ -41,7 +43,7 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
             cafe_id: req.params.cafe_id
         }).exec();
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
     Cart.findOne({
         user_id: req.user._id,
@@ -88,12 +90,14 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
                     })
                     dishesCopy.push(tobepushed);
                 }
-                cart.total_price = cart.total_price + dish.price;
+                cart.total_price = Number(cart.total_price) + Number(dish.price);
 
                 cart.dishes = dishesCopy;
                 cart.save((err, saved) => {
                     if (err) {
-                        res.send(err)
+                        res.status(500).json({
+                            error: 'Unable to add'
+                        })
                     } else {
                         res.json({
                             success: 'added successfully'
@@ -121,7 +125,9 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
                 });
                 await cart.save((err, saved) => {
                     if (err) {
-                        res.send(err)
+                        res.status(500).json({
+                            error: 'Unable to add'
+                        })
                     } else {
                         res.json({
                             success: 'added successfully'
@@ -149,7 +155,9 @@ router.post('/:cafe_id/:dish_id', ensureUser, async(req, res) => {
             })
             newCart.save((err, saved) => {
                 if (err) {
-                    res.send(err)
+                    res.status(500).json({
+                        error: 'Unable to add'
+                    })
                 } else {
                     res.json({
                         success: 'added successfully'
@@ -187,7 +195,10 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
             resp2
         })
     } catch (err) {
-        res.send(err);
+        res.status(500).error({
+            error: 'Unable to remove dish',
+            err: err.message
+        });
     }
 });
 
@@ -204,7 +215,7 @@ router.delete('/:dish_id/all', ensureUser, (req, res) => {
         if (err) throw err;
         else {
             console.log(result);
-            res.send(result);
+            res.status(200).json(result);
         }
     })
 });

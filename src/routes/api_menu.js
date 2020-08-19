@@ -7,28 +7,28 @@ const {
     ensureAuthenticated,
     ensureCafe
 } = require("../config/auth");
+const upload = require('../config/multer_support')
+
 const {
     Cafe
 } = require('../models/Cafe')
     //working api endpoint /api/menu
     //returns list of all cafes
-router.get('/', (req, res) => {
-    Cafe.find({}, (err, cafes) => {
-        if (err) {
-            res.status(501).json({
-                error: err
-            })
-        } else {
-            cafesCopy = JSON.parse(JSON.stringify(cafes))
-            for (let i = 0; i < cafesCopy.length; i++) {
-                let workingCafe = cafesCopy[i];
-                delete workingCafe.password;
-                delete workingCafe.orders;
+router.get('/', async(req, res) => {
+    try {
+        let cafeList = await Cafe.find().select({
+            orders: -1,
+            password: -1
+        }).exec();
+        res.status(200).json(cafeList);
 
-            }
-            res.json(cafesCopy);
-        }
-    })
+    } catch (err) {
+        res.status(500).json({
+            error: err,
+            err: err.message
+        })
+    }
+
 });
 
 //working
@@ -44,18 +44,24 @@ router.get("/:cafeid", (req, res) => {
                 res.sendStatus(404);
             }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err.message));
 });
 
 
-router.post("/", ensureCafe, (req, res) => {
+router.post("/", ensureCafe, upload.single('dishImage'), (req, res) => {
     console.log(req.body);
+    let deepClone = JSON.parse(JSON.stringify(req.body));
+    if (req.file != undefined) {
+        deepClone.pictureURL = req.file.path;
+    }
+    deepClone.cafe_id = req.user._id;
+
     console.log(req.user._id);
     Menu.updateOne({
             cafe_id: req.user._id
         }, {
             $push: {
-                items: req.body
+                items: deepClone,
             }
         }, {
             upsert: true
@@ -66,7 +72,7 @@ router.post("/", ensureCafe, (req, res) => {
                     'error': err
                 })
             } else {
-                res.send(result);
+                res.status(200).json(result);
             }
         })
 })
@@ -94,7 +100,9 @@ router.delete("/dish/:dishID", ensureCafe, (req, res) => {
                     response: response
                 });
             } else {
-                res.send(err);
+                res.status(500).json({
+                    error: 'Unable to delete'
+                });
             }
         }
     );

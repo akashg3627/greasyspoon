@@ -14,14 +14,16 @@ const cartDish = Dish.discriminator('cartDish', new mongoose.Schema({
 const cartDishSchema = cartDish.schema
 const cartSchema = new mongoose.Schema({
     user_id: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     },
     cafe_id: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Cafe'
     },
-    total_price: mongoose.Decimal128,
+    total_price: Number, //in paisas
     dishes: [
         cartDishSchema
     ],

@@ -21,13 +21,16 @@ router.post('/', ensureUser, async(req, res) => {
         user_id: req.user._id
     }).lean();
     if (!workingCart) {
-        res.status(404).send('no working cart found');
+        res.status(404).json({
+            error: 'no working cart found'
+        });
     } else {
         workingCartCopy = JSON.parse(JSON.stringify(workingCart))
         console.log('found cart');
         console.log(workingCartCopy);
         delete workingCartCopy._id;
         console.log('creating order');
+
         workingOrder = new Order({
             ...workingCartCopy,
             status: 'Yet to be accepted'
@@ -43,23 +46,29 @@ router.post('/', ensureUser, async(req, res) => {
         currCafe.orders.push(workingOrder);
         currUser.save(err => {
             if (err) {
-                res.send(err)
+                res.status(500).json({
+                    error: 'Unable to create order'
+                })
             }
         });
         currCafe.save(err => {
             if (err) {
-                res.send(err)
+                res.status(500).json({
+                    error: 'Unable to create order(order saved in user db but not in cafedb'
+                })
             }
         });
         Cart.deleteOne({
             user_id: req.user._id
         }, (err, result) => {
-            if (err) throw err;
+            if (err) res.status(500).json({
+                error: 'Order created but cart unable to delete'
+            });
             else {
                 console.log(result);
             }
         })
-        res.json({
+        res.status(200).json({
             message: 'success',
             orderStatus: 'pending',
             object: workingOrder
@@ -79,7 +88,7 @@ router.get('/:user_id/:order_id', ensureAuthenticated, async(req, res) => {
 
     } catch (err) {
         res.json({
-            error: err
+            error: err.message
         });
     }
 });

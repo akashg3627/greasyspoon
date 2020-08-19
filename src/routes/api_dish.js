@@ -7,7 +7,9 @@ router.post("/", (req, res) => {
     let newDish = new Dish(req.body);
     newDish.save((err) => {
         if (err) {
-            res.send(err);
+            res.status(500).json({
+                error: 'unable to add dish'
+            });
         } else {
             res.status(200).json({
                 saved: true,
@@ -69,8 +71,11 @@ router.post("/", (req, res) => {
                     res.status(200).json({
                         status: "deleted",
                     });
+                } else {
+                    res.status(500).json({
+                        err: 'unable to delete the dish'
+                    });
                 }
-                res.send(err);
             }
         );
     });

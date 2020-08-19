@@ -18,8 +18,8 @@ router.get('/orders', ensureCafe, (req, res) => {
             }
         )
         .catch(err => {
-            res.status(501).json({
-                Error: err
+            res.status(500).json({
+                Error: err.message
             })
         })
 
