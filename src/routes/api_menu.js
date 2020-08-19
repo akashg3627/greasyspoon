@@ -17,8 +17,8 @@ const {
 router.get('/', async(req, res) => {
     try {
         let cafeList = await Cafe.find().select({
-            orders: -1,
-            password: -1
+            orders: 0,
+            password: 0
         }).exec();
         res.status(200).json(cafeList);
 
@@ -55,24 +55,28 @@ router.post("/", ensureCafe, upload.single('dishImage'), (req, res) => {
         deepClone.pictureURL = req.file.path;
     }
     deepClone.cafe_id = req.user._id;
-
+    deepClone.availability = (deepClone.availability == 'true');
     console.log(req.user._id);
-    Menu.updateOne({
+    Menu.findOneAndUpdate({
             cafe_id: req.user._id
         }, {
             $push: {
                 items: deepClone,
             }
         }, {
+            new: true,
             upsert: true
         },
-        (err, result) => {
+        (err, workingMenu) => {
             if (err) {
                 res.json({
-                    'error': err
+                    'error': err.message
                 })
             } else {
-                res.status(200).json(result);
+                res.status(200).json({
+                    status: 'Added',
+                    newMenu: workingMenu
+                });
             }
         })
 })
@@ -80,7 +84,7 @@ router.post("/", ensureCafe, upload.single('dishImage'), (req, res) => {
 
 
 
-router.delete("/dish/:dishID", ensureCafe, (req, res) => {
+router.delete("/:dishID", ensureCafe, (req, res) => {
 
     Menu.findOneAndUpdate({
             cafe_id: req.user._id,
