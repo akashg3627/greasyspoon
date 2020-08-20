@@ -35,7 +35,9 @@ module.exports = function(passport) {
                         console.log(profile);
                         if (!profile._json.hd || !profile._json.hd == "iiti.ac.in") {
 
-                            return done(new Error("Invalid host domain"));
+                            return done(null, false, {
+                                message: 'Only sign in using iiti domain email is allowed.'
+                            });
                         }
                         //No user was found... so create a new user with values from Google (all the profile. stuff)
                         if (!user) {

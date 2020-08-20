@@ -72,8 +72,31 @@ app.use("/api/profile", require("./routes/api_profile"));
 app.use("/api/cart", require("./routes/api_cart"));
 app.use("/api/order", require("./routes/api_order"));
 app.use("/api/cafe", require("./routes/api_cafe"));
-const router = require('express').Router();
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
 
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'fail',
+        message: `Can't find ${req.originalUrl} on this server!`
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(3000, () => {

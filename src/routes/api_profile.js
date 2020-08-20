@@ -132,6 +132,7 @@ router.get('/check', (req, res) => {
 router.get('/login/user',
         passport.authenticate("google", {
             scope: ["profile", "email"],
+            failureRedirect: '/login/failure'
         }), (req, res) => {
             console.log('login request');
         })
