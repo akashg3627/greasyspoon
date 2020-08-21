@@ -72,15 +72,6 @@ app.use("/api/profile", require("./routes/api_profile"));
 app.use("/api/cart", require("./routes/api_cart"));
 app.use("/api/order", require("./routes/api_order"));
 app.use("/api/cafe", require("./routes/api_cafe"));
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
 app.get('/404', function(req, res, next) {
     // trigger a 404 since no other middleware
     // will match /404 after this one, and we're not
@@ -132,8 +123,7 @@ app.use(function(err, req, res, next) {
     // we may use properties of the error object
     // here and next(err) appropriately, or if
     // we possibly recovered from the error, simply next().
-    res.status(err.status || 500);
-    res.render('500', {
+    res.status(err.status || 500).json({
         error: err.message
     });
 });
