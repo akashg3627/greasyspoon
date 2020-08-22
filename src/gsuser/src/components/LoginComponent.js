@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input, Col, Card, CardBody, CardHeader, Button, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import {Link} from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 
 
 function LoginComponent(props) {
@@ -14,6 +15,14 @@ function LoginComponent(props) {
         console.log("buttun clicked")
         props.loginGoogleUser();
     }
+
+    function responseGoogle(res){
+if(res)
+{props.loginGoogleUser()}
+else{
+    console.log("google login failed")
+}
+    }
     
     function handleLogout() {
         this.props.logoutUser();
@@ -23,7 +32,7 @@ function LoginComponent(props) {
     function Cafelogin() {
         return (
             <CardBody>
-                <Form className="mt-2" onSubmit="">
+                <Form className="mt-2" onSubmit={handleGoogleLogin}>
                     <FormGroup row>
                         <Label for="userid">User Name</Label>
                         <Input type="email" name="userid" id="userid" placeholder="User Name" />
@@ -64,7 +73,13 @@ function LoginComponent(props) {
     function Userlogin() {
         return (
             <CardBody>
-                <Button onClick={handleGoogleLogin} color="danger" size="lg" block><span className="fa fa-google-plus"></span> LogIn with institute id</Button>
+                <GoogleLogin
+                clientId="899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
+                buttonText="Login using Google"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                className="btn btn-outline-danger"
+                 />
             </CardBody>
         );
     }

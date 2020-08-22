@@ -3,12 +3,14 @@ const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
 const app = express();
+
 //const flash = require('connect-flash');
 const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require('cors');
+app.use(cors);
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -66,7 +68,7 @@ app.use(passport.session());
 //     next();
 // });
 app.use('/public', express.static('public'))
-app.use(cors);
+
 //Routes
 app.use("/api/menu", require("./routes/api_menu"));
 //app.use("/api/dish", require("./routes/api_dish")); no use as all the dishes are inside the Menu

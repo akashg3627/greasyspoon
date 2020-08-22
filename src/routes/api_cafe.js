@@ -12,7 +12,7 @@ router.get('/orders', ensureCafe, (req, res) => {
             _id: req.user._id
         }).then(
             cafe => {
-                res.status(400).json({
+                res.status(200).json({
                     orders: cafe.orders
                 });
             }

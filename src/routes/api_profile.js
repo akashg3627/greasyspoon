@@ -8,6 +8,7 @@ const _ = require('lodash')
 const {
     ensureAuthenticated
 } = require('../config/auth');
+const authenticate =require('../config/passport-google');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 //User model
@@ -134,9 +135,8 @@ router.get('/login/user',
         passport.authenticate("google", {
             scope: ["profile", "email"],
             failureRedirect: '/login/failure'
-        }), (req, res) => {
-
-            console.log('login request');
+        }),(req, res)=>{
+            console.log("google login")
         })
     //login api endpoint for Cafe login
     //redirects to working_route/login/failure if not authenticated
@@ -152,10 +152,13 @@ router.post('/login/cafe', passport.authenticate('local', {
     //do not send direct requests to this endpoint
 router.get('/auth/google/callback', function(req, res) {
     if (req.user) {
+        console.log(req.user);
+        const token = authenticate.getToken({ _id: req.user._id })
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true,  status: 'You are successfully logged in!' });
+        res.json({ success: true,  status: 'You are successfully logged in!', token: token });
       }
+      console.log("callback called")
     })
     //logout route for all user types
 router.get('/logout', (req, res) => {

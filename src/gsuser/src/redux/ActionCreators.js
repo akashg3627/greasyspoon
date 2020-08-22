@@ -1,9 +1,11 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import axios from 'axios';
 
-export const requestLogin = () => {
+export const requestLogin = (creds) => {
     return {
-        type: ActionTypes.LOGIN_REQUEST
+        type: ActionTypes.LOGIN_REQUEST,
+        payload: null
     }
 }
   
@@ -65,8 +67,9 @@ export const loginGoogleUser = () => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin())
 
-    return fetch('/api/profile/login/user')
+    return axios.get(baseUrl + '/profile/login/user')
     .then(response => {
+        console.log("response recieveds")
         if (response.ok) {
             return response;
         } else {
@@ -82,7 +85,7 @@ export const loginGoogleUser = () => (dispatch) => {
     .then(response => {
         if (response.success) {
             // If login was successful, set the token in local storage
-            // localStorage.setItem('token', response.token);
+            localStorage.setItem('token', response.token);
             //localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
             dispatch(receiveLogin(response));
