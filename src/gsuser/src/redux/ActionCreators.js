@@ -1,17 +1,15 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
-export const requestLogin = (creds) => {
+export const requestLogin = () => {
     return {
-        type: ActionTypes.LOGIN_REQUEST,
-        creds
+        type: ActionTypes.LOGIN_REQUEST
     }
 }
   
 export const receiveLogin = (response) => {
     return {
-        type: ActionTypes.LOGIN_SUCCESS,
-        token: response.token
+        type: ActionTypes.LOGIN_SUCCESS
     }
 }
   
@@ -67,7 +65,7 @@ export const loginGoogleUser = () => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin())
 
-    return fetch(baseUrl + 'users/google')
+    return fetch('/api/profile/login/user')
     .then(response => {
         if (response.ok) {
             return response;
@@ -84,7 +82,7 @@ export const loginGoogleUser = () => (dispatch) => {
     .then(response => {
         if (response.success) {
             // If login was successful, set the token in local storage
-            localStorage.setItem('token', response.token);
+            // localStorage.setItem('token', response.token);
             //localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
             dispatch(receiveLogin(response));

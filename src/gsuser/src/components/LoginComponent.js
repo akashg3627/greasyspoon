@@ -10,10 +10,9 @@ function LoginComponent(props) {
     const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     }
-    function handleLogin(event) {
-        props.loginUser({username: this.username.value, password: this.password.value});
-        event.preventDefault();
-    
+    function handleGoogleLogin() {
+        console.log("buttun clicked")
+        props.loginGoogleUser();
     }
     
     function handleLogout() {
@@ -65,7 +64,7 @@ function LoginComponent(props) {
     function Userlogin() {
         return (
             <CardBody>
-                <Button color="danger" size="lg" block><span className="fa fa-google-plus"></span> LogIn with institute id</Button>
+                <Button onClick={handleGoogleLogin} color="danger" size="lg" block><span className="fa fa-google-plus"></span> LogIn with institute id</Button>
             </CardBody>
         );
     }
