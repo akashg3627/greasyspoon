@@ -8,7 +8,6 @@ const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
-const cors = require('cors');
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -35,7 +34,6 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(helmet())
-
     //Express session
 app.use(
     session({
@@ -66,7 +64,7 @@ app.use(passport.session());
 //     next();
 // });
 app.use('/public', express.static('public'))
-app.use(cors);
+
 //Routes
 app.use("/api/menu", require("./routes/api_menu"));
 //app.use("/api/dish", require("./routes/api_dish")); no use as all the dishes are inside the Menu
@@ -130,6 +128,6 @@ app.use(function(err, req, res, next) {
     });
 });
 const PORT = process.env.PORT || 5000;
-app.listen(5000, () => {
+app.listen(PORT, () => {
     console.log(`Server started on ${PORT}`);
 });

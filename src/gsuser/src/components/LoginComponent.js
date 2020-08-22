@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input, Col, Card, CardBody, CardHeader, Button, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function LoginComponent(props) {
@@ -14,12 +14,12 @@ function LoginComponent(props) {
         console.log("buttun clicked")
         props.loginGoogleUser();
     }
-    
+
     function handleLogout() {
         this.props.logoutUser();
     }
-    
-    
+
+
     function Cafelogin() {
         return (
             <CardBody>
@@ -39,8 +39,8 @@ function LoginComponent(props) {
             </CardBody>
         );
     }
-    
-    function Cafesignup(){
+
+    function Cafesignup() {
         return (
             <CardBody>
                 <Form className="mt-2">
@@ -55,16 +55,16 @@ function LoginComponent(props) {
                     <FormGroup className="mt-5">
                         <Button color="primary" size="lg" block>Login</Button>
                     </FormGroup>
-                    
+
                 </Form>
             </CardBody>
         );
     }
-    
+
     function Userlogin() {
         return (
             <CardBody>
-                <Button onClick={handleGoogleLogin} color="danger" size="lg" block><span className="fa fa-google-plus"></span> LogIn with institute id</Button>
+                <a href="http://localhost:5000/api/profile/login/user" color="danger" size="lg" block><span className="fa fa-google-plus"></span> LogIn with institute id</a>
             </CardBody>
         );
     }

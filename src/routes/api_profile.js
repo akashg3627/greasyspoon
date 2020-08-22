@@ -17,8 +17,7 @@ const {
 } = require('mongoose');
 const bodyParser = require('body-parser');
 const Cafe = require('../models/Cafe').Cafe;
-const upload = require('../config/multer_support');
-const cors= require('../cors');
+const upload = require('../config/multer_support')
 
 //working api route is /api/profile
 
@@ -130,12 +129,11 @@ router.get('/check', (req, res) => {
         }
     })
     //allows User login using google oauth 2 (login only if from iiti domain name)
-router.get('/login/user', 
+router.get('/login/user',
         passport.authenticate("google", {
             scope: ["profile", "email"],
             failureRedirect: '/login/failure'
         }), (req, res) => {
-
             console.log('login request');
         })
     //login api endpoint for Cafe login
@@ -143,19 +141,14 @@ router.get('/login/user',
 router.post('/login/cafe', passport.authenticate('local', {
         failureRedirect: '/login/failure'
     }), (req, res) => {
-        
         res.status(200).json({
             message: 'Cafe log-in successful'
         })
     })
     //callback for google login.
     //do not send direct requests to this endpoint
-router.get('/auth/google/callback', function(req, res) {
-    if (req.user) {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true,  status: 'You are successfully logged in!' });
-      }
+router.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
+        res.redirect('http://localhost:3000/');
     })
     //logout route for all user types
 router.get('/logout', (req, res) => {

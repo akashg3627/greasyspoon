@@ -7,24 +7,19 @@ const {
 
 const router = require('express').Router();
 
-router.get('/orders', ensureCafe, (req, res) => {
-    Cafe.findOne({
-            _id: req.user._id
-        }).then(
-            cafe => {
-                res.status(400).json({
-                    orders: cafe.orders
-                });
-            }
-        )
-        .catch(err => {
-            res.status(500).json({
-                Error: err.message
-            })
+router.get('/orders', ensureCafe, async(req, res, next) => {
+
+    try {
+        let workingCafe = await Cafe.findOne({ _id: req.user._id })
+        await res.status(workingCafe ? 200 : 404).json({
+            orders: workingCafe.orders ? workingCafe.orders : null
         })
+    } catch (err) {
+        next(err);
+    }
 
 });
-router.get('/:orderID/accept', (req, res) => {
+router.post('/:orderID/accept', (req, res) => {
     Cafe.findOneAndUpdate({
         _id: req.user._id,
         "orders._id": req.params.orderID,
@@ -85,6 +80,43 @@ router.get('/:orderID/complete', (req, res) => {
                 }, {
                     $set: {
                         "orders.$.status": 'Completed the order, please take the order'
+                    }
+                })
+                .then((err, result) => {
+                    if (err) {
+                        res.status(501).json('Could not update in user but updated in cafe')
+                    } else {
+                        res.status(200).json('Operation completed');
+                    };
+                })
+        }
+    })
+
+})
+router.get('/:orderID/reject', (req, res) => {
+    Cafe.findOneAndUpdate({
+        _id: req.user._id,
+        "orders._id": req.params.orderID,
+    }, {
+        $set: {
+            "orders.$.status": 'Order rejected'
+        }
+    }, {
+        new: true
+    }, (err, doc) => {
+        if (err) {
+            res.status(500)
+                .json({
+                    error: 'Unable to make the operation.',
+                });
+        } else {
+            workingOrder = doc.orders.id(req.params.orderID);
+            User.update({
+                    _id: workingOrder.user_id,
+                    'orders._id': workingOrder._id
+                }, {
+                    $set: {
+                        "orders.$.status": 'Order rejected'
                     }
                 })
                 .then((err, result) => {
