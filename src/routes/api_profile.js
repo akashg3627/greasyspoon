@@ -168,4 +168,10 @@ router.get('/logout', (req, res) => {
         message: 'logged out successfully'
     })
 })
+router.get('login/failure', (req, res)=>{
+    req.status(404).json({
+        errMess: "Could not login"
+    })
+})
+
 module.exports = router;

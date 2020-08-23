@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 
 function HeaderComponent(props) {
@@ -40,9 +40,11 @@ function HeaderComponent(props) {
                                     <span className="fa fa-search fa-lg"></span>
                                 </NavLink>
                             </NavItem>
+                            <Link to="/login">
                             <Button className="nav-link btn-login">
                                 <span className="fa fa-bars fa-lg"></span>
                             </Button>
+                            </Link>
                         </Nav>
                     </Collapse>
                 </div>
