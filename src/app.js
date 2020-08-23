@@ -9,8 +9,11 @@ const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+<<<<<<< HEAD
 const cors = require('cors');
 app.use(cors());
+=======
+>>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -37,7 +40,6 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(helmet())
-
     //Express session
 app.use(
     session({
@@ -132,6 +134,6 @@ app.use(function(err, req, res, next) {
     });
 });
 const PORT = process.env.PORT || 5000;
-app.listen(5000, () => {
+app.listen(PORT, () => {
     console.log(`Server started on ${PORT}`);
 });

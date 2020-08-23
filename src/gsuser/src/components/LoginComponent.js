@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input, Col, Card, CardBody, CardHeader, Button, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+<<<<<<< HEAD
 import {Link} from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
+=======
+import { Link } from 'react-router-dom';
+>>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
 
 
 function LoginComponent(props) {
@@ -16,6 +20,7 @@ function LoginComponent(props) {
         props.loginGoogleUser();
     }
 
+<<<<<<< HEAD
     function responseGoogle(res){
 if(res)
 {props.loginGoogleUser()}
@@ -24,11 +29,13 @@ else{
 }
     }
     
+=======
+>>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
     function handleLogout() {
         this.props.logoutUser();
     }
-    
-    
+
+
     function Cafelogin() {
         return (
             <CardBody>
@@ -48,8 +55,8 @@ else{
             </CardBody>
         );
     }
-    
-    function Cafesignup(){
+
+    function Cafesignup() {
         return (
             <CardBody>
                 <Form className="mt-2">
@@ -64,15 +71,16 @@ else{
                     <FormGroup className="mt-5">
                         <Button color="primary" size="lg" block>Login</Button>
                     </FormGroup>
-                    
+
                 </Form>
             </CardBody>
         );
     }
-    
+
     function Userlogin() {
         return (
             <CardBody>
+<<<<<<< HEAD
                 <GoogleLogin
                 clientId="899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
                 buttonText="Login using Google"
@@ -80,6 +88,9 @@ else{
                 onFailure={responseGoogle}
                 className="btn btn-outline-danger"
                  />
+=======
+                <a href="http://localhost:5000/api/profile/login/user" color="danger" size="lg" block><span className="fa fa-google-plus"></span> LogIn with institute id</a>
+>>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
             </CardBody>
         );
     }
