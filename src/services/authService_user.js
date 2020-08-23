@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-
 // check if Token exists on request Header and attach token to request as attribute
 exports.checkTokenMW = (req, res, next) => {
     // Get auth header value
@@ -12,7 +11,6 @@ exports.checkTokenMW = (req, res, next) => {
         res.sendStatus(403);
     }
 };
-
 // Verify Token validity and attach token data as request attribute
 exports.verifyToken = (req, res) => {
     jwt.verify(req.token, process.env.JWT_SECRET, (err, authData) => {

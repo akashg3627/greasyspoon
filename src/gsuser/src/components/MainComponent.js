@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => ({
 fetchDishes: () => {dispatch(fetchDishes())},
 //loginUser: () => dispatch(loginUser()),
 //logoutUser: () => dispatch(logoutUser()),
-loginGoogleUser: ()=>dispatch(loginGoogleUser())
+loginGoogleUser: (data)=>dispatch(loginGoogleUser(data))
 });
 
 // const PrivateRoute = ({ component: Component, ...rest }) => (

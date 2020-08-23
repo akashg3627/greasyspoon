@@ -28,6 +28,7 @@ export const Auth = (state = {
             return {...state,
                 isLoading: false,
                 isAuthenticated: false,
+                user: null,
                 errMess: action.message
             };
         case ActionTypes.LOGOUT_REQUEST:

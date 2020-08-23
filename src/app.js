@@ -35,7 +35,9 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(helmet())
-app.use(cors())
+app.use(
+    cors()
+  );
     //Express session
     // app.use(
     //     session({
@@ -74,6 +76,7 @@ app.use("/api/profile", require("./routes/api_profile"));
 app.use("/api/cart", require("./routes/api_cart"));
 app.use("/api/order", require("./routes/api_order"));
 app.use("/api/cafe", require("./routes/api_cafe"));
+app.use("/api/google", require("./services/auth"));
 app.get('/404', function(req, res, next) {
     // trigger a 404 since no other middleware
     // will match /404 after this one, and we're not
