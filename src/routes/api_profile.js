@@ -130,18 +130,14 @@ router.get('/check', (req, res) => {
         }
     })
     //allows User login using google oauth 2 (login only if from iiti domain name)
-router.get('/login/user',
-        passport.authenticate("google", {
-            scope: ["profile", "email"],
-            failureRedirect: '/login/failure'
-<<<<<<< HEAD
-        }),(req, res)=>{
-            console.log("google login")
-=======
-        }), (req, res) => {
-            console.log('login request');
->>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
-        })
+router.get('/login/user',(req, res, next)=>{
+console.log("google login")
+next()
+},
+            passport.authenticate("google", {
+                scope: ["profile", "email"]
+            })
+        )
     //login api endpoint for Cafe login
     //redirects to working_route/login/failure if not authenticated
 router.post('/login/cafe', passport.authenticate('local', {
@@ -153,20 +149,12 @@ router.post('/login/cafe', passport.authenticate('local', {
     })
     //callback for google login.
     //do not send direct requests to this endpoint
-<<<<<<< HEAD
 router.get('/auth/google/callback', function(req, res) {
-    if (req.user) {
-        console.log(req.user);
-        const token = authenticate.getToken({ _id: req.user._id })
+        //const token = authenticate.getToken({ _id: req.user._id })
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true,  status: 'You are successfully logged in!', token: token });
-      }
+        res.json({ success: true,  status: 'You are successfully logged in!' });
       console.log("callback called")
-=======
-router.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
-        res.redirect('http://localhost:3000/');
->>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
     })
     //logout route for all user types
 router.get('/logout', (req, res) => {

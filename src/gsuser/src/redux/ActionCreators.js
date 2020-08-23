@@ -63,16 +63,25 @@ export const loginUser = (creds) => (dispatch) => {
     .catch(error => dispatch(loginError(error.message)))
 };
 
-export const loginGoogleUser = () => (dispatch) => {
+export const loginGoogleUser = (response) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin())
 
-    return axios.get(baseUrl + '/profile/login/user')
+    return fetch(baseUrl + 'api/profile/login/user',{
+        method: 'GET',
+        mode: 'no-cors',
+        headers: { 
+            'Content-Type':'application/json' 
+        },
+        body: response
+    })
     .then(response => {
-        console.log("response recieveds")
+        console.log("response recieved", response)
         if (response.ok) {
+            
             return response;
         } else {
+            console.log("response ok")
             var error = new Error('Error ' + response.status + ': ' + response.statusText);
             error.response = response;
             throw error;
@@ -85,7 +94,7 @@ export const loginGoogleUser = () => (dispatch) => {
     .then(response => {
         if (response.success) {
             // If login was successful, set the token in local storage
-            localStorage.setItem('token', response.token);
+            //localStorage.setItem('token', response.token);
             //localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
             dispatch(receiveLogin(response));

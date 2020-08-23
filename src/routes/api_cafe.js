@@ -7,29 +7,12 @@ const {
 
 const router = require('express').Router();
 
-<<<<<<< HEAD
-router.get('/orders', ensureCafe, (req, res) => {
-    Cafe.findOne({
-            _id: req.user._id
-        }).then(
-            cafe => {
-                res.status(200).json({
-                    orders: cafe.orders
-                });
-            }
-        )
-        .catch(err => {
-            res.status(500).json({
-                Error: err.message
-            })
-=======
 router.get('/orders', ensureCafe, async(req, res, next) => {
 
     try {
         let workingCafe = await Cafe.findOne({ _id: req.user._id })
         await res.status(workingCafe ? 200 : 404).json({
             orders: workingCafe.orders ? workingCafe.orders : null
->>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
         })
     } catch (err) {
         next(err);

@@ -9,11 +9,8 @@ const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
-<<<<<<< HEAD
 const cors = require('cors');
 app.use(cors());
-=======
->>>>>>> 62efff06c8ed5a9d1fa40527f793f1df0d833232
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
