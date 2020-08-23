@@ -23,14 +23,14 @@ router.get('/', ensureUser, async(req, res) => {
             user_id: req.user._id
         }).exec();
         if (cart) {
-            res.status(200).json(cart);
+            return res.status(200).json(cart);
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'cart not found'
             })
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             error: err.message
         });
     }

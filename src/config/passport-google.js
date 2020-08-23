@@ -95,54 +95,54 @@ module.exports = function(passport) {
             }
         )
     );
-    passport.serializeUser(function(userObject, done) {
-        //adds the userObject currently logged in session to browser cookie
-        console.log('serialising', userObject)
-            // userObject could be a Model1 or a Model2... or Model3, Model4, etc.
-        let userGroup = "";
-        if (userObject.role == "User") {
-            userGroup = "User";
-        } else if (userObject.role === "Cafe") {
-            userGroup = "Cafe";
-        }
-        let sessionConstructor = new SessionConstructor(
-            userObject.id,
-            userGroup,
-            ""
-        );
-        done(null, sessionConstructor);
-        //returns a javascript object with id and usergroup
-    });
-    passport.deserializeUser(function(sessionConstructor, done) {
-        //finds a session using received cookie
-        //receives a sessionConstructor object created in the serializer function
-        console.log('deserializing', sessionConstructor)
-        if (sessionConstructor.userGroup == "User") {
-            //user object search in the User model
-            User.findOne({
-                    _id: sessionConstructor.userId,
-                },
-                function(err, user) {
-                    // When using string syntax, prefixing a path with - will flag that path as excluded.
-                    if (err) {
-                        return done(err);
-                    }
-                    done(null, user);
-                }
-            );
-        } else if (sessionConstructor.userGroup == "Cafe") {
-            //search in the Cafe model
-            Cafe.findOne({
-                    _id: sessionConstructor.userId,
-                },
-                function(err, user) {
-                    // When using string syntax, prefixing a path with - will flag that path as excluded.
-                    if (err) {
-                        return done(err);
-                    }
-                    done(null, user);
-                }
-            );
-        }
-    });
+    // passport.serializeUser(function(userObject, done) {
+    //     //adds the userObject currently logged in session to browser cookie
+    //     console.log('serialising', userObject)
+    //         // userObject could be a Model1 or a Model2... or Model3, Model4, etc.
+    //     let userGroup = "";
+    //     if (userObject.role == "User") {
+    //         userGroup = "User";
+    //     } else if (userObject.role === "Cafe") {
+    //         userGroup = "Cafe";
+    //     }
+    //     let sessionConstructor = new SessionConstructor(
+    //         userObject.id,
+    //         userGroup,
+    //         ""
+    //     );
+    //     done(null, sessionConstructor);
+    //     //returns a javascript object with id and usergroup
+    // });
+    // passport.deserializeUser(function(sessionConstructor, done) {
+    //     //finds a session using received cookie
+    //     //receives a sessionConstructor object created in the serializer function
+    //     console.log('deserializing', sessionConstructor)
+    //     if (sessionConstructor.userGroup == "User") {
+    //         //user object search in the User model
+    //         User.findOne({
+    //                 _id: sessionConstructor.userId,
+    //             },
+    //             function(err, user) {
+    //                 // When using string syntax, prefixing a path with - will flag that path as excluded.
+    //                 if (err) {
+    //                     return done(err);
+    //                 }
+    //                 done(null, user);
+    //             }
+    //         );
+    //     } else if (sessionConstructor.userGroup == "Cafe") {
+    //         //search in the Cafe model
+    //         Cafe.findOne({
+    //                 _id: sessionConstructor.userId,
+    //             },
+    //             function(err, user) {
+    //                 // When using string syntax, prefixing a path with - will flag that path as excluded.
+    //                 if (err) {
+    //                     return done(err);
+    //                 }
+    //                 done(null, user);
+    //             }
+    //         );
+    //     }
+    // });
 };
