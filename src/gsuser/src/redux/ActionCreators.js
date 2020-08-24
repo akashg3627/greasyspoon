@@ -90,7 +90,7 @@ export const logoutUser = () => (dispatch) => {
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
-    return fetch(baseUrl + 'dishes')
+    return fetch(baseUrl + 'api/menu/')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -123,3 +123,179 @@ export const addDishes = (dishes) => ({
     type: ActionTypes.ADD_DISHES,
     payload: dishes
 });
+
+
+
+export const menuLoading=()=>({
+    type: ActionTypes.MENU_LOADING
+});
+
+export const addMenu = (menu) =>({
+type: ActionTypes.ADD_MENU,
+payload: menu
+});
+
+export const menuFailed = (errmess) =>({
+    type: ActionTypes.MENU_FAILED,
+    payload: errmess
+})
+
+export const fetchMenu = () => (dispatch) => {
+    dispatch(menuLoading(true));
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(baseUrl + 'api/menu/all', {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': bearer
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+        })
+        .then(response => response.json())
+        .then(menu => dispatch(addMenu(menu)))
+        .catch(error => dispatch(menuFailed(error.message)));
+}
+
+
+//Cart
+
+export const cartLoading=()=>({
+    type: ActionTypes.CART_LOADING
+});
+
+export const addCart = (cart) =>({
+type: ActionTypes.ADD_CART,
+payload: cart
+});
+
+export const cartFailed = (errmess) =>({
+    type: ActionTypes.CART_FAILED,
+    payload: errmess
+})
+
+export const fetchCart = () => (dispatch) => {
+    dispatch(cartLoading(true));
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(baseUrl + 'api/cart', {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': bearer
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+        })
+        .then(response => response.json())
+        .then(cart => dispatch(addCart(cart)))
+        .catch(error => dispatch(cartFailed(error.message)));
+}
+
+export const postCart = (body)=>(dispatch)=>{
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'api/cart', {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(response => response.json())
+    .then(cart => { console.log('Cart Added', cart); dispatch(addCart(cart)); })
+    .catch(error => dispatch(cartFailed(error.message)));
+}
+
+export const reduceCartdish = (dishId) => (dispatch) => {
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'api/cart/' + dishId, {
+        method: "DELETE",
+        headers: {
+          'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(response => response.json())
+    .then(cart => { console.log('Updated Cart', cart); dispatch(addCart(cart)); })
+    .catch(error => dispatch(cartFailed(error.message)));
+};
+
+export const deleteCartdish = (dishId) => (dispatch) => {
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'api/cart/' + dishId +'/all', {
+        method: "DELETE",
+        headers: {
+          'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(response => response.json())
+    .then(cart => { console.log('Updated Cart', cart); dispatch(addCart(cart)); })
+    .catch(error => dispatch(cartFailed(error.message)));
+};

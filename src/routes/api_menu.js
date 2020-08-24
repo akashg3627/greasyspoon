@@ -31,6 +31,16 @@ router.get('/', async(req, res) => {
 
 });
 
+router.get("/all", (req, res)=>{
+    Menu.find(req.query)
+    .then((menu) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(menu);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+
 //working
 //returns menu of cafe with cafeid
 router.get("/:cafeid", (req, res) => {

@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
         immutable: true,
     },
     google_id: { type: String, immutable: true },
+    email: {type: String},
     orders: [orderSchema],
     mobNumber: {
         type: Number,

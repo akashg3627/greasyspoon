@@ -3,6 +3,7 @@ const {
     Cafe
 } = require('../models/Cafe');
 const User = require('../models/User');
+
 async function ensureAuthenticated(req, res, next) {
     // if (req.isAuthenticated()) {
     //     return next();
