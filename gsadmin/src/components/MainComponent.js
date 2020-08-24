@@ -28,7 +28,7 @@ import {signin, signup} from '../redux/ActionCreators';
 
 const mapStateToProps =(state)=>{
   return{
-  auth: state.auth
+  auth: state.auth,
   }
 }
 

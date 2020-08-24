@@ -127,6 +127,43 @@ export const signin = (creds) =>(dispatch) =>{
 }
 
 export const signup = (creds) =>(dispatch) =>{
-    console.log("signup reducer");
+    console.log("signin reducer");
     console.log("creds", creds);
+    dispatch(requestLogin(creds));
+    
+    return fetch(baseUrl + 'api/profile/register/cafe', {
+        method: 'POST',
+        headers: { 
+            'Content-Type':'application/json' 
+        },
+        body: JSON.stringify(creds)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+        },
+        error => {
+            throw error;
+        })
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // If login was successful, set the token in local storage
+            //localStorage.setItem('token', response.token);
+            localStorage.setItem('creds', JSON.stringify(creds));
+            // Dispatch the success action
+            dispatch(receiveLogin(response));
+        }
+        else {
+            var error = new Error('Error ' + response.status);
+            error.response = response;
+            throw error;
+        }
+    })
+    .catch(error => dispatch(loginError(error.message)))
 }

@@ -27,8 +27,6 @@ function LoginComponent(props) {
                         <NavItem>
                             <NavLink onClick={()=>{toggle('2')}}>
                                 Sign In
-                                
-                                
                                 </NavLink>
                         </NavItem>
                     </Nav>
