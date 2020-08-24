@@ -72,10 +72,20 @@ passport.use('googleToken',new GooglePlusTokenStrategy({
 
 
 passport.use('custom',new CustomStrategy((req, done)=>{
+  
     User.findOne({ google_id: req.body.googleId }, (err, user) => {
+      
         if (err) {
           return done(err, false);
         }
+        const email= req.body.email;
+  const address= email.split("@");
+  const domain= address[1];
+  if(domain.localeCompare("iiti.ac.in") !==0)
+  {
+    const error = new Error("Login with institute id!");
+    return done(error, false);
+  }
         if (!err && user !== null) {
           return done(null, user);
         }

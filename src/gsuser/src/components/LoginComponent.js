@@ -46,6 +46,10 @@ class LoginComponent extends Component {
                         <CardHeader>
                             <span className="g">GREASY</span><span className="s">SPOON</span>
                         </CardHeader>
+                        {
+                            this.props.auth.isAuthenticated ?<div>Hello Welcome</div>
+                            :<div>Please Login</div>
+                        }
                         <Userlogin />
                     </Card>
 
