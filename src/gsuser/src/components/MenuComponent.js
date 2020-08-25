@@ -1,9 +1,10 @@
 import React from 'react';
-import { Breadcrumb, BreadcrumbItem, Button, Media, Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
+import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup } from 'reactstrap';
 import { Link } from 'react-router-dom';
-// import { Loading } from './LoadingComponent';
-import { baseUrl } from '../shared/baseUrl';
-import dishes from '../shared/dishes';
+import { Loading } from './LoadingComponent';
+import { reduceCartdish } from '../redux/ActionCreators';
+
+
 
 
 function RenderCafe({ cafe }) {
@@ -18,7 +19,17 @@ function RenderCafe({ cafe }) {
 
 }
 
-function RenderMenuItem({ dish }) {
+function RenderMenuItem({ dish, reduceCartdish, postCart }) {
+    function handlepost(dish) {
+        const body = {
+            dish_id: dish._id,
+            cafe_id: dish.cafe_id
+        };
+        postCart(body);
+    };
+    function handledelete(dish) {
+        reduceCartdish(dish._id);
+    };
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
             <Media left middle className="col-5 col-sm-4 col-md-3">
@@ -33,7 +44,11 @@ function RenderMenuItem({ dish }) {
                         {dish.category}
                     </Media>
                     <Media className="col-12 col-sm-5 ">
-                        <Button>Quantity</Button>
+                        <ButtonGroup size="lg">
+                            <Button onClick={(dish) => { handledelete(dish) }} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
+                            <Button disabled outline color="primary"></Button>
+                            <Button onClick={(dish) => { handlepost(dish) }} outline color="success"><span className="fa fa-plus fa-lg"> </span></Button>
+                        </ButtonGroup>
                     </Media>
                 </Media>
             </Media>
@@ -41,97 +56,103 @@ function RenderMenuItem({ dish }) {
     );
 }
 
-function RenderCart({ cart }) {
-    //     const AddedDish = cart.dishes.map((dish)=>{
-    // return(
-    //     <div key={dish._id}>
-    // <dl className="row p-1">
-    // <dt className="col-6">{dish.name}</dt>
-    // <dd className="col-6">Quantity: {cart.quantity}</dd>
-    // </dl>
-    //     </div>
-    // )
-    //     });
-    return (
-        <Card>
-            <CardHeader className="bg-success">Cart</CardHeader>
-            <CardBody>
-                <div>No dishes added</div>
+function RenderCart(props) {
+    const AddedDish = (dishes) => dishes.map((dish) => {
+        return (
+            <div key={dish._id}>
+                <dl className="row p-1">
+                    <dt className="col-6">{dish.name}</dt>
+                    <dd className="col-6">Quantity: {dish.quantity}</dd>
+                </dl>
+            </div>
+        )
+    });
 
-            </CardBody>
-            <CardFooter className="bg-success">Price</CardFooter>
-        </Card>
-    );
+    if (props.cart.isLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    else if (props.cart.errMess) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        );
+    }
+    else {
+        if (props.cart.cart)
+            return (
+                <AddedDish dishes={props.cart.cart.dishes} />
+            );
+        else return (
+            <div>Empty Cart</div>
+        )
+    }
+
 }
 
 const Menu = (props) => {
 
-    const menu = props.dishes.dishes.map((dish) => {
+    const menu = props.menu.map((menu) => {
+        const cafemenu = menu.items.map((dish) => {
+            return (
+                <div key={dish._id}>
+                    <RenderMenuItem dish={dish} reduceCartdish={props.reduceCartdish} postCart={props.postCart} />
+                </div>
+            );
+        })
         return (
-            <div key={dish._id}>
-                <RenderMenuItem dish={dish} />
+            <div key={menu.cafe_id}>
+                {cafemenu}
             </div>
         );
     });
 
-    const cart =
-    {
-        dishes: [
-            {
-                _id: 1,
-                name: 'A'
-            },
-            {
-                _id: 1,
-                name: 'A'
-            }
-        ],
-        quantity: 5
+    if (props.isLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
     }
-
-
-    // if (props.dishes.isLoading) {
-    //     return (
-    //         <div className="container">
-    //             <div className="row">
-    //                 <Loading />
-    //             </div>
-    //         </div>
-    //     );
-    // }
-    // else if (props.dishes.errMess) {
-    //     return (
-    //         <div className="container">
-    //             <div className="row">
-    //                 <h4>{props.dishes.errMess}</h4>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-    // else
-    return (
-        <div className="container">
-            <div className="row">
-                <Breadcrumb>
-                    <BreadcrumbItem><Link to='/home'>Home</Link></BreadcrumbItem>
-                    <BreadcrumbItem active>Menu</BreadcrumbItem>
-                </Breadcrumb>
-                <div className="col-12">
-                    <h3>Menu</h3>
-                    <hr />
+    else if (props.errMess) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMess}</h4>
                 </div>
             </div>
-            <div className="row">
-                <div className="col-12 col-sm-7 offset-sm-1 mt-2">
-                    {menu}
-                </div>
-                <div className="col-12 col-sm-4 mt-2">
-                    <RenderCart cart={cart} />
-                </div>
+        );
+    }
+    else
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12 col-sm-7 offset-sm-1 mt-2">
+                        {menu}
+                    </div>
+                    <div className="col-12 col-sm-4 mt-2">
+                        <Card>
+                            <CardHeader className="bg-success">Cart</CardHeader>
+                            <CardBody>
+                                <RenderCart cart={props.cart} />
+                            </CardBody>
+                            <CardFooter className="bg-success">Price {props.cart.total_price}</CardFooter>
+                        </Card>
+                    </div>
 
+                </div>
             </div>
-        </div>
-    );
+        );
 }
 
 export default Menu;

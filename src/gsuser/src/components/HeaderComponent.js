@@ -31,8 +31,8 @@ function HeaderComponent(props) {
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/contactus">
-                                    Contact Us
+                                <NavLink className="nav-link" to="/orders">
+                                    Orders
                             </NavLink>
                             </NavItem>
                             <NavItem>

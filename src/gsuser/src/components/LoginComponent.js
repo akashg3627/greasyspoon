@@ -14,77 +14,56 @@ class LoginComponent extends Component {
 
     responseGoogle = (res) => {
         if (res.tokenId) {
-            this.props.loginGoogleUser({ tokenId: res.tokenId, "googleId": res.profileObj.googleId, "name": res.profileObj.name, "email": res.profileObj.email });
-        } else {
+            this.props.loginGoogleUser({ "googleId": res.profileObj.googleId, "name": res.profileObj.name, "email": res.profileObj.email, "tokenId": res.tokenId });
+        }
+        else {
             console.log("Invalid");
         }
     }
 
     render() {
         const Userlogin = () => {
-            return ( <
-                CardBody >
-                <
-                GoogleLogin clientId = "899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
-                render = {
-                    renderProps => ( <
-                        button className = "btn btn-danger"
-                        onClick = { renderProps.onClick }
-                        disabled = { renderProps.disabled } > Google < /button>
-                    )
-                }
-                onSuccess = { this.responseGoogle }
-                onFailure = { this.responseGoogle }
-                className = "btn btn-outline-danger" /
-                >
-                <
-                /CardBody>
+            return (
+                <CardBody>
+                    <GoogleLogin
+                        clientId="899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
+                        render={renderProps => (
+                            <button className="btn btn-danger" onClick={renderProps.onClick} disabled={renderProps.disabled}>Google</button>
+                        )}
+                        onSuccess={this.responseGoogle}
+                        onFailure={this.responseGoogle}
+                        className="btn btn-outline-danger"
+                    />
+                </CardBody>
             )
         };
 
 
 
 
-        function Userlogin() {
-            return ( <
-                CardBody >
-                <
-                GoogleLogin clientId = "899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
-                onSuccess = { handleGoogleLogin }
-                onFailure = { handleGoogleLogin }
-                buttonText = "Login with Google" /
-                >
-                <
-                /CardBody>
-            );
-        }
+        return (
+            <div className="container">
+                <div className="row align-items-center justify-content-center">
+                    <Card className="login-card">
+                        <CardHeader>
+                            <span className="g">GREASY</span><span className="s">SPOON</span>
+                        </CardHeader>
+                        {
+                            this.props.auth.isAuthenticated ? <div>Hello Welcome</div>
+                                : <div>Please Login</div>
+                        }
+                        <Userlogin />
+                    </Card>
 
-        return ( <
-            div className = "container" >
-            <
-            div className = "row align-items-center justify-content-center" >
-            <
-            Card className = "login-card" >
-            <
-            CardHeader >
-            <
-            span className = "g" > GREASY < /span><span className="s">SPOON</span >
-            <
-            /CardHeader> <
-            CardBody > < span className = "fa fa-user-circle-o" > < /span> User<br></br >
-            <
-            Button onClick = { handleGoogleLogin } > Login with Google < /Button> < /
-            CardBody > <
-            Userlogin / >
-            <
-            /Card>
-
-            <
-            /div> < /
-            div >
+                </div>
+            </div>
         );
     }
+
+
+
 }
+
 
 
 export default LoginComponent;
