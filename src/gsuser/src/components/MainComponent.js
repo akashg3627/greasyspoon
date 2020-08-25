@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchDishes, loginUser, logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart} from '../redux/ActionCreators';
+import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, addUser} from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -9,28 +9,30 @@ import HeaderComponent from './HeaderComponent';
 import HomeComponent from './HomeComponent';
 import MenuComponet from './MenuComponent';
 import Footer from './Footer';
+import Menu from './Menu';
+import OrderPanel from './OrderPanel';
 
-import {DISHES} from '../shared/dishes';
+//import {DISHES} from '../shared/dishes';
 import LoginComponent from './LoginComponent';
 
 const mapStateToProps = state => {
   return {
-    dishes: state.dishes,
     auth: state.auth,
     menu: state.menu,
-    cart: state.cart
+    cart: state.cart,
+    cafeList: state.cafeList
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-fetchDishes: () => {dispatch(fetchDishes())},
 fetchMenu: ()=> {dispatch(fetchMenu())},
 fetchCart: ()=>{dispatch(fetchCart())},
 postCart: (body)=>{dispatch(postCart(body))},
+fetchcafeList: ()=>{dispatch(fetchcafeList())},
 reduceCartdish: (dishId)=>{dispatch(reduceCartdish(dishId))},
-//loginUser: () => dispatch(loginUser()),
-//logoutUser: () => dispatch(logoutUser()),
-loginGoogleUser: (data)=>dispatch(loginGoogleUser(data))
+logoutUser: () => {dispatch(logoutUser())},
+loginGoogleUser: (data)=>dispatch(loginGoogleUser(data)),
+addUser: ()=>dispatch(addUser())
 });
 
 
@@ -40,6 +42,7 @@ class Main extends Component {
 componentDidMount() {
 this.props.fetchMenu();
 this.props.fetchCart();
+this.props.fetchcafeList();
 }
 
   render(){
@@ -56,11 +59,13 @@ this.props.fetchCart();
   );
       return (
         <div>
-          <HeaderComponent />  
+          <HeaderComponent auth={this.props.auth} logoutUser={this.props.logoutUser} />  
               <Switch>
                 <Route path="/home" component={HomeComponent} />
-                <PrivateRoute exact path="/menu" component={()=><MenuComponet menu={this.props.menu.menu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} cart={this.props.cart} postCart={this.props.postCart} reduceCartdish={this.props.reduceCartdish} />} />
-                <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser}/> } />
+                <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
+                <PrivateRoute path="/menu/:cafeId" component={()=><MenuComponet menu={this.props.menu.menu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} cart={this.props.cart} postCart={this.props.postCart} reduceCartdish={this.props.reduceCartdish} />} />
+                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel user={this.props.auth.user} />} />
+                <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>
           <Footer />  

@@ -19,6 +19,9 @@ class LoginComponent extends Component {
         else {
             console.log("Invalid");
         }
+        if(this.props.auth.isAuthenticated)
+        {this.props.addUser();
+        }
     }
 
     render() {

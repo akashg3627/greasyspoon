@@ -5,6 +5,7 @@ import { Dishes } from './dishes/dishes';
 import { Auth } from './auth';
 import {Menu} from './menu';
 import {Cart} from './cart';
+import {CafeList} from './cafeList'
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
@@ -14,7 +15,8 @@ export const ConfigureStore = () => {
             dishes: Dishes,
             auth: Auth,
             menu: Menu,
-            cart: Cart
+            cart: Cart,
+            cafeList: CafeList
         }),
         applyMiddleware(thunk, logger)
     );

@@ -31,7 +31,7 @@ function HeaderComponent(props) {
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/orders">
+                                <NavLink className="nav-link" to="/orderpanel">
                                     Orders
                             </NavLink>
                             </NavItem>
@@ -40,11 +40,19 @@ function HeaderComponent(props) {
                                     <span className="fa fa-search fa-lg"></span>
                                 </NavLink>
                             </NavItem>
-                            <Link to="/login">
-                            <Button className="nav-link btn-login">
-                                <span className="fa fa-bars fa-lg"></span>
-                            </Button>
-                            </Link>
+                            {
+                                props.auth.isAuthenticated
+                                    ?
+                                    <Button className="nav-link btn-login" onClick={props.logoutUser}>
+                                        <span className="fa fa-sign-out fa-lg"></span> Logout
+                                    </Button>
+                                    :
+                                    <Link to="/login">
+                                        <Button className="nav-link btn-login">
+                                            <span className="fa fa-sign-in fa-lg"></span> Login
+                                        </Button>
+                                    </Link>
+                            }
                         </Nav>
                     </Collapse>
                 </div>

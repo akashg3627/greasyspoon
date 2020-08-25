@@ -14,7 +14,6 @@ export const receiveLogin = (res) => {
     return {
         type: ActionTypes.LOGIN_SUCCESS,
         token: res
-
     }
 }
 
@@ -52,10 +51,8 @@ export const loginGoogleUser = (creds) => (dispatch) => {
             if (response.success) {
                 // If login was successful, set the token in local storage
                 localStorage.setItem('token', response.token);
-
-                localStorage.setItem('creds', JSON.stringify(creds));
                 // Dispatch the success action
-                dispatch(receiveLogin(response));
+                dispatch(receiveLogin(response.token));
             }
             else {
                 var error = new Error('Error ' + response.status);
@@ -65,6 +62,43 @@ export const loginGoogleUser = (creds) => (dispatch) => {
         })
         .catch(error => dispatch(loginError(error.message)))
 };
+
+export const addUser = () =>(dispatch)=>{
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(baseUrl + 'api/profile' , {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': bearer
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(user =>{
+            localStorage.setItem('user', user);
+            dispatch(AddUser(user))})
+            .catch(error => dispatch(loginError(error.message)))
+}
+
+export const AddUser = (user)=>{
+    return{
+        type: ActionTypes.ADD_USER,
+        payload: user
+    }
+}
 
 
 
@@ -91,7 +125,7 @@ export const logoutUser = () => (dispatch) => {
 
 
 //Dishes reducers
-
+/*
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
@@ -128,6 +162,7 @@ export const addDishes = (dishes) => ({
     type: ActionTypes.ADD_DISHES,
     payload: dishes
 });
+*/
 
 
 
@@ -148,7 +183,7 @@ export const menuFailed = (errmess) => ({
 export const fetchMenu = () => (dispatch) => {
     dispatch(menuLoading(true));
     const bearer = 'Bearer ' + localStorage.getItem('token');
-    return fetch(baseUrl + 'api/menu/all', {
+    return fetch(baseUrl + 'api/menu/all' , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -304,3 +339,43 @@ export const deleteCartdish = (dishId) => (dispatch) => {
         .then(cart => { console.log('Updated Cart', cart); dispatch(addCart(cart)); })
         .catch(error => dispatch(cartFailed(error.message)));
 };
+
+
+// CAfeList
+
+export const fetchcafeList = () => (dispatch) => {
+    dispatch(cafelistLoading(true));
+
+    return fetch(baseUrl + 'api/menu/')
+        .then(response => {
+            if (response.ok) {
+                return response;
+            }
+            else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(cafeList => dispatch(addcafelist(cafeList)))
+        .catch(error => dispatch(cafelistFailed(error.message)));
+}
+
+export const cafelistLoading = () => ({
+    type: ActionTypes.CAFE_LIST_LOAD
+});
+
+export const cafelistFailed = (errmess) => ({
+    type: ActionTypes.CAFE_LIST_FAIL,
+    payload: errmess
+});
+
+export const addcafelist = (cafeList) => ({
+    type: ActionTypes.CAFE_LIST_ADD,
+    payload: cafeList
+});
