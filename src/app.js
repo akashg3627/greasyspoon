@@ -3,12 +3,16 @@ const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
 const app = express();
+
 //const flash = require('connect-flash');
 const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require('cors');
+
+app.use(cors());
+
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -76,7 +80,6 @@ app.use("/api/profile", require("./routes/api_profile"));
 app.use("/api/cart", require("./routes/api_cart"));
 app.use("/api/order", require("./routes/api_order"));
 app.use("/api/cafe", require("./routes/api_cafe"));
-app.use("/api/google", require("./services/auth"));
 app.get('/404', function(req, res, next) {
     // trigger a 404 since no other middleware
     // will match /404 after this one, and we're not

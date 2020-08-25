@@ -1,10 +1,12 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import axios from 'axios';
 
 export const requestLogin = (creds) => {
     return {
         type: ActionTypes.LOGIN_REQUEST,
         creds: creds
+
     }
 }
   
@@ -50,7 +52,53 @@ export const loginGoogleUser = (creds) => (dispatch) => {
         if (response.success) {
             // If login was successful, set the token in local storage
             localStorage.setItem('token', response.token);
-            localStorage.setItem('user', creds);
+
+            localStorage.setItem('creds', JSON.stringify(creds));
+            // Dispatch the success action
+            dispatch(receiveLogin(response));
+        }
+        else {
+            var error = new Error('Error ' + response.status);
+            error.response = response;
+            throw error;
+        }
+    })
+    .catch(error => dispatch(loginError(error.message)))
+};
+
+export const loginGoogleUser = (response) => (dispatch) => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestLogin())
+
+    return fetch(baseUrl + 'api/profile/login/user',{
+        method: 'GET',
+        mode: 'no-cors',
+        headers: { 
+            'Content-Type':'application/json' 
+        },
+        body: response
+    })
+    .then(response => {
+        console.log("response recieved", response)
+        if (response.ok) {
+            
+            return response;
+        } else {
+            console.log("response ok")
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+        },
+        error => {
+            throw error;
+        })
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // If login was successful, set the token in local storage
+            //localStorage.setItem('token', response.token);
+            //localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
             dispatch(receiveLogin(response.token));
         }

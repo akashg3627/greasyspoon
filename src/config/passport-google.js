@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Cafe = require("../models/Cafe").Cafe;
 const bcrypt = require("bcryptjs");
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var jwt = require('jsonwebtoken');
+const passport= require('passport');
 //contains much of the logic for logging in
 //should be renamed passport.js
 
@@ -95,6 +99,7 @@ module.exports = function(passport) {
             }
         )
     );
+
     // passport.serializeUser(function(userObject, done) {
     //     //adds the userObject currently logged in session to browser cookie
     //     console.log('serialising', userObject)
@@ -146,3 +151,4 @@ module.exports = function(passport) {
     //     }
     // });
 };
+
