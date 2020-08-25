@@ -5,29 +5,31 @@ import axios from 'axios';
 export const requestLogin = (creds) => {
     return {
         type: ActionTypes.LOGIN_REQUEST,
-        payload: null
+        creds: creds
+
     }
 }
   
-export const receiveLogin = (response) => {
+export const receiveLogin = (res) => {
     return {
-        type: ActionTypes.LOGIN_SUCCESS
+        type: ActionTypes.LOGIN_SUCCESS,
+        token: res
+
     }
 }
   
 export const loginError = (message) => {
     return {
         type: ActionTypes.LOGIN_FAILURE,
-        message
+        message: message
     }
 }
 
-export const loginUser = (creds) => (dispatch) => {
+export const loginGoogleUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
-
-    return fetch(baseUrl + 'users/login', {
-        method: 'POST',
+    return fetch(baseUrl + 'api/google/login',{
+    method: 'POST',
         headers: { 
             'Content-Type':'application/json' 
         },
@@ -50,6 +52,7 @@ export const loginUser = (creds) => (dispatch) => {
         if (response.success) {
             // If login was successful, set the token in local storage
             localStorage.setItem('token', response.token);
+
             localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
             dispatch(receiveLogin(response));
@@ -97,7 +100,7 @@ export const loginGoogleUser = (response) => (dispatch) => {
             //localStorage.setItem('token', response.token);
             //localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
-            dispatch(receiveLogin(response));
+            dispatch(receiveLogin(response.token));
         }
         else {
             var error = new Error('Error ' + response.status);
@@ -124,7 +127,7 @@ export const receiveLogout = () => {
 export const logoutUser = () => (dispatch) => {
     dispatch(requestLogout())
     localStorage.removeItem('token');
-    localStorage.removeItem('creds');
+    localStorage.removeItem('user');
     dispatch(receiveLogout())
 }
 

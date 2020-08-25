@@ -19,6 +19,7 @@ const {
 const bodyParser = require('body-parser');
 const Cafe = require('../models/Cafe').Cafe;
 const upload = require('../config/multer_support')
+const authService = require('../services/authService_user');
 
 //working api route is /api/profile
 
@@ -130,44 +131,5 @@ router.get('/check', (req, res) => {
         }
     })
     //allows User login using google oauth 2 (login only if from iiti domain name)
-router.get('/login/user',(req, res, next)=>{
-console.log("google login")
-next()
-},
-            passport.authenticate("google", {
-                scope: ["profile", "email"]
-            })
-        )
-    //login api endpoint for Cafe login
-    //redirects to working_route/login/failure if not authenticated
-router.post('/login/cafe', passport.authenticate('local', {
-        failureRedirect: '/login/failure'
-    }), (req, res) => {
-        res.status(200).json({
-            message: 'Cafe log-in successful'
-        })
-    })
-    //callback for google login.
-    //do not send direct requests to this endpoint
-router.get('/auth/google/callback', function(req, res) {
-        //const token = authenticate.getToken({ _id: req.user._id })
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json({ success: true,  status: 'You are successfully logged in!' });
-      console.log("callback called")
-    })
-    //logout route for all user types
-router.get('/logout', (req, res) => {
-    console.log('logging out')
-    req.logout();
-    res.status(200).json({
-        message: 'logged out successfully'
-    })
-})
-router.get('login/failure', (req, res)=>{
-    req.status(404).json({
-        errMess: "Could not login"
-    })
-})
 
 module.exports = router;
