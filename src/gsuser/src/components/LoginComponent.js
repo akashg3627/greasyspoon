@@ -39,7 +39,12 @@ class LoginComponent extends Component {
             )
         };
 
+
+
+
+    function Userlogin() {
         return (
+<<<<<<< HEAD
             <div className="container">
                 <div className="row align-items-center justify-content-center">
                     <Card className="login-card">
@@ -55,8 +60,35 @@ class LoginComponent extends Component {
 
                 </div>
             </div>
+=======
+            <CardBody>
+                <GoogleLogin
+                clientId="899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
+                onSuccess={handleGoogleLogin}
+                onFailure={handleGoogleLogin}
+                buttonText="Login with Google"
+                 />
+            </CardBody>
+>>>>>>> 4e8b6b6b9583ab9acda687e9d84cd22c51232d91
         );
     }
+
+    return (
+        <div className="container">
+            <div className="row align-items-center justify-content-center">
+                <Card className="login-card">
+                    <CardHeader>
+                        <span className="g">GREASY</span><span className="s">SPOON</span>
+                    </CardHeader>
+                    <CardBody><span className="fa fa-user-circle-o"></span> User<br></br>
+                    <Button onClick={handleGoogleLogin}>Login with Google</Button>
+                    </CardBody> 
+                    <Userlogin />     
+                </Card>
+
+            </div>
+        </div>
+    );
 }
 
 

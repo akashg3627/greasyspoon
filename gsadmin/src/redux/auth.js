@@ -21,8 +21,7 @@ export const Auth = (state = {
             return {...state,
                 isLoading: false,
                 isAuthenticated: true,
-                errMess: '',
-                token: action.token
+                errMess: ''
             };
         case ActionTypes.LOGIN_FAILURE:
             return {...state,

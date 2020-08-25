@@ -117,6 +117,7 @@ async function ensureCafe(req, res, next) {
     }
 
 }
+
 module.exports = {
     ensureAuthenticated,
     ensureUser,
