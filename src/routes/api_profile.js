@@ -82,7 +82,7 @@ router.post('/register/cafe/', upload.fields([{
     name: 'cafeImage',
     maxCount: 1,
 
-}]), (req, res) => {
+}]), async(req, res) => {
     if (req.isAuthenticated()) {
         res.status(405).json({
             error: 'Please log out first'
@@ -105,16 +105,25 @@ router.post('/register/cafe/', upload.fields([{
         if (req.files.cafeImage !== undefined) {
             newAcc.imageURL = req.files.cafeImage[0].path
         }
-        newAcc.save(err => {
-            if (err) {
-                console.log(err)
-            } else {
-                res.status(200).json({
-                    message: 'Successfully created object',
-                    uploaded: req.files,
-                });
-            }
-        })
+        try {
+            var newCafe = await newAcc.save();
+            req.login(newCafe, {
+                session: false
+            }, err => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: 'unable to login the registered Cafe'
+                    })
+                } else {
+                    authService.signToken(req, res);
+
+                }
+            })
+        } catch (error) {
+            res.sendStatus(500)
+        }
+
     }
 })
 
