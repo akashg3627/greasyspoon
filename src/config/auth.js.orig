@@ -116,9 +116,13 @@ async function ensureCafe(req, res, next) {
     }
 
 }
+<<<<<<< HEAD
 module.exports = {
     ensureAuthenticated,
     ensureUser,
     ensureCafe
 
 }
+=======
+
+>>>>>>> 6fb5026cb3219f4d9f53adc1e3f842271362727f

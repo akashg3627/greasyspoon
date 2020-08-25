@@ -3,16 +3,12 @@ const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
 const app = express();
-
 //const flash = require('connect-flash');
 const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require('cors');
-
-app.use(cors());
-
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -39,9 +35,7 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(helmet())
-app.use(
-    cors()
-  );
+app.use(cors())
     //Express session
     // app.use(
     //     session({

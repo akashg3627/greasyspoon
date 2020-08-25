@@ -3,10 +3,8 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Cafe = require("../models/Cafe").Cafe;
 const bcrypt = require("bcryptjs");
-var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-var jwt = require('jsonwebtoken');
-const passport= require('passport');
+const CustomStrategy = require('passport-custom').Strategy;
+
 //contains much of the logic for logging in
 //should be renamed passport.js
 
@@ -62,6 +60,31 @@ module.exports = function(passport) {
             }
         )
     );
+    passport.use('custom', new CustomStrategy((req, done) => {
+        User.findOne({
+            google_id: req.body.googleId
+        }, (err, user) => {
+            if (err) {
+                return done(err, false);
+            }
+            if (!err && user !== null) {
+                return done(null, user);
+            } else {
+                user = new User({
+                    "google_id": req.body.googleId
+                });
+                user.name = req.body.name;
+                user.email = req.body.email;
+                user.role = 'User';
+                user.save((err, user) => {
+                    if (err)
+                        return done(err, false);
+                    else
+                        return done(null, user);
+                })
+            }
+        })
+    }));
     passport.use(
         //fot cafe login
         new LocalStrategy({
@@ -99,7 +122,6 @@ module.exports = function(passport) {
             }
         )
     );
-
     // passport.serializeUser(function(userObject, done) {
     //     //adds the userObject currently logged in session to browser cookie
     //     console.log('serialising', userObject)
@@ -151,4 +173,3 @@ module.exports = function(passport) {
     //     }
     // });
 };
-

@@ -8,7 +8,6 @@ const _ = require('lodash')
 const {
     ensureAuthenticated
 } = require('../config/auth');
-const authenticate =require('../config/passport-google');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 //User model
@@ -131,5 +130,50 @@ router.get('/check', (req, res) => {
         }
     })
     //allows User login using google oauth 2 (login only if from iiti domain name)
-
+    // router.get('/login/user',
+    //         passport.authenticate("google", {
+    //             scope: ["profile", "email"],
+    //             failureRedirect: '/login/failure',
+    //             accessType: 'offline',
+    //             approvalPrompt: 'force'
+    //         }), (req, res) => {
+    //             console.log('login request');
+    //         })
+router.post('/login/user', authService.checkOAUTHtoken, passport.authenticate('custom', {
+        failureRedirect: '/login/failure',
+        session: false,
+    }), (req, res) => {
+        authService.loginuser(req, res);
+    })
+    //login api endpoint for Cafe login
+    //redirects to working_route/login/failure if not authenticated
+router.post('/login/cafe', passport.authenticate('local', {
+    failureRedirect: '/login/failure',
+    session: false,
+}), (req, res) => {
+    authService.signToken(req, res);
+})
+router.get('/verify', authService.checkTokenMW, (req, res) => {
+    authService.verifyToken(req, res);
+    if (null === req.authData) {
+        res.sendStatus(403);
+    } else {
+        res.json(req.authData);
+    }
+});
+//callback for google login.
+//do not send direct requests to this endpoint
+router.get('/auth/google/callback', passport.authenticate('google', {
+        session: false
+    }), function(req, res) {
+        authService.signToken(req, res);
+    })
+    //logout route for all user types
+    // router.get('/logout', (req, res) => {
+    //     console.log('logging out')
+    //     req.logout();
+    //     res.status(200).json({
+    //         message: 'logged out successfully'
+    //     })
+    // })
 module.exports = router;
