@@ -70,7 +70,8 @@ getToken = function(user) {
 exports.loginuser = (req, res, next) => {
     if (req.user) {
         var token = getToken({
-            _id: req.user._id
+            userId: req.user._id,
+            role: 'User',
         });
         console.log(req.user);
         res.statusCode = 200;
@@ -84,19 +85,27 @@ exports.loginuser = (req, res, next) => {
     }
 }
 exports.signToken = (req, res) => {
+    console.log('req is ', req.user);
     jwt.sign({
         userId: req.user._id,
         role: req.user.role,
         name: req.user.name,
     }, process.env.JWT_SECRET, {
-        expiresIn: '60 min'
+        expiresIn: 3600,
     }, (err, token) => {
         if (err) {
             console.log(err);
             res.sendStatus(500)
         } else {
+            let deepClone = JSON.parse(JSON.stringify(req.user));
+            if (req.user.password) {
+                delete deepClone.password;
+            }
             res.json({
-                token
+                success: true,
+                token: token,
+                status: 'You are successfully logged in!',
+                user: deepClone
             });
         }
     });

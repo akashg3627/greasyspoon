@@ -15,6 +15,7 @@ async function ensureAuthenticated(req, res, next) {
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         if (payload.role == 'User') {
+            console.log('log in request as user');
             let workingUser = await User.findOne({
                 _id: payload.userId
             })
