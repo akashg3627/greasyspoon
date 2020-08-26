@@ -8,10 +8,14 @@ const RenderCafe = ({ cafe }) => {
     return (
         <Card>
             <Link to={`/menu/${cafe._id}`} >
+    <CardHeader>{cafe.name}</CardHeader>
                 <CardImg width="100%" src={baseUrl + cafe.image} alt={cafe.name} />
+                {cafe.image 
+                ?
                 <CardImgOverlay>
                     <CardTitle>{cafe.name}</CardTitle>
                 </CardImgOverlay>
+                : null}
             </Link>
         </Card>
     )

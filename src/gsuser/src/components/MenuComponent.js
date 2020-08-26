@@ -100,19 +100,12 @@ function RenderCart(props) {
 
 const Menu = (props) => {
 
-    const menu = props.menu.map((menu) => {
-        const cafemenu = menu.items.map((dish) => {
+    const menu = props.cafe.items.map((dish) => {
             return (
                 <div key={dish._id}>
                     <RenderMenuItem dish={dish} reduceCartdish={props.reduceCartdish} postCart={props.postCart} />
                 </div>
             );
-        })
-        return (
-            <div key={menu.cafe_id}>
-                {cafemenu}
-            </div>
-        );
     });
 
     if (props.isLoading) {

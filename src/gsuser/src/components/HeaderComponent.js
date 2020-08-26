@@ -35,11 +35,17 @@ function HeaderComponent(props) {
                                     Orders
                             </NavLink>
                             </NavItem>
-                            <NavItem>
-                                <NavLink className="nav-link" to="/contactus">
-                                    <span className="fa fa-search fa-lg"></span>
+                            {
+                                props.auth.isAuthenticated
+                                ?
+                                <NavItem>
+                                <NavLink className="nav-link btn-profile" to="/contactus">
+                                    <span className="fa fa-user fa-lg"></span>
                                 </NavLink>
                             </NavItem>
+                                :
+                                null
+                            }
                             {
                                 props.auth.isAuthenticated
                                     ?
