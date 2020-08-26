@@ -25,10 +25,7 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
          //   dish_id: dish._id,
          //   cafe_id: dish.cafe_id
        // } ;
-        postCart({
-            dish_id: dish._id,
-            cafe_id: dish.cafe_id
-        });
+        postCart(dish._id, dish.cafe_id);
     };
     function handledelete(dish) {
         reduceCartdish(dish._id);

@@ -2,6 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import {
     baseUrl
 } from '../shared/baseUrl';
+
 //import axios from 'axios';
 
 export const requestLogin = () => {
@@ -230,7 +231,7 @@ export const cartFailed = (errmess) => ({
 })
 
 export const fetchCart = () => (dispatch) => {
-    dispatch(cartLoading(true));
+    dispatch(cartLoading());
     const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
@@ -259,15 +260,18 @@ export const fetchCart = () => (dispatch) => {
         .catch(error => dispatch(cartFailed(error.message)));
 }
 
-export const postCart = (creds) => (dispatch) => {
+export const postCart = (dishId, cafeId) => (dispatch) => {
+    dispatch(cartLoading())
+    const newCart = {
+        dish_id: dishId,
+        cafe_id: cafeId
+    }
+    console.log("cart request", newCart);
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
             method: "POST",
-            body: JSON.stringify({
-                dish_id: creds.dish_id,
-                cafe_id: creds.cafe_id
-            }),
+            body: JSON.stringify(newCart),
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': bearer,
@@ -288,15 +292,15 @@ export const postCart = (creds) => (dispatch) => {
                 throw error;
             })
         .then(response => response.json())
-        .then(cart => {
-            console.log('Cart Added', cart);
-            dispatch(addCart(cart));
+        .then(response => {
+            console.log('Cart Added', response.cart);
+            dispatch(addCart(response.cart));
         })
         .catch(error => dispatch(cartFailed(error.message)));
 }
 
 export const reduceCartdish = (dishId) => (dispatch) => {
-
+dispatch(cartLoading());
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId, {
@@ -320,15 +324,15 @@ export const reduceCartdish = (dishId) => (dispatch) => {
                 throw error;
             })
         .then(response => response.json())
-        .then(cart => {
-            console.log('Updated Cart', cart);
-            dispatch(addCart(cart));
+        .then(response => {
+            console.log('Updated Cart', response.cart);
+            dispatch(addCart(response.cart));
         })
         .catch(error => dispatch(cartFailed(error.message)));
 };
 
 export const deleteCartdish = (dishId) => (dispatch) => {
-
+dispatch(cartLoading());
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId + '/all', {
@@ -352,9 +356,9 @@ export const deleteCartdish = (dishId) => (dispatch) => {
                 throw error;
             })
         .then(response => response.json())
-        .then(cart => {
-            console.log('Updated Cart', cart);
-            dispatch(addCart(cart));
+        .then(response => {
+            console.log('Updated Cart', response.cart);
+            dispatch(addCart(response.cart));
         })
         .catch(error => dispatch(cartFailed(error.message)));
 };
@@ -363,7 +367,7 @@ export const deleteCartdish = (dishId) => (dispatch) => {
 // CAfeList
 
 export const fetchcafeList = () => (dispatch) => {
-    dispatch(cafelistLoading(true));
+    dispatch(cafelistLoading());
 
     return fetch(baseUrl + 'api/menu')
         .then(response => {

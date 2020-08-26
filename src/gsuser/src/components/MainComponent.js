@@ -27,7 +27,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
 fetchMenu: ()=> {dispatch(fetchMenu())},
 fetchCart: ()=>{dispatch(fetchCart())},
-postCart: (body)=>{dispatch(postCart(body))},
+postCart: (dishId, cafeId)=>{dispatch(postCart(dishId, cafeId))},
 fetchcafeList: ()=>{dispatch(fetchcafeList())},
 reduceCartdish: (dishId)=>{dispatch(reduceCartdish(dishId))},
 logoutUser: () => {dispatch(logoutUser())},
