@@ -14,12 +14,12 @@ const cartDish = Dish.discriminator('cartDish', new mongoose.Schema({
 const cartDishSchema = cartDish.schema
 const cartSchema = new mongoose.Schema({
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
         ref: 'User'
     },
     cafe_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
         ref: 'Cafe'
     },

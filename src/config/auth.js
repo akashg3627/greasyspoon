@@ -54,10 +54,11 @@ async function ensureUser(req, res, next) {
     // res.status(401).json({
     //     error: 'Unauthorized'
     // })
+    console.log('verifying user')
     const token = req.header('x-auth-token');
-    if (!token) res.status(401).send('Access denied. No token provided')
+    if (!token) return res.status(401).send('Access denied. No token provided')
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const payload = await jwt.verify(token, process.env.JWT_SECRET);
         if (payload.role == 'User') {
             let workingUser = await User.findOne({
                 _id: payload.userId
@@ -76,7 +77,7 @@ async function ensureUser(req, res, next) {
             })
         }
     } catch (e) {
-        res.status(400).json({
+        return res.status(400).json({
             error: e,
         })
     }

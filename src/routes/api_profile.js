@@ -6,7 +6,8 @@ const {
 } = require('express-validator/check')
 const _ = require('lodash')
 const {
-    ensureAuthenticated
+    ensureAuthenticated,
+    ensureCafe
 } = require('../config/auth');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -73,19 +74,48 @@ router.patch('/', ensureAuthenticated, (req, res) => {
 //api endpoint to register a cafe using local strategy
 //sends 200 if success
 //the post request data should(or form names) should have (name,email,number,password)
-
-
-router.post('/register/cafe/', upload.fields([{
+router.post('/register/images', upload.fields([{
     name: 'logoImage',
     maxCount: 1,
 }, {
     name: 'cafeImage',
     maxCount: 1,
 
-}]), async(req, res) => {
-    if (req.isAuthenticated()) {
-        res.status(405).json({
-            error: 'Please log out first'
+}]), ensureCafe, async(req, res) => {
+    let workingCafe = await Cafe.findOne({
+        _id: req.user._id
+    });
+    if (req.files.logoImage !== undefined) {
+        workingCafe.logoURL = req.files.logoImage[0].path
+    }
+    if (req.files.cafeImage !== undefined) {
+        workingCafe.imageURL = req.files.cafeImage[0].path
+    }
+    try {
+        let savedCafe = await workingCafe.save();
+        req.logIn(savedCafe, err => {
+            if (err) {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                })
+            } else {
+                res.status(200).json({
+                    status: 'success'
+                });
+            }
+        })
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/register/cafe/', async(req, res) => {
+    var token = req.header('x-auth-token')
+    if (token) {
+        res.status(403).json({
+            error: 'You need to be logged out first'
         })
     } else {
         console.log('registering Cafe ', req.body);
@@ -99,12 +129,6 @@ router.post('/register/cafe/', upload.fields([{
             role: 'Cafe',
             password: bcrypt.hashSync(req.body.password, 10),
         })
-        if (req.files.logoImage !== undefined) {
-            newAcc.logoURL = req.files.logoImage[0].path
-        }
-        if (req.files.cafeImage !== undefined) {
-            newAcc.imageURL = req.files.cafeImage[0].path
-        }
         try {
             var newCafe = await newAcc.save();
             req.login(newCafe, {
@@ -126,6 +150,9 @@ router.post('/register/cafe/', upload.fields([{
 
     }
 })
+router.post('/', (req, res) => {
+    return
+});
 
 //checks whether a user(User or Cafe) is logged in or not
 router.get('/check', (req, res) => {
