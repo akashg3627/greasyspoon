@@ -20,14 +20,14 @@ function RenderCafe({ cafe }) {
 }
 
 function RenderMenuItem({ dish, reduceCartdish, postCart }) {
-    function handlepost(dish) {
+    function handlepost() {
         //const body ={
          //   dish_id: dish._id,
          //   cafe_id: dish.cafe_id
        // } ;
         postCart(dish._id, dish.cafe_id);
     };
-    function handledelete(dish) {
+    function handledelete() {
         reduceCartdish(dish._id);
     };
     return (
@@ -45,9 +45,9 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                     </Media>
                     <Media className="col-12 col-sm-5 ">
                         <ButtonGroup size="lg">
-                            <Button onClick={(dish) => { handledelete(dish) }} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
+                            <Button onClick={handledelete} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
                             <Button disabled outline color="primary"></Button>
-                            <Button onClick={(dish) => { handlepost(dish) }} outline color="success"><span className="fa fa-plus fa-lg"> </span></Button>
+                            <Button onClick={handlepost} outline color="success"><span className="fa fa-plus fa-lg"> </span></Button>
                         </ButtonGroup>
                     </Media>
                 </Media>

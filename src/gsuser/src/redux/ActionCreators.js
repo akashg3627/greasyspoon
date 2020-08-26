@@ -271,12 +271,12 @@ export const postCart = (dishId, cafeId) => (dispatch) => {
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
             method: "POST",
-            body: JSON.stringify(newCart),
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': bearer,
                 'X-Auth-Token': token
             },
+            body: JSON.stringify(newCart),
             credentials: "same-origin"
         })
         .then(response => {
