@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardFooter, CardBody, Media, Button } from 'reactstrap';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent'
 function RenderUserProfile({ user }) {
 
 }
