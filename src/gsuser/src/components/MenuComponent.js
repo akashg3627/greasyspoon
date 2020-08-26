@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup } from 'reactstrap';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
-import { reduceCartdish } from '../redux/ActionCreators';
+import {baseUrl} from '../shared/baseUrl'
 
 
 
@@ -33,13 +33,13 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
             <Media left middle className="col-5 col-sm-4 col-md-3">
-                <Media object src={dish.image} alt="Generic placeholder image" />
+                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" />
             </Media>
             <Media className="col-7 col-sm-8 col-md-9">
                 <Media className="row ml-1">
                     <Media body className="col-12 col-sm-7">
                         <Media heading>
-                            {dish.name}
+                            {dish.dish_name}
                         </Media>
                         {dish.category}
                     </Media>

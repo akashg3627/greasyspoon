@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, addUser} from '../redux/ActionCreators';
-import { actions } from 'react-redux-form';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
+//import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import HeaderComponent from './HeaderComponent';
 import HomeComponent from './HomeComponent';

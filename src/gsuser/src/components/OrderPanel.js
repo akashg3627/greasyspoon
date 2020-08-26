@@ -1,15 +1,14 @@
 import React from 'react';
-import { Card, CardHeader, CardFooter, CardBody, Media, Button } from 'reactstrap';
-import { baseUrl } from '../shared/baseUrl';
+import { Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
+//import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 
 function RenderUserProfile({ user }) {
 
 }
+/*function RenderOrder({ order }) {
 
-function RenderOrder({ order }) {
-
-}
+}*/
 
 function RenderCart(props) {
   const AddedDish = (dishes) => dishes.map((dish) => {
