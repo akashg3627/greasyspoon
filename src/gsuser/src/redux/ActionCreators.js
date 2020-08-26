@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
-import axios from 'axios';
+//import axios from 'axios';
 
 export const requestLogin = () => {
     return {
@@ -64,11 +64,13 @@ export const loginGoogleUser = (creds) => (dispatch) => {
 
 export const addUser = () =>(dispatch)=>{
     const bearer = 'Bearer ' + localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/profile' , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            'Authorization': bearer
+            'Authorization': bearer,
+            'X-Auth-Token': token
         }
     })
         .then(response => {
@@ -181,12 +183,14 @@ export const menuFailed = (errmess) => ({
 
 export const fetchMenu = () => (dispatch) => {
     dispatch(menuLoading(true));
+    const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
     return fetch(baseUrl + 'api/menu/all' , {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            'Authorization': bearer
+            'Authorization': bearer,
+            'X-Auth-Token': token
         }
     })
         .then(response => {
@@ -227,12 +231,14 @@ export const cartFailed = (errmess) => ({
 
 export const fetchCart = () => (dispatch) => {
     dispatch(cartLoading(true));
+    const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            'Authorization': bearer
+            'Authorization': bearer,
+            'X-Auth-Token' : token
         }
     })
         .then(response => {
@@ -256,13 +262,14 @@ export const fetchCart = () => (dispatch) => {
 
 export const postCart = (body) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
-
+    const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
         method: "POST",
         body: JSON.stringify(body),
         headers: {
             "Content-Type": "application/json",
-            'Authorization': bearer
+            'Authorization': bearer,
+            'X-Auth-Token': token
         },
         credentials: "same-origin"
     })
@@ -286,11 +293,12 @@ export const postCart = (body) => (dispatch) => {
 export const reduceCartdish = (dishId) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
-
+    const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId, {
         method: "DELETE",
         headers: {
-            'Authorization': bearer
+            'Authorization': bearer,
+            'X-Auth-Token': token
         },
         credentials: "same-origin"
     })
@@ -314,11 +322,12 @@ export const reduceCartdish = (dishId) => (dispatch) => {
 export const deleteCartdish = (dishId) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
-
+    const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId + '/all', {
         method: "DELETE",
         headers: {
-            'Authorization': bearer
+            'Authorization': bearer,
+            'X-Auth-Token': token
         },
         credentials: "same-origin"
     })

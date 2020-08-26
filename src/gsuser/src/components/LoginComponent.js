@@ -1,9 +1,9 @@
 import React, { useState, Component } from 'react';
-import { Form, FormGroup, Label, Input, Col, Card, CardBody, CardHeader, Button, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import {Card, CardBody, CardHeader} from 'reactstrap';
+//import { Link } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
-import { connect } from 'react-redux';
-import * as actions from '../redux/ActionCreators'
+//import { connect } from 'react-redux';
+//import * as actions from '../redux/ActionCreators'
 
 
 class LoginComponent extends Component {
@@ -22,6 +22,7 @@ class LoginComponent extends Component {
         if(this.props.auth.isAuthenticated)
         {this.props.addUser();
         }
+
     }
 
     render() {
