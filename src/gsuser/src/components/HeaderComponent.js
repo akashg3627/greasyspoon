@@ -40,7 +40,7 @@ function HeaderComponent(props) {
                                 ?
                                 <NavItem>
                                 <NavLink className="nav-link btn-profile" to="/contactus">
-                                    <span className="fa fa-user fa-lg"></span>
+                                    <span className="fa fa-user fa-lg"></span> {props.auth.user ? props.auth.user.name : null}
                                 </NavLink>
                             </NavItem>
                                 :

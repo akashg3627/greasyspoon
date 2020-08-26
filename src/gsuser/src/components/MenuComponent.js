@@ -98,15 +98,7 @@ function RenderCart(props) {
 
 }
 
-const Menu = (props) => {
-
-    const menu = props.cafe.items.map((dish) => {
-            return (
-                <div key={dish._id}>
-                    <RenderMenuItem dish={dish} reduceCartdish={props.reduceCartdish} postCart={props.postCart} />
-                </div>
-            );
-    });
+const MenuComponent = (props) => {
 
     if (props.isLoading) {
         return (
@@ -126,7 +118,15 @@ const Menu = (props) => {
             </div>
         );
     }
-    else
+    else if(props.cafemenu!=null)
+    {
+        const menu = props.cafemenu.items.map((dish) => {
+            return (
+                <div key={dish._id}>
+                    <RenderMenuItem dish={dish} reduceCartdish={props.reduceCartdish} postCart={props.postCart} />
+                </div>
+            );
+    });
         return (
             <div className="container">
                 <div className="row">
@@ -145,7 +145,10 @@ const Menu = (props) => {
 
                 </div>
             </div>
-        );
+        );}
+    else return(
+        <div>No Dish Found</div>
+    );
 }
 
-export default Menu;
+export default MenuComponent;
