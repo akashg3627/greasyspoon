@@ -34,7 +34,55 @@ router.get('/', ensureAuthenticated, (req, res) => {
     res.json(deepClone);
 });
 //provides ability to edit user document details.
+router.get('/check', async(req, res) => {
+    // if (req.isAuthenticated()) {
+    //     return next();
+    // }
+    // res.status(401).json({
+    //     error: 'Unauthorized'
+    // })
+    const token = req.header('x-auth-token');
+    if (!token) res.status(201).json({
+        isAuthorized: 'false'
+    })
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        if (payload.role == 'User') {
+            console.log('checking auth as user');
+            let workingUser = await User.findOne({
+                _id: payload.userId
+            })
+            if (workingUser) {
+                res.status(200).json({
+                    isAuthorized: 'true'
+                })
+            } else {
+                return res.status(201).json({
+                    isAuthorized: 'false'
+                })
+            }
+        } else {
+            let workingCafe = await Cafe.findOne({
+                _id: payload.userId
+            })
+            if (workingCafe) {
+                res.status(200).json({
+                    isAuthorized: 'true'
+                })
+            } else {
+                return res.status(201).json({
+                    isAuthorized: 'false'
+                })
+            }
+        }
+    } catch (e) {
+        res.status(400).json({
+            error: e,
+            isAuthorized: 'false'
+        })
+    }
 
+});
 router.patch('/', ensureAuthenticated, (req, res) => {
     if (req.user.role == 'User') {
         //User object

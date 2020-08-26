@@ -195,10 +195,14 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
             }
         }).exec();
         if (!resp1.nModified) {
-            await res.status(404).json({
-                error: 'Cart is unchanged. Please check if the dish exists or dishid is correct'
+            let cart = await Cart.findOne({
+                user_id: req.user._id
             });
-            res.end();
+            return res.status(200).json({
+
+                error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
+                cart
+            });
         }
         let resp2 = await Cart.findOneAndUpdate({
             user_id: req.user._id
@@ -226,9 +230,11 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
         })
     } catch (err) {
         console.log(err);
+
         res.status(500).json({
             error: 'Unable to remove dish',
-            err: err.message
+            err: err.message,
+            cart
         });
     }
 });
