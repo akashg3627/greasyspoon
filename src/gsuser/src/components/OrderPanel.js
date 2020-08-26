@@ -5,9 +5,8 @@ import { Loading } from './LoadingComponent';
 
 function RenderUserProfile({ user }) {
     if (user != null){
-        
         return (
-        <div className="cartinner">{user.name}</div>
+        <div className="cartinner">Name: {user.name}</div>
         );
     }
     else return (
@@ -81,7 +80,7 @@ function OrderPanel(props) {
         <div className="col col-md-6">
           <Card>
           <RenderCart cart={props.cart} />
-          <CardFooter><Button className="btn btn">Place Order</Button></CardFooter>
+          <CardFooter><Button className="btn btn-primary">Place Order</Button></CardFooter>
           </Card>
         </div>
       </div>

@@ -54,7 +54,9 @@ export const loginGoogleUser = (creds) => (dispatch) => {
             if (response.success) {
                 // If login was successful, set the token in local storage
                 localStorage.setItem('token', response.token);
-                localStorage.setItem('creds', response.user);
+                const creds = JSON.stringify(response.user);
+                localStorage.setItem('creds', creds);
+                
                 // Dispatch the success action
                 dispatch(receiveLogin(response.token, response.user));
             } else {
