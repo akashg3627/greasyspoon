@@ -153,8 +153,12 @@ router.post('/register/cafe/', async(req, res) => {
 router.post('/', (req, res) => {
     return
 });
-
-//checks whether a user(User or Cafe) is logged in or not
+router.post('/login/cafe', passport.authenticate('local', {
+        session: false,
+    }), (req, res) => {
+        authService.signToken(req, res);
+    })
+    //checks whether a user(User or Cafe) is logged in or not
 router.get('/check', (req, res) => {
         console.log('checking');
         if (req.user) {
@@ -183,12 +187,7 @@ router.post('/login/user', authService.checkOAUTHtoken, passport.authenticate('c
     })
     //login api endpoint for Cafe login
     //redirects to working_route/login/failure if not authenticated
-router.post('/login/cafe', passport.authenticate('local', {
-    failureRedirect: '/login/failure',
-    session: false,
-}), (req, res) => {
-    authService.signToken(req, res);
-})
+
 router.get('/verify', authService.checkTokenMW, (req, res) => {
     authService.verifyToken(req, res);
     if (null === req.authData) {

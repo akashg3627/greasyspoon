@@ -25,7 +25,10 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
             dish_id: dish._id,
             cafe_id: dish.cafe_id
         };
-        postCart(body);
+        postCart({
+            dish_id: dish._id,
+            cafe_id: dish.cafe_id
+        });
     };
     function handledelete(dish) {
         reduceCartdish(dish._id);
@@ -33,7 +36,7 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
             <Media left middle className="col-5 col-sm-4 col-md-3">
-                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" />
+                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" className="menuImage" />
             </Media>
             <Media className="col-7 col-sm-8 col-md-9">
                 <Media className="row ml-1">

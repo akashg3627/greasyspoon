@@ -42,7 +42,7 @@ router.post('/', ensureUser, async(req, res) => {
     //make sure only one cart is present at a time
     console.log('the req body is', req.body)
     if (!req.body.cafe_id || !req.body.dish_id) {
-        res.status(404).json({
+        return res.status(404).json({
             error: 'cafe_id and dish_id required in body of the post request.'
         })
     }
@@ -64,7 +64,7 @@ router.post('/', ensureUser, async(req, res) => {
     }, async(err, cart) => {
         if (err) {
             console.log(err)
-            res.status(501).json({
+            return res.status(501).json({
                 error: err.message
             });
         }
@@ -75,7 +75,7 @@ router.post('/', ensureUser, async(req, res) => {
         if (dish == undefined
             //||!dish.availablity
         ) {
-            res.status(405).send({
+            return res.status(405).send({
                 error: 'Unable to add to cart,either it is not available or dish id is invalid'
             });
         }
