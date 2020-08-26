@@ -65,6 +65,7 @@ app.use(passport.initialize());
 //     res.locals.error_msg = req.flash('error')
 //     next();
 // });
+
 app.use('/public', express.static('public'))
 
 //Routes

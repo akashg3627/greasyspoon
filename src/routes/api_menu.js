@@ -63,6 +63,7 @@ router.get("/:cafeid", (req, res) => {
 router.post("/", ensureCafe, upload.single('dishImage'), (req, res) => {
     console.log(req.body);
     let deepClone = JSON.parse(JSON.stringify(req.body));
+    console.log(req.file);
     if (req.file != undefined) {
         deepClone.pictureURL = req.file.path;
     }

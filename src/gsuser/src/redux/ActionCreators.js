@@ -1,5 +1,7 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from '../shared/baseUrl';
+import {
+    baseUrl
+} from '../shared/baseUrl';
 //import axios from 'axios';
 
 export const requestLogin = () => {
@@ -27,21 +29,21 @@ export const loginGoogleUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin())
     return fetch(baseUrl + 'api/profile/login/user', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(creds)
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(creds)
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 throw error;
             })
@@ -52,8 +54,7 @@ export const loginGoogleUser = (creds) => (dispatch) => {
                 localStorage.setItem('token', response.token);
                 // Dispatch the success action
                 dispatch(receiveLogin(response.token));
-            }
-            else {
+            } else {
                 var error = new Error('Error ' + response.status);
                 error.response = response;
                 throw error;
@@ -62,40 +63,40 @@ export const loginGoogleUser = (creds) => (dispatch) => {
         .catch(error => dispatch(loginError(error.message)))
 };
 
-export const addUser = () =>(dispatch)=>{
+export const addUser = () => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
-    return fetch(baseUrl + 'api/profile' , {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': bearer,
-            'X-Auth-Token': token
-        }
-    })
+    return fetch(baseUrl + 'api/profile', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            }
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            }
-            else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 var errmess = new Error(error.message);
                 throw errmess;
             })
         .then(response => response.json())
-        .then(user =>{
+        .then(user => {
             localStorage.setItem('creds', user);
-            dispatch(AddUser(user))})
-            .catch(error => dispatch(loginError(error.message)))
+            dispatch(AddUser(user))
+        })
+        .catch(error => dispatch(loginError(error.message)))
 }
 
-export const AddUser = (user)=>{
-    return{
+export const AddUser = (user) => {
+    return {
         type: ActionTypes.ADD_USER,
         payload: user
     }
@@ -185,24 +186,23 @@ export const fetchMenu = () => (dispatch) => {
     dispatch(menuLoading(true));
     const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
-    return fetch(baseUrl + 'api/menu/all' , {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': bearer,
-            'X-Auth-Token': token
-        }
-    })
+    return fetch(baseUrl + 'api/menu/all', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            }
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            }
-            else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 var errmess = new Error(error.message);
                 throw errmess;
@@ -234,23 +234,22 @@ export const fetchCart = () => (dispatch) => {
     const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': bearer,
-            'X-Auth-Token' : token
-        }
-    })
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            }
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            }
-            else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 var errmess = new Error(error.message);
                 throw errmess;
@@ -264,29 +263,35 @@ export const postCart = (creds) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
-        method: "POST",
-        body: JSON.stringify({dish_id: creds.dish_id, cafe_id: creds.cafe_id }),
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': bearer,
-            'X-Auth-Token': token
-        },
-        credentials: "same-origin"
-    })
+            method: "POST",
+            body: JSON.stringify({
+                dish_id: creds.dish_id,
+                cafe_id: creds.cafe_id
+            }),
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 throw error;
             })
         .then(response => response.json())
-        .then(cart => { console.log('Cart Added', cart); dispatch(addCart(cart)); })
+        .then(cart => {
+            console.log('Cart Added', cart);
+            dispatch(addCart(cart));
+        })
         .catch(error => dispatch(cartFailed(error.message)));
 }
 
@@ -295,27 +300,30 @@ export const reduceCartdish = (dishId) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId, {
-        method: "DELETE",
-        headers: {
-            'Authorization': bearer,
-            'X-Auth-Token': token
-        },
-        credentials: "same-origin"
-    })
+            method: "DELETE",
+            headers: {
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 throw error;
             })
         .then(response => response.json())
-        .then(cart => { console.log('Updated Cart', cart); dispatch(addCart(cart)); })
+        .then(cart => {
+            console.log('Updated Cart', cart);
+            dispatch(addCart(cart));
+        })
         .catch(error => dispatch(cartFailed(error.message)));
 };
 
@@ -324,27 +332,30 @@ export const deleteCartdish = (dishId) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId + '/all', {
-        method: "DELETE",
-        headers: {
-            'Authorization': bearer,
-            'X-Auth-Token': token
-        },
-        credentials: "same-origin"
-    })
+            method: "DELETE",
+            headers: {
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
         .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 throw error;
             })
         .then(response => response.json())
-        .then(cart => { console.log('Updated Cart', cart); dispatch(addCart(cart)); })
+        .then(cart => {
+            console.log('Updated Cart', cart);
+            dispatch(addCart(cart));
+        })
         .catch(error => dispatch(cartFailed(error.message)));
 };
 
@@ -356,15 +367,14 @@ export const fetchcafeList = () => (dispatch) => {
 
     return fetch(baseUrl + 'api/menu')
         .then(response => {
-            if (response.ok) {
-                return response;
-            }
-            else {
-                var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                error.response = response;
-                throw error;
-            }
-        },
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
             error => {
                 var errmess = new Error(error.message);
                 throw errmess;

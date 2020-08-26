@@ -95,7 +95,7 @@ async function ensureCafe(req, res, next) {
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         if (payload.role == 'Cafe') {
-            let workingUser = await User.findOne({
+            let workingUser = await Cafe.findOne({
                 _id: payload.userId
             })
             if (workingUser) {

@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup } from 'reactstrap';
 //import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
-import {baseUrl} from '../shared/baseUrl'
-
+import { reduceCartdish } from '../redux/ActionCreators';
+import { baseUrl } from '../shared/baseUrl'
 
 
 
@@ -36,7 +36,7 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
             <Media left middle className="col-5 col-sm-4 col-md-3">
-                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" className="menuimage"/>
+                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" className="menuImage" />
             </Media>
             <Media className="col-7 col-sm-8 col-md-9">
                 <Media className="row ml-1">
@@ -122,15 +122,14 @@ const MenuComponent = (props) => {
             </div>
         );
     }
-    else if(props.cafemenu!=null)
-    {
+    else if (props.cafemenu != null) {
         const menu = props.cafemenu.items.map((dish) => {
             return (
                 <div key={dish._id}>
                     <RenderMenuItem dish={dish} reduceCartdish={props.reduceCartdish} postCart={props.postCart} />
                 </div>
             );
-    });
+        });
         return (
             <div className="container">
                 <div className="row">
@@ -149,8 +148,9 @@ const MenuComponent = (props) => {
 
                 </div>
             </div>
-        );}
-    else return(
+        );
+    }
+    else return (
         <div>No Dish Found</div>
     );
 }

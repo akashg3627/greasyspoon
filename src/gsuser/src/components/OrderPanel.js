@@ -45,16 +45,16 @@ function RenderCart(props) {
       <Card>
         <CardHeader className="bg-success">Cart</CardHeader>
         {
-        props.cart.cart
+          props.cart.cart
             ?
             <div><CardBody>
-            <AddedDish dishes={props.cart.cart.dishes} />
-        </CardBody>
-        <CardFooter className="bg-success">Price {props.cart.cart.total_price}</CardFooter>
-        </div>
-        :
+              <AddedDish dishes={props.cart.cart.dishes} />
+            </CardBody>
+              <CardFooter className="bg-success">Price {props.cart.cart.total_price}</CardFooter>
+            </div>
+            :
             <div>Empty Cart</div>
-          }
+        }
       </Card>
     )
   }
