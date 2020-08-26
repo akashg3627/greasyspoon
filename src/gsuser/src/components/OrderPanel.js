@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
+import { Card, CardHeader, CardFooter, CardBody, Button } from 'reactstrap';
 //import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 
@@ -81,6 +81,7 @@ function OrderPanel(props) {
         <div className="col col-md-6">
           <Card>
           <RenderCart cart={props.cart} />
+          <CardFooter><Button className="btn btn">Place Order</Button></CardFooter>
           </Card>
         </div>
       </div>

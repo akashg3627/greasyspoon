@@ -21,7 +21,8 @@ export const Auth = (state = {
                 isLoading: false,
                 isAuthenticated: true,
                 errMess: '',
-                token: action.token
+                token: action.token,
+                user: action.user
             };
         case ActionTypes.LOGIN_FAILURE:
             return {...state,
@@ -43,12 +44,6 @@ export const Auth = (state = {
                 token: '',
                 user: null
             };
-        case ActionTypes.ADD_USER:
-            return{...state,
-                isLoading: false,
-            isAuthenticated: true,
-            user: action.payload
-        }
         default:
             return state
     }

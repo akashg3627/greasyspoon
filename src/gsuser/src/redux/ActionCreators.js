@@ -12,10 +12,11 @@ export const requestLogin = () => {
     }
 }
 
-export const receiveLogin = (res) => {
+export const receiveLogin = (token, user) => {
     return {
         type: ActionTypes.LOGIN_SUCCESS,
-        token: res
+        token: token,
+        user: user
     }
 }
 
@@ -53,8 +54,9 @@ export const loginGoogleUser = (creds) => (dispatch) => {
             if (response.success) {
                 // If login was successful, set the token in local storage
                 localStorage.setItem('token', response.token);
+                localStorage.setItem('creds', response.user);
                 // Dispatch the success action
-                dispatch(receiveLogin(response.token));
+                dispatch(receiveLogin(response.token, response.user));
             } else {
                 var error = new Error('Error ' + response.status);
                 error.response = response;
@@ -63,45 +65,6 @@ export const loginGoogleUser = (creds) => (dispatch) => {
         })
         .catch(error => dispatch(loginError(error.message)))
 };
-
-export const addUser = () => (dispatch) => {
-    const bearer = 'Bearer ' + localStorage.getItem('token');
-    const token = localStorage.getItem('token');
-    return fetch(baseUrl + 'api/profile', {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': bearer,
-                'X-Auth-Token': token
-            }
-        })
-        .then(response => {
-                if (response.ok) {
-                    return response;
-                } else {
-                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    error.response = response;
-                    throw error;
-                }
-            },
-            error => {
-                var errmess = new Error(error.message);
-                throw errmess;
-            })
-        .then(response => response.json())
-        .then(user => {
-            localStorage.setItem('creds', user);
-            dispatch(AddUser(user))
-        })
-        .catch(error => dispatch(loginError(error.message)))
-}
-
-export const AddUser = (user) => {
-    return {
-        type: ActionTypes.ADD_USER,
-        payload: user
-    }
-}
 
 
 
