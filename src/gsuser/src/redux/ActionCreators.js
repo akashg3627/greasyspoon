@@ -2,10 +2,9 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 import axios from 'axios';
 
-export const requestLogin = (creds) => {
+export const requestLogin = () => {
     return {
-        type: ActionTypes.LOGIN_REQUEST,
-        creds: creds
+        type: ActionTypes.LOGIN_REQUEST
 
     }
 }
@@ -26,7 +25,7 @@ export const loginError = (message) => {
 
 export const loginGoogleUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
-    dispatch(requestLogin(creds))
+    dispatch(requestLogin())
     return fetch(baseUrl + 'api/profile/login/user', {
         method: 'POST',
         headers: {
@@ -88,7 +87,7 @@ export const addUser = () =>(dispatch)=>{
             })
         .then(response => response.json())
         .then(user =>{
-            localStorage.setItem('user', user);
+            localStorage.setItem('creds', user);
             dispatch(AddUser(user))})
             .catch(error => dispatch(loginError(error.message)))
 }
@@ -346,7 +345,7 @@ export const deleteCartdish = (dishId) => (dispatch) => {
 export const fetchcafeList = () => (dispatch) => {
     dispatch(cafelistLoading(true));
 
-    return fetch(baseUrl + 'api/menu/')
+    return fetch(baseUrl + 'api/menu')
         .then(response => {
             if (response.ok) {
                 return response;

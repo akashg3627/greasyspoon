@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardHeader, CardFooter, CardBody, Media, Button } from 'reactstrap';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
+
 function RenderUserProfile({ user }) {
 
 }
@@ -43,15 +45,17 @@ function RenderCart(props) {
     return (
       <Card>
         <CardHeader className="bg-success">Cart</CardHeader>
-        <CardBody>
-          {props.cart.cart
+        {
+        props.cart.cart
             ?
+            <div><CardBody>
             <AddedDish dishes={props.cart.cart.dishes} />
-            :
-            <div>Empty Cart</div>
-          }
         </CardBody>
         <CardFooter className="bg-success">Price {props.cart.cart.total_price}</CardFooter>
+        </div>
+        :
+            <div>Empty Cart</div>
+          }
       </Card>
     )
   }
@@ -64,7 +68,11 @@ function OrderPanel(props) {
     <div className="container">
       <div className="row">
         <div className="col col-md-6">
-          <RenderUserProfile user={props.auth.user} />
+          {
+            props.auth.user != null ?
+              <RenderUserProfile user={props.auth.user} />
+              : null
+          }
         </div>
         <div className="col col-md-6">
           <RenderCart cart={props.cart} />

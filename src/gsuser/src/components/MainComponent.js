@@ -48,13 +48,15 @@ this.props.fetchcafeList();
   render(){
 
     const MenuCafe = ({match})=>{
+      return(
       <MenuComponet 
-      cafe={this.props.menu.menu.filter((cafe) => cafe.cafe_id === match.params.cafeId)[0]} 
+      cafemenu={this.props.menu.menu.filter((cafemenu) => cafemenu.cafe_id === match.params.cafeId)[0]} 
       isLoading={this.props.menu.isLoading} 
       errMess={this.props.menu.errMess} 
       cart={this.props.cart} 
       postCart={this.props.postCart} 
       reduceCartdish={this.props.reduceCartdish} />
+      )
     }
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -74,7 +76,7 @@ this.props.fetchcafeList();
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
                 <PrivateRoute path="/menu/:cafeId" component={MenuCafe} />
-                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth.user} cart={this.props.cart} />} />
+                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth} cart={this.props.cart} />} />
                 <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>
