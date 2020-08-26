@@ -260,12 +260,12 @@ export const fetchCart = () => (dispatch) => {
         .catch(error => dispatch(cartFailed(error.message)));
 }
 
-export const postCart = (body) => (dispatch) => {
+export const postCart = (creds) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify({dish_id: creds.dish_id, cafe_id: creds.cafe_id }),
         headers: {
             "Content-Type": "application/json",
             'Authorization': bearer,

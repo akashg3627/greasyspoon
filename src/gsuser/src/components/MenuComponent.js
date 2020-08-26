@@ -21,11 +21,14 @@ function RenderCafe({ cafe }) {
 
 function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     function handlepost(dish) {
-        const body = {
+        //const body ={
+         //   dish_id: dish._id,
+         //   cafe_id: dish.cafe_id
+       // } ;
+        postCart({
             dish_id: dish._id,
             cafe_id: dish.cafe_id
-        };
-        postCart(body);
+        });
     };
     function handledelete(dish) {
         reduceCartdish(dish._id);
@@ -33,7 +36,7 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
             <Media left middle className="col-5 col-sm-4 col-md-3">
-                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" />
+                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" className="menuimage"/>
             </Media>
             <Media className="col-7 col-sm-8 col-md-9">
                 <Media className="row ml-1">
@@ -56,19 +59,9 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     );
 }
 
-function RenderCart(props) {
-    const AddedDish = (dishes) => dishes.map((dish) => {
-        return (
-            <div key={dish._id}>
-                <dl className="row p-1">
-                    <dt className="col-6">{dish.name}</dt>
-                    <dd className="col-6">Quantity: {dish.quantity}</dd>
-                </dl>
-            </div>
-        )
-    });
-
-    if (props.cart.isLoading) {
+function RenderCart({cart}) {
+    
+    if (cart.isLoading) {
         return (
             <div className="container">
                 <div className="row">
@@ -77,20 +70,31 @@ function RenderCart(props) {
             </div>
         );
     }
-    else if (props.cart.errMess) {
+    else if (cart.errMess) {
         return (
             <div className="container">
                 <div className="row">
-                    <h4>{props.errMess}</h4>
+                    <h4>{cart.errMess}</h4>
                 </div>
             </div>
         );
     }
     else {
-        if (props.cart.cart)
+        if (cart.cart != null){
+            const AddedDish = cart.cart.dishes.map((dish) => {
+                return (
+                    <div key={dish._id}>
+                        <dl className="row p-1">
+                            <dt className="col-6">{dish.dish_name}</dt>
+                            <dd className="col-6">Quantity: {dish.quantity}</dd>
+                        </dl>
+                    </div>
+                )
+            });
             return (
-                <AddedDish dishes={props.cart.cart.dishes} />
+            <div>{AddedDish}</div>
             );
+        }
         else return (
             <div>Empty Cart</div>
         )

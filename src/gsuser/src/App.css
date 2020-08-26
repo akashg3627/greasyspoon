@@ -143,3 +143,9 @@ address{
   border: 1px solid white;
   border-radius: 30px;
 }
+
+.menuimage
+{
+  height: 128px;
+  width: 128px;
+}
