@@ -1,21 +1,21 @@
 import React from 'react';
 import { Card, CardBody, CardImg, CardImgOverlay, CardTitle, CardHeader, Button } from 'reactstrap';
-import {Loading} from './LoadingComponent';
-import {Link} from 'react-router-dom'
-import {baseUrl} from '../shared/baseUrl'
+import { Loading } from './LoadingComponent';
+import { Link } from 'react-router-dom'
+import { baseUrl } from '../shared/baseUrl'
 
 const RenderCafe = ({ cafe }) => {
     return (
         <Card>
             <Link to={`/menu/${cafe._id}`} >
-    <CardHeader>{cafe.name}</CardHeader>
-                <CardImg width="100%" src={baseUrl + cafe.image} alt={cafe.name} />
-                {cafe.image 
-                ?
-                <CardImgOverlay>
-                    <CardTitle>{cafe.name}</CardTitle>
-                </CardImgOverlay>
-                : null}
+                <CardHeader>{cafe.name}</CardHeader>
+                <CardImg width="100%" src={baseUrl + cafe.logoURL} alt={cafe.name} />
+                {cafe.image
+                    ?
+                    <CardImgOverlay>
+                        <CardTitle>{cafe.name}</CardTitle>
+                    </CardImgOverlay>
+                    : null}
             </Link>
         </Card>
     )

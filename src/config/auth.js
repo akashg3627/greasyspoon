@@ -41,6 +41,7 @@ async function ensureAuthenticated(req, res, next) {
             }
         }
     } catch (e) {
+        console.log(e);
         res.status(400).json({
             error: e,
         })
@@ -55,7 +56,9 @@ async function ensureUser(req, res, next) {
     //     error: 'Unauthorized'
     // })
     console.log('verifying user')
+
     const token = req.header('x-auth-token');
+    console.log(token);
     if (!token) return res.status(401).send('Access denied. No token provided')
     try {
         const payload = await jwt.verify(token, process.env.JWT_SECRET);
@@ -67,6 +70,7 @@ async function ensureUser(req, res, next) {
                 req.user = workingUser
                 next();
             } else {
+                console.log('could not find user')
                 return res.status(400).json({
                     error: 'No user found'
                 })
@@ -77,6 +81,7 @@ async function ensureUser(req, res, next) {
             })
         }
     } catch (e) {
+        console.log(e);
         return res.status(400).json({
             error: e,
         })
@@ -102,6 +107,7 @@ async function ensureCafe(req, res, next) {
                 req.user = workingUser
                 next();
             } else {
+                console.log('no cafe found with the token creds')
                 return res.status(400).json({
                     error: 'No cafe found'
                 })
@@ -112,6 +118,7 @@ async function ensureCafe(req, res, next) {
             })
         }
     } catch (e) {
+        console.log(e);
         res.status(400).json({
             error: e,
         })
