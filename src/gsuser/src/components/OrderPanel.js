@@ -4,60 +4,63 @@ import { Card, CardHeader, CardFooter, CardBody } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 
 function RenderUserProfile({ user }) {
-
+    if (user != null){
+        
+        return (
+        <div className="cartinner">{user.name}</div>
+        );
+    }
+    else return (
+        <div>Empty Cart</div>
+    )
 }
+
+
+
+
 /*function RenderOrder({ order }) {
 
 }*/
 
-function RenderCart(props) {
-  const AddedDish = (dishes) => dishes.map((dish) => {
+function RenderCart({cart}) {
+  if (cart.isLoading) {
     return (
-      <div key={dish._id}>
-        <dl className="row p-1">
-          <dt className="col-6">{dish.name}</dt>
-          <dd className="col-6">Quantity: {dish.quantity}</dd>
-        </dl>
-      </div>
-    )
-  });
+        <div className="cartinner">
+        
+                <Loading />
 
-  if (props.cart.isLoading) {
-    return (
-      <div className="container">
-        <div className="row">
-          <Loading />
         </div>
-      </div>
     );
-  }
-  else if (props.cart.errMess) {
+}
+else if (cart.errMess) {
     return (
-      <div className="container">
-        <div className="row">
-          <h4>{props.errMess}</h4>
-        </div>
-      </div>
-    );
-  }
-  else {
-    return (
-      <Card>
-        <CardHeader className="bg-success">Cart</CardHeader>
-        {
-          props.cart.cart
-            ?
-            <div><CardBody>
-              <AddedDish dishes={props.cart.cart.dishes} />
-            </CardBody>
-              <CardFooter className="bg-success">Price {props.cart.cart.total_price}</CardFooter>
+    
+            <div className="cartinner">
+                <h4>{cart.errMess}</h4>
             </div>
-            :
-            <div>Empty Cart</div>
-        }
-      </Card>
+        
+    );
+}
+else {
+    if (cart.cart != null){
+        const AddedDish = cart.cart.dishes.map((dish) => {
+            return (
+                <div key={dish._id}>
+                    <dl className="row p-1">
+                        <dt className="col-6">{dish.dish_name}</dt>
+                        <dd className="col-6">Quantity: {dish.quantity}</dd>
+                    </dl>
+                </div>
+            )
+        });
+        return (
+        <div className="cartinner">{AddedDish}</div>
+        );
+    }
+    else return (
+        <div className="cartinner">Empty Cart</div>
     )
-  }
+}
 }
 
 
@@ -69,12 +72,16 @@ function OrderPanel(props) {
         <div className="col col-md-6">
           {
             props.auth.user != null ?
+            <Card>
               <RenderUserProfile user={props.auth.user} />
+              </Card>
               : null
           }
         </div>
         <div className="col col-md-6">
+          <Card>
           <RenderCart cart={props.cart} />
+          </Card>
         </div>
       </div>
       {/*<div className="row">

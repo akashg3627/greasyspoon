@@ -60,20 +60,20 @@ function RenderCart({cart}) {
     
     if (cart.isLoading) {
         return (
-            <div className="container">
-                <div className="row">
+            <div className="cartinner">
+            
                     <Loading />
-                </div>
+
             </div>
         );
     }
     else if (cart.errMess) {
         return (
-            <div className="container">
-                <div className="row">
+        
+                <div className="cartinner">
                     <h4>{cart.errMess}</h4>
                 </div>
-            </div>
+            
         );
     }
     else {
@@ -89,11 +89,11 @@ function RenderCart({cart}) {
                 )
             });
             return (
-            <div>{AddedDish}</div>
+            <div className="cartinner">{AddedDish}</div>
             );
         }
         else return (
-            <div>Empty Cart</div>
+            <div className="cartinner">Empty Cart</div>
         )
     }
 
@@ -139,7 +139,7 @@ const MenuComponent = (props) => {
                             <CardBody>
                                 <RenderCart cart={props.cart} />
                             </CardBody>
-                            <CardFooter className="bg-success">Price {props.cart.total_price}</CardFooter>
+                            <CardFooter className="bg-success">Price {props.cart.cart !=null ? props.cart.cart.total_price / 100 : null}</CardFooter>
                         </Card>
                     </div>
 
