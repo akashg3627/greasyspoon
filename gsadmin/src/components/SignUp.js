@@ -30,12 +30,12 @@ export default class SignUp extends React.Component {
               <Label htmlFor="number">Mobile Number</Label>
               <Control.text model=".number" name="number" id="number" placeholder="Mobile Number" />
             </FormGroup>
-              <FormGroup className="mt-5">
-                <Button type="submit" value="submit" color="primary" size="lg" block>Sign Up</Button>
-              </FormGroup>
+            <FormGroup className="mt-5">
+              <Button type="submit" value="submit" color="primary" size="lg" block>Sign Up</Button>
+            </FormGroup>
           </Form>
-  </CardBody>
-  </Card>
+        </CardBody>
+      </Card>
     );
   }
 }

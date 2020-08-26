@@ -30,9 +30,21 @@ router.get('/', async(req, res) => {
     }
 
 });
+router.get("/all", async(req, res) => {
+        console.log('erearea')
+        try {
+            let menus = await Menu.find({}).exec();
+            res.status(200).send(menus);
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({
+                err
+            })
+        }
 
-//working
-//returns menu of cafe with cafeid
+    })
+    //working
+    //returns menu of cafe with cafeid
 router.get("/:cafeid", (req, res) => {
     Menu.findOne({
             cafe_id: req.params.cafeid,
@@ -111,4 +123,6 @@ router.delete("/:dishID", ensureCafe, (req, res) => {
         }
     );
 });
+
+;
 module.exports = router;
