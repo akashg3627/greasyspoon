@@ -179,6 +179,7 @@ router.post('/register/cafe/', async(req, res) => {
             ordersToBeAccepted: [],
             mobNumber: req.body.number,
             role: 'Cafe',
+            description: req.body.description,
             password: bcrypt.hashSync(req.body.password, 10),
         })
         try {
@@ -202,9 +203,60 @@ router.post('/register/cafe/', async(req, res) => {
 
     }
 })
-router.post('/', (req, res) => {
-    return
-});
+router.post('/register/cafe/withImage', upload.fields([{
+    name: 'logoImage',
+    maxCount: 1,
+}, {
+    name: 'cafeImage',
+    maxCount: 1,
+
+}]), async(req, res) => {
+    var token = req.header('x-auth-token')
+    if (token) {
+        res.status(403).json({
+            error: 'You need to be logged out first'
+        })
+    } else {
+        console.log('registering Cafe ', req.body);
+
+        var newAcc = new Cafe({
+            name: req.body.name,
+            email_id: req.body.email,
+            ordersCompleted: [],
+            ordersPending: [],
+            ordersToBeAccepted: [],
+            mobNumber: req.body.number,
+            role: 'Cafe',
+            description: req.body.description,
+            password: bcrypt.hashSync(req.body.password, 10),
+            logoURL: req.files.logoImage !== undefined ? req.files.logoImage[0].path : null,
+            imageURL: req.files.cafeImage !== undefined ? req.files.cafeImage[0].path : null,
+        })
+
+        try {
+            var newCafe = await newAcc.save();
+            req.login(newCafe, {
+                session: false
+            }, err => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: 'unable to login the registered Cafe'
+                    })
+                } else {
+                    authService.signToken(req, res);
+
+                }
+            })
+        } catch (error) {
+            res.sendStatus(500)
+        }
+
+    }
+})
+
+
+
 router.post('/login/cafe', passport.authenticate('local', {
         session: false,
     }), (req, res) => {

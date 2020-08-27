@@ -59,8 +59,39 @@ router.get("/:cafeid", (req, res) => {
         .catch((err) => console.log(err.message));
 });
 
+router.post("/", ensureCafe, (req, res) => {
+    console.log(req.body);
+    let deepClone = JSON.parse(JSON.stringify(req.body));
 
-router.post("/", ensureCafe, upload.single('dishImage'), (req, res) => {
+    deepClone.cafe_id = req.user._id;
+    deepClone.availability = (deepClone.availability == 'true');
+    deepClone.featured = (deepClone.featured == 'true');
+    console.log(req.user._id);
+    Menu.findOneAndUpdate({
+            cafe_id: req.user._id
+        }, {
+            $push: {
+                items: deepClone,
+            }
+        }, {
+            new: true,
+            upsert: true
+        },
+        (err, workingMenu) => {
+            if (err) {
+                res.json({
+                    'error': err.message
+                })
+            } else {
+                res.status(200).json({
+                    status: 'Added',
+                    newMenu: workingMenu
+                });
+            }
+        })
+})
+
+router.post("/withImage", ensureCafe, upload.single('dishImage'), (req, res) => {
     console.log(req.body);
     let deepClone = JSON.parse(JSON.stringify(req.body));
     console.log(req.file);
@@ -69,6 +100,7 @@ router.post("/", ensureCafe, upload.single('dishImage'), (req, res) => {
     }
     deepClone.cafe_id = req.user._id;
     deepClone.availability = (deepClone.availability == 'true');
+    deepClone.featured = (deepClone.featured == 'true');
     console.log(req.user._id);
     Menu.findOneAndUpdate({
             cafe_id: req.user._id

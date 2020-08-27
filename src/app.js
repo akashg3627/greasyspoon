@@ -18,11 +18,11 @@ require("./config/passport-google")(passport);
 const db = require("./config/keys").MongoURI;
 //Connect to mongo
 mongoose
-    .connect(db, {
+    .connect(process.env.Mongo_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-    .then(() => console.log("MongoDB connected"))
+    .then(() => console.log("MongoDB connected", process.env.Mongo_URI))
     .catch((err) => console.log(err.message));
 //EJS
 //app.use(expressLayouts);

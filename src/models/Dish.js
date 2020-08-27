@@ -13,8 +13,8 @@ const dishSchema = new mongoose.Schema({
         type: Number
     },
     availability: Boolean,
-    totalRating: Number,
-    ratingCount: Number,
+    category: String,
+    featured: Boolean,
     pictureURL: String,
     description: String,
 }, {
