@@ -6,8 +6,9 @@ import {
 //import axios from 'axios';
 
 
-export const checkauth =(token) =>(dispatch)=>{
-return fetch('api/profile/check',{
+export const checkauth =() =>(dispatch)=>{
+const token = localStorage.getItem('token');
+return fetch(baseUrl+ 'api/profile/check',{
     method: 'GET',
     headers:{
         'Content-Type': 'application/json',
@@ -30,11 +31,20 @@ error => {
 .then(response => {
 if (!response.isAuthorized) {
     // If login was successful, set the token in local storage
-    localStorage.removeItem('token');
-    localStorage.removeItem('creds');
+    localStorage.clear();
     var error = new Error('Error: Session Expired' );
     error.response = response;
     throw error;
+}
+else{
+    if(response.cafe){
+        console.log("Authorized cafe");
+        localStorage.clear();
+    }
+    else if(response.user){
+        console.log("Authorized User");
+        dispatch(fetchCart());
+    }
 } 
 })
 .catch(error => dispatch(loginError(error.message)))
@@ -56,6 +66,7 @@ export const receiveLogin = (token, user) => {
 }
 
 export const loginError = (message) => {
+    localStorage.clear();
     return {
         type: ActionTypes.LOGIN_FAILURE,
         message: message
@@ -64,6 +75,7 @@ export const loginError = (message) => {
 
 export const loginGoogleUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
+    localStorage.clear();
     dispatch(requestLogin())
     return fetch(baseUrl + 'api/profile/login/user', {
             method: 'POST',
@@ -94,6 +106,7 @@ export const loginGoogleUser = (creds) => (dispatch) => {
                 
                 // Dispatch the success action
                 dispatch(receiveLogin(response.token, response.user));
+                dispatch(fetchCart());
             } else {
                 var error = new Error('Error ' + response.status);
                 error.response = response;
@@ -120,8 +133,7 @@ export const receiveLogout = () => {
 // Logs the user out
 export const logoutUser = () => (dispatch) => {
     dispatch(requestLogout())
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.clear();
     dispatch(receiveLogout())
 }
 

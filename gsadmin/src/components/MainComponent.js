@@ -14,17 +14,7 @@ import SignUp from './SignUp';
 import {DISHES} from '../shared/dishes';
 import Footer from './Footer';
 
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-//     <Route {...rest} render={(props) => (
-//       this.props.auth.isAuthenticated
-//         ? <Component {...props} />
-//         : <Redirect to={{
-//             pathname: '/home',
-//             state: { from: props.location }
-//           }} />
-//     )} />
-//   );
-import {signin, signup, fetchMenu} from '../redux/ActionCreators';
+import {signin, signup, fetchMenu, deleteDish, checkauth} from '../redux/ActionCreators';
 
 const mapStateToProps =(state)=>{
   return{
@@ -37,18 +27,39 @@ const mapStateToProps =(state)=>{
 const mapDispatchToProps=(dispatch)=>({
 signin: (creds)=> dispatch(signin(creds)),
 signup: (creds)=> dispatch(signup(creds)),
-fetchMenu: (cafeId)=>dispatch(fetchMenu(cafeId))
+fetchMenu: (cafeId)=>dispatch(fetchMenu(cafeId)),
+deleteDish: (dishId)=>dispatch(deleteDish(dishId)),
+checkauth: ()=>dispatch(checkauth())
 });
 
 class Main extends Component {
+
+  componentDidMount(){
+    if(localStorage.getItem('token') != null)
+    {
+    this.props.checkauth();
+  }
+  }
+
   render(){
-    const dishes = DISHES;
+
+    const PrivateRoute = ({ component: Component, ...rest }) => (
+      <Route {...rest} render={(props) => (
+        this.props.auth.isAuthenticated
+          ? <Component {...props} />
+          : <Redirect to={{
+              pathname: '/home',
+              state: { from: props.location }
+            }} />
+      )} />
+    );
+
       return (
         <div>
           <HeaderComponent />  
           <Switch>
                 <Route path="/home" component={HomeComponent} />
-                <Route exact path="/menu" component={()=><MenuComponet menu={this.props.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} />} />
+                <PrivateRoute exact path="/menu" component={()=><MenuComponet deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
                 <Route exaxt path ="/login" component={()=><LoginComponent signin={this.props.signin} signup={this.props.signup} />} />
                 <Redirect to="/home" />
           </Switch>

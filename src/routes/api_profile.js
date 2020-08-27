@@ -20,6 +20,7 @@ const bodyParser = require('body-parser');
 const Cafe = require('../models/Cafe').Cafe;
 const upload = require('../config/multer_support')
 const authService = require('../services/authService_user');
+const jwt = require('jsonwebtoken');
 
 //working api route is /api/profile
 
@@ -54,7 +55,8 @@ router.get('/check', async(req, res) => {
             })
             if (workingUser) {
                 res.status(200).json({
-                    isAuthorized: true
+                    isAuthorized: true,
+                    user: JSON.stringify(workingUser)
                 })
             } else {
                 return res.status(201).json({
@@ -67,7 +69,8 @@ router.get('/check', async(req, res) => {
             })
             if (workingCafe) {
                 res.status(200).json({
-                    isAuthorized: true
+                    isAuthorized: true,
+                    cafe: JSON.stringify(workingCafe)
                 })
             } else {
                 return res.status(201).json({
@@ -263,7 +266,7 @@ router.post('/login/cafe', passport.authenticate('local', {
         authService.signToken(req, res);
     })
     //checks whether a user(User or Cafe) is logged in or not
-router.get('/check', (req, res) => {
+/*router.get('/check', (req, res) => {
         console.log('checking');
         if (req.user) {
             res.status.json({
@@ -272,7 +275,7 @@ router.get('/check', (req, res) => {
         } else {
             res.sendStatus(404);
         }
-    })
+    })*/
     //allows User login using google oauth 2 (login only if from iiti domain name)
     // router.get('/login/user',
     //         passport.authenticate("google", {

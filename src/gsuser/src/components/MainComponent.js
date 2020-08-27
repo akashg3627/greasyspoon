@@ -32,7 +32,7 @@ fetchcafeList: ()=>{dispatch(fetchcafeList())},
 reduceCartdish: (dishId)=>{dispatch(reduceCartdish(dishId))},
 logoutUser: () => {dispatch(logoutUser())},
 loginGoogleUser: (data)=>dispatch(loginGoogleUser(data)),
-checkauth: (token)=>dispatch(checkauth(token))
+checkauth: ()=>dispatch(checkauth())
 });
 
 
@@ -40,13 +40,14 @@ checkauth: (token)=>dispatch(checkauth(token))
 
 class Main extends Component {
 componentDidMount() {
+  if(localStorage.getItem('token') != null)
+    {
+    this.props.checkauth();
+  }
 this.props.fetchMenu();
 this.props.fetchcafeList();
 }
-componentWillUnmount(){
-  this.props.checkauth(this.props.auth.token);
-  this.props.fetchCart();
-}
+
 
   render(){
 

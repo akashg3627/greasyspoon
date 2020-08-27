@@ -4,6 +4,11 @@ import { NavLink, Link } from 'react-router-dom';
 
 
 function HeaderComponent(props) {
+    const handlemenu =()=>{
+        if(props.user != null){
+            props.fetchMenu(props.user._id);
+        }
+    }
     const [isNavOpen, toggleNavbar] = useState(false);
     return (
         <React.Fragment>
@@ -26,7 +31,7 @@ function HeaderComponent(props) {
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/menu">
+                                <NavLink className="nav-link" to="/menu" onClick={handlemenu()}>
                                     Menu
                             </NavLink>
                             </NavItem>
