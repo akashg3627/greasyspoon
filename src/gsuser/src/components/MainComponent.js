@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList} from '../redux/ActionCreators';
+import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, checkauth} from '../redux/ActionCreators';
 
 //import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -31,7 +31,8 @@ postCart: (dishId, cafeId)=>{dispatch(postCart(dishId, cafeId))},
 fetchcafeList: ()=>{dispatch(fetchcafeList())},
 reduceCartdish: (dishId)=>{dispatch(reduceCartdish(dishId))},
 logoutUser: () => {dispatch(logoutUser())},
-loginGoogleUser: (data)=>dispatch(loginGoogleUser(data))
+loginGoogleUser: (data)=>dispatch(loginGoogleUser(data)),
+checkauth: (token)=>dispatch(checkauth(token))
 });
 
 
@@ -40,8 +41,11 @@ loginGoogleUser: (data)=>dispatch(loginGoogleUser(data))
 class Main extends Component {
 componentDidMount() {
 this.props.fetchMenu();
-this.props.fetchCart();
 this.props.fetchcafeList();
+}
+componentWillUnmount(){
+  this.props.checkauth(this.props.auth.token);
+  this.props.fetchCart();
 }
 
   render(){

@@ -43,7 +43,7 @@ router.get('/check', async(req, res) => {
     // })
     const token = req.header('x-auth-token');
     if (!token) res.status(201).json({
-        isAuthorized: 'false'
+        isAuthorized: false
     })
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
@@ -54,11 +54,11 @@ router.get('/check', async(req, res) => {
             })
             if (workingUser) {
                 res.status(200).json({
-                    isAuthorized: 'true'
+                    isAuthorized: true
                 })
             } else {
                 return res.status(201).json({
-                    isAuthorized: 'false'
+                    isAuthorized: false
                 })
             }
         } else {
@@ -67,18 +67,18 @@ router.get('/check', async(req, res) => {
             })
             if (workingCafe) {
                 res.status(200).json({
-                    isAuthorized: 'true'
+                    isAuthorized: true
                 })
             } else {
                 return res.status(201).json({
-                    isAuthorized: 'false'
+                    isAuthorized: false
                 })
             }
         }
     } catch (e) {
         res.status(400).json({
             error: e,
-            isAuthorized: 'false'
+            isAuthorized: false
         })
     }
 
@@ -185,7 +185,7 @@ router.post('/register/cafe/', async(req, res) => {
                 if (err) {
                     console.log(err);
                     res.status(500).json({
-                        error: 'unable to login the registered Cafe'
+                        message: 'unable to login the registered Cafe'
                     })
                 } else {
                     authService.signToken(req, res);

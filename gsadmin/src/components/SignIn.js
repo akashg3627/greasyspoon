@@ -11,7 +11,6 @@ export default class SignIn extends React.Component {
   }
   render() {
     return (
-      <Card>
         <CardBody>
           <LocalForm className="mt-2" onSubmit={(values) => this.handleSubmit(values)}>
             <FormGroup row>
@@ -27,7 +26,6 @@ export default class SignIn extends React.Component {
             </FormGroup>
           </LocalForm>
         </CardBody>
-      </Card>
     );
   }
 }
