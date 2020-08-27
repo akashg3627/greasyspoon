@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 //import { createForms } from 'react-redux-form';
-
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { Dishes } from './dishes/dishes';
 import { Auth } from './auth';
 import {Menu} from './menu';
@@ -18,7 +18,8 @@ export const ConfigureStore = () => {
             cart: Cart,
             cafeList: CafeList
         }),
-        applyMiddleware(thunk, logger)
+        composeWithDevTools(
+        applyMiddleware(thunk, logger))
     );
 
     return store;
