@@ -22,9 +22,9 @@ function RenderCafe({ cafe }) {
 function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     function handlepost() {
         //const body ={
-         //   dish_id: dish._id,
-         //   cafe_id: dish.cafe_id
-       // } ;
+        //   dish_id: dish._id,
+        //   cafe_id: dish.cafe_id
+        // } ;
         postCart(dish._id, dish.cafe_id);
     };
     function handledelete() {
@@ -56,28 +56,28 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     );
 }
 
-function RenderCart({cart}) {
-    
+function RenderCart({ cart }) {
+
     if (cart.isLoading) {
         return (
             <div className="cartinner">
-            
+                <div className="row">
                     <Loading />
-
+                </div>
             </div>
         );
     }
     else if (cart.errMess) {
         return (
-        
-                <div className="cartinner">
-                    <h4>{cart.errMess}</h4>
-                </div>
-            
+
+            <div className="cartinner">
+                <h4>{cart.errMess}</h4>
+            </div>
+
         );
     }
     else {
-        if (cart.cart != null){
+        if (cart.cart != null) {
             const AddedDish = cart.cart.dishes.map((dish) => {
                 return (
                     <div key={dish._id}>
@@ -89,7 +89,7 @@ function RenderCart({cart}) {
                 )
             });
             return (
-            <div className="cartinner">{AddedDish}</div>
+                <div className="cartinner">{AddedDish}</div>
             );
         }
         else return (
@@ -139,7 +139,7 @@ const MenuComponent = (props) => {
                             <CardBody>
                                 <RenderCart cart={props.cart} />
                             </CardBody>
-                            <CardFooter className="bg-success">Price {props.cart.cart !=null ? props.cart.cart.total_price / 100 : null}</CardFooter>
+                            <CardFooter className="bg-success">Price {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
                         </Card>
                     </div>
 
