@@ -76,6 +76,7 @@ router.get('/check', async(req, res) => {
             }
         }
     } catch (e) {
+        console.log(e);
         res.status(400).json({
             error: e,
             isAuthorized: false
@@ -141,18 +142,21 @@ router.post('/register/images', upload.fields([{
     }
     try {
         let savedCafe = await workingCafe.save();
-        req.logIn(savedCafe, err => {
-            if (err) {
-                console.log(err);
-                res.status(500).json({
-                    error: err.message
-                })
-            } else {
-                res.status(200).json({
-                    status: 'success'
-                });
-            }
-        })
+        req.logIn(savedCafe, {
+                session: false
+            },
+            err => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err.message
+                    })
+                } else {
+                    res.status(200).json({
+                        status: 'success'
+                    });
+                }
+            })
     } catch (err) {
         console.log(err);
         res.sendStatus(500);
