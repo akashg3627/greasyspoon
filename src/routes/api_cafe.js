@@ -10,7 +10,9 @@ const router = require('express').Router();
 router.get('/orders', ensureCafe, async(req, res, next) => {
 
     try {
-        let workingCafe = await Cafe.findOne({ _id: req.user._id })
+        let workingCafe = await Cafe.findOne({
+            _id: req.user._id
+        })
         await res.status(workingCafe ? 200 : 404).json({
             orders: workingCafe.orders ? workingCafe.orders : null
         })
@@ -25,7 +27,7 @@ router.post('/:orderID/accept', (req, res) => {
         "orders._id": req.params.orderID,
     }, {
         $set: {
-            "orders.$.status": 'Accepted,currently making the order'
+            "orders.$.status": 1
         }
     }, {
         new: true
@@ -42,7 +44,7 @@ router.post('/:orderID/accept', (req, res) => {
                     'orders._id': workingOrder._id
                 }, {
                     $set: {
-                        "orders.$.status": 'Accepted, currently making the order'
+                        "orders.$.status": 1
                     }
                 })
                 .then((err, result) => {
@@ -62,7 +64,7 @@ router.get('/:orderID/complete', (req, res) => {
         "orders._id": req.params.orderID,
     }, {
         $set: {
-            "orders.$.status": 'Completed the order, please take the order'
+            "orders.$.status": 2
         }
     }, {
         new: true
@@ -79,7 +81,7 @@ router.get('/:orderID/complete', (req, res) => {
                     'orders._id': workingOrder._id
                 }, {
                     $set: {
-                        "orders.$.status": 'Completed the order, please take the order'
+                        "orders.$.status": 2
                     }
                 })
                 .then((err, result) => {
@@ -99,7 +101,7 @@ router.get('/:orderID/reject', (req, res) => {
         "orders._id": req.params.orderID,
     }, {
         $set: {
-            "orders.$.status": 'Order rejected'
+            "orders.$.status": -1
         }
     }, {
         new: true
@@ -116,7 +118,7 @@ router.get('/:orderID/reject', (req, res) => {
                     'orders._id': workingOrder._id
                 }, {
                     $set: {
-                        "orders.$.status": 'Order rejected'
+                        "orders.$.status": -1
                     }
                 })
                 .then((err, result) => {

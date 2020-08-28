@@ -47,15 +47,28 @@ router.post('/', ensureUser, async(req, res) => {
         })
     }
     let workingMenu;
+    let workingCafe;
+    let cafe_name;
+    let workingUser;
+    let user_name;
     try {
+
         workingMenu = await Menu.findOne({
             cafe_id: req.body.cafe_id
         }).exec();
+        workingCafe = await Cafe.findOne({
+            _id: req.body.cafe_id
+        }).exec();
+        cafe_name = workingCafe.name;
+        workingUser = await User.findOne({
+            _id: req.user._id
+        }).exec();
+        user_name = workingUser.name
     } catch (err) {
         console.log(err.message);
     }
     if (!workingMenu) {
-        res.status(404).json({
+        return res.status(404).json({
             error: 'Menu not found'
         })
     }
@@ -162,6 +175,8 @@ router.post('/', ensureUser, async(req, res) => {
             let newCart = new Cart({
                 user_id: req.user._id,
                 cafe_id,
+                user_name,
+                cafe_name,
                 total_price: Number(dish.price),
                 dishes: [tobepushed]
             })
