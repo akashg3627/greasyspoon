@@ -140,3 +140,8 @@ address{
 .gs-body{
   min-height: 600px;
 }
+
+.gs-color-dark
+{
+  color: var(--dark-color);
+}

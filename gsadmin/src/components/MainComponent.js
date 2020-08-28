@@ -40,7 +40,7 @@ class Main extends Component {
     this.props.checkauth();
   }
   }
-
+  
   render(){
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
