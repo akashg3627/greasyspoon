@@ -12,9 +12,9 @@ const upload = require('../config/multer_support')
 const {
     Cafe
 } = require('../models/Cafe')
-    //working api endpoint /api/menu
-    //returns list of all cafes
-router.get('/', async(req, res) => {
+//working api endpoint /api/menu
+//returns list of all cafes
+router.get('/', async (req, res) => {
     try {
         let cafeList = await Cafe.find().select({
             orders: 0,
@@ -30,21 +30,21 @@ router.get('/', async(req, res) => {
     }
 
 });
-router.get("/all", async(req, res) => {
-        console.log('erearea')
-        try {
-            let menus = await Menu.find({}).exec();
-            res.status(200).send(menus);
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({
-                err
-            })
-        }
+router.get("/all", async (req, res) => {
+    console.log('erearea')
+    try {
+        let menus = await Menu.find({}).exec();
+        res.status(200).send(menus);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            err
+        })
+    }
 
-    })
-    //working
-    //returns menu of cafe with cafeid
+})
+//working
+//returns menu of cafe with cafeid
 router.get("/:cafeid", (req, res) => {
     Menu.findOne({
             cafe_id: req.params.cafeid,
@@ -124,6 +124,38 @@ router.post("/withImage", ensureCafe, upload.single('dishImage'), (req, res) => 
                 });
             }
         })
+})
+router.put("/:dish_id/onlyImage/", ensureCafe, upload.single('dishImage'), async (req, res) => {
+    try {
+        let workingMenu = await Menu.findOne({
+            cafe_id: req.user._id
+        }).exec();
+        if (!workingMenu) {
+            res.status(404).json({
+                error: 'Could not find the menu'
+            })
+        };
+
+        let workingDish = await workingMenu.items.id(req.params.dish_id);
+        if (!workingDish) {
+            res.status(404).json({
+                error: 'Could not find the dish'
+            })
+        }
+        if (req.file != undefined) {
+            workingDish.pictureURL = req.file.path;
+        }
+        let newMenu = await workingMenu.save()
+        res.status(200).json({
+            success: 'Updated the dish',
+            menu: newMenu,
+        })
+
+    } catch (error) {
+        console.log(error);
+        return new Error(error);
+    }
+
 })
 
 
