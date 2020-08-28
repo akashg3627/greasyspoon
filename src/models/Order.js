@@ -16,6 +16,8 @@ const orderSchema = new mongoose.Schema({
         required: true,
         ref: 'Cafe'
     },
+    user_name: String,
+    cafe_name: String,
     dishes: [
         cartDishSchema
     ],

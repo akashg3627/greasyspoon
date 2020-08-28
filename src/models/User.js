@@ -1,12 +1,18 @@
 const mongoose = require("mongoose");
-const { orderSchema } = require("./Order");
+const {
+    orderSchema
+} = require("./Order");
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         immutable: true,
     },
-    google_id: { type: String, immutable: true },
+    email: String,
+    google_id: {
+        type: String,
+        immutable: true
+    },
     orders: [orderSchema],
     mobNumber: {
         type: Number,
