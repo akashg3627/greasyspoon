@@ -18,6 +18,8 @@ const cartSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    user_name: String,
+    cafe_name: String,
     cafe_id: {
         type: String,
         required: true,
