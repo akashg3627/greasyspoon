@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup } from 'reactstrap';
+import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, CardImg } from 'reactstrap';
 //import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { reduceCartdish } from '../redux/ActionCreators';
@@ -9,11 +9,17 @@ import { baseUrl } from '../shared/baseUrl'
 
 function RenderCafe({ cafe }) {
     return (
-        <div>
-            <div>
-            </div>
-            <div>
-            </div>
+        <div className="row">
+            <Card>
+                <div className="col">
+                    <CardImg src={baseUrl + cafe.logoURL} />
+                </div>
+                <div className="col">
+                    <CardBody>
+                        {cafe.name}
+                    </CardBody>
+                </div>
+            </Card>
         </div>
     );
 
@@ -102,10 +108,10 @@ function RenderCart({ cart }) {
 }
 
 const MenuComponent = (props) => {
-
     if (props.isLoading) {
         return (
             <div className="container">
+                <RenderCafe cafe={props.cafe} />
                 <div className="row">
                     <Loading />
                 </div>
@@ -115,6 +121,7 @@ const MenuComponent = (props) => {
     else if (props.errMess) {
         return (
             <div className="container">
+                <RenderCafe cafe={props.cafe} />
                 <div className="row">
                     <h4>{props.errMess}</h4>
                 </div>
@@ -131,6 +138,7 @@ const MenuComponent = (props) => {
         });
         return (
             <div className="container">
+                <RenderCafe cafe={props.cafe} />
                 <div className="row">
                     <div className="col-12 col-sm-7 offset-sm-1 mt-2">
                         {menu}
@@ -144,7 +152,6 @@ const MenuComponent = (props) => {
                             <CardFooter className="bg-success">Total Price Rs. {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
                         </Card>
                     </div>
-
                 </div>
             </div>
         );

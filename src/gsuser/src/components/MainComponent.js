@@ -59,7 +59,8 @@ this.props.fetchcafeList();
       errMess={this.props.menu.errMess} 
       cart={this.props.cart} 
       postCart={this.props.postCart} 
-      reduceCartdish={this.props.reduceCartdish} />
+      reduceCartdish={this.props.reduceCartdish}
+      cafe={this.props.cafeList.filter((cafe)=> cafe.cafe_id === match.params.cafeId)[0]} />
       )
     }
 
