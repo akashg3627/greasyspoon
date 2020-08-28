@@ -42,17 +42,18 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                             {dish.dish_name}
                         </Media>
                         {dish.category}
+                    Price  Rs {dish.price / 100}
                     </Media>
+
                     <Media className="col-12 col-sm-5 ">
                         <ButtonGroup size="lg">
                             <Button onClick={handledelete} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
-                            <Button disabled outline color="primary"></Button>
                             <Button onClick={handlepost} outline color="success"><span className="fa fa-plus fa-lg"> </span></Button>
                         </ButtonGroup>
                     </Media>
                 </Media>
-            </Media>
-        </Media>
+            </Media >
+        </Media >
     );
 }
 
@@ -82,8 +83,9 @@ function RenderCart({ cart }) {
                 return (
                     <div key={dish._id}>
                         <dl className="row p-1">
-                            <dt className="col-6">{dish.dish_name}</dt>
-                            <dd className="col-6">Quantity: {dish.quantity}</dd>
+                            <dt className="col-4">{dish.dish_name}</dt>
+                            <dd className="col-4">Quantity: {dish.quantity}</dd>
+                            <dd className="col-4">Rs. {dish.quantity * dish.price / 100}</dd>
                         </dl>
                     </div>
                 )
@@ -139,7 +141,7 @@ const MenuComponent = (props) => {
                             <CardBody>
                                 <RenderCart cart={props.cart} />
                             </CardBody>
-                            <CardFooter className="bg-success">Price {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
+                            <CardFooter className="bg-success">Total Price Rs. {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
                         </Card>
                     </div>
 
