@@ -125,9 +125,8 @@ router.post("/withImage", ensureCafe, upload.single('dishImage'), (req, res) => 
             }
         })
 })
-router.post("/onlyImage", ensureCafe, upload.single('dishImage'), async (req, res) => {
+router.put("/:dish_id/onlyImage/", ensureCafe, upload.single('dishImage'), async (req, res) => {
     try {
-        console.log(req.body);
         let workingMenu = await Menu.findOne({
             cafe_id: req.user._id
         }).exec();
@@ -137,7 +136,7 @@ router.post("/onlyImage", ensureCafe, upload.single('dishImage'), async (req, re
             })
         };
 
-        let workingDish = await Menu.items.id(req.body.dish_id);
+        let workingDish = await workingMenu.items.id(req.params.dish_id);
         if (!workingDish) {
             res.status(404).json({
                 error: 'Could not find the dish'
@@ -146,10 +145,10 @@ router.post("/onlyImage", ensureCafe, upload.single('dishImage'), async (req, re
         if (req.file != undefined) {
             workingDish.pictureURL = req.file.path;
         }
-        let newMenu = await Menu.save()
+        let newMenu = await workingMenu.save()
         res.status(200).json({
             success: 'Updated the dish',
-            menu
+            menu: newMenu,
         })
 
     } catch (error) {
