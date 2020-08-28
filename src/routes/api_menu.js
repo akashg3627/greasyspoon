@@ -173,9 +173,8 @@
              await fs.unlinkSync(imgURL);
              console.log('image deleted');
          }
-
          let newItems = workingMenu.items.filter((dish) => {
-             return dish._id !== req.params.dishID
+             return dish._id.toString() !== req.params.dishID
          });
          workingMenu.items = newItems;
          let newMenu = await workingMenu.save();
