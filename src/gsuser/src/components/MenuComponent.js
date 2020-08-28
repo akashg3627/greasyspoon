@@ -8,20 +8,18 @@ import { baseUrl } from '../shared/baseUrl'
 
 
 function RenderCafe({ cafe }) {
-    return (
-        <div className="row">
-            <Card>
-                <div className="col">
-                    <CardImg src={baseUrl + cafe.logoURL} />
-                </div>
-                <div className="col">
-                    <CardBody>
-                        {cafe.name}
-                    </CardBody>
-                </div>
-            </Card>
-        </div>
-    );
+
+    if (cafe != null)
+        return (
+            <Media className="media-menu col-12 justify-content-center">
+                <Media heading className="text-align-center">
+                    {cafe.name}
+                </Media>
+            </Media>
+        );
+    else return (<div>
+        cafe detail not found
+    </div>);
 
 }
 
@@ -39,7 +37,7 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
             <Media left middle className="col-5 col-sm-4 col-md-3">
-                <Media object src={baseUrl + dish.pictureURL} alt="Generic placeholder image" className="menuImage" />
+                <Media object src={baseUrl + dish.pictureURL} alt={dish.dish_name} className="menuImage" />
             </Media>
             <Media className="col-7 col-sm-8 col-md-9">
                 <Media className="row ml-1">
@@ -138,7 +136,7 @@ const MenuComponent = (props) => {
         });
         return (
             <div className="container">
-                <RenderCafe cafe={props.cafe} />
+                <div className="row"><RenderCafe cafe={props.cafe} /></div>
                 <div className="row">
                     <div className="col-12 col-sm-7 offset-sm-1 mt-2">
                         {menu}

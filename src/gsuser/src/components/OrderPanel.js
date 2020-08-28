@@ -64,6 +64,9 @@ else {
 
 
 function OrderPanel(props) {
+  function handleOrder(){
+    props.addOrder();
+  }
 
   return (
     <div className="container">
@@ -80,14 +83,14 @@ function OrderPanel(props) {
         <div className="col col-md-6">
           <Card>
           <RenderCart cart={props.cart} />
-          <CardFooter><Button className="btn btn-primary">Place Order</Button></CardFooter>
+          <CardFooter><Button onClick={handleOrder} className="btn btn-primary">Place Order</Button></CardFooter>
           </Card>
         </div>
       </div>
-      {/*<div className="row">
+     {/* <div className="row">
         <RenderOrder order={props.order} />
-  </div>*/}
-    </div>
+        </div>*/}
+        </div>
   );
 }
 

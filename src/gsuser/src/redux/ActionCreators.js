@@ -273,7 +273,8 @@ export const fetchCart = () => (dispatch) => {
 }
 
 export const postCart = (dishId, cafeId) => (dispatch) => {
-    dispatch(cartLoading())
+    dispatch(cartLoading());
+    console.log("postinf dish");
     const newCart = {
         dish_id: dishId,
         cafe_id: cafeId
@@ -313,6 +314,7 @@ export const postCart = (dishId, cafeId) => (dispatch) => {
 
 export const reduceCartdish = (dishId) => (dispatch) => {
 dispatch(cartLoading());
+console.log("Deleting dish")
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId, {
@@ -413,3 +415,36 @@ export const addcafelist = (cafeList) => ({
     type: ActionTypes.CAFE_LIST_ADD,
     payload: cafeList
 });
+
+
+
+export const addOrder = () =>(dispatch)=>{
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    return fetch(baseUrl + 'api/order', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            console.log("order completed", response.object);
+        })
+        .catch(error => console.log(error));
+}

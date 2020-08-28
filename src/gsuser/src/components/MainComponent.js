@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, checkauth} from '../redux/ActionCreators';
+import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, checkauth, addOrder} from '../redux/ActionCreators';
 
 //import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -32,7 +32,8 @@ fetchcafeList: ()=>{dispatch(fetchcafeList())},
 reduceCartdish: (dishId)=>{dispatch(reduceCartdish(dishId))},
 logoutUser: () => {dispatch(logoutUser())},
 loginGoogleUser: (data)=>dispatch(loginGoogleUser(data)),
-checkauth: ()=>dispatch(checkauth())
+checkauth: ()=>dispatch(checkauth()),
+addOrder: ()=>dispatch(addOrder())
 });
 
 
@@ -60,7 +61,7 @@ this.props.fetchcafeList();
       cart={this.props.cart} 
       postCart={this.props.postCart} 
       reduceCartdish={this.props.reduceCartdish}
-      cafe={this.props.cafeList.filter((cafe)=> cafe.cafe_id === match.params.cafeId)[0]} />
+      cafe={this.props.cafeList.list.filter((cafe)=> cafe._id === match.params.cafeId)[0]} />
       )
     }
 
@@ -81,7 +82,7 @@ this.props.fetchcafeList();
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
                 <PrivateRoute path="/menu/:cafeId" component={MenuCafe} />
-                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth} cart={this.props.cart} />} />
+                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth} cart={this.props.cart} addOrder={this.props.addOrder} />} />
                 <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>
