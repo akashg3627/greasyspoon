@@ -42,7 +42,9 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                             {dish.dish_name}
                         </Media>
                         {dish.category}
+                    Price  Rs {dish.price / 100}
                     </Media>
+
                     <Media className="col-12 col-sm-5 ">
                         <ButtonGroup size="lg">
                             <Button onClick={handledelete} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
@@ -50,8 +52,8 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                         </ButtonGroup>
                     </Media>
                 </Media>
-            </Media>
-        </Media>
+            </Media >
+        </Media >
     );
 }
 
