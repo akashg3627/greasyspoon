@@ -33,14 +33,15 @@ function RenderMenuItem({ dish, deleteDish }) {
 
             <CardBody>
                 <CardTitle>{dish.dish_name}</CardTitle>
-                <CardText>{dish.category}</CardText>
+                <CardText>{dish.category}  Price: Rs. {dish.price}
+                </CardText>
             </CardBody>
 
         </Card>
     );
 }
 
-function RenderAddDish(props) {
+function RenderAddDish({addDishWI}) {
     const [modal, setModal] = useState(false);
     const toggle = () => {
         setModal(!modal);
@@ -54,7 +55,7 @@ function RenderAddDish(props) {
                     ADD DISH
                 </ModalHeader>
                 <ModalBody>
-                    <DishPost />
+                    <DishPost addDishWI={addDishWI} />
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={toggle}>Submit</Button>
@@ -64,7 +65,7 @@ function RenderAddDish(props) {
     );
 }
 
-function RenderMenu(props) {
+const MenuComponent = (props) => {
     if (props.isLoading) {
         return (
             <div className="container gs-body">
@@ -95,7 +96,7 @@ function RenderMenu(props) {
         return (
             <div className="container gs-body">
                 <div className="row">
-                    <RenderAddDish />
+                    <RenderAddDish addDishWI={props.addDishWI} />
                 </div>
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4">
                     {menu}
@@ -107,21 +108,12 @@ function RenderMenu(props) {
         <div className="container gs-body">
             <div>No Dish Added</div>
             <div className="row">
-                <RenderAddDish />
+                <RenderAddDish addDishWI={props.addDishWI} />
             </div>
         </div>
     );
 
 }
 
-
-const MenuComponent = (props) => {
-
-    return (
-        <div>
-            <RenderMenu menu={props.menu} isLoading={props.isLoading} errMess={props.errMess} deleteDish={props.deleteDish} />
-        </div>
-    );
-}
 
 export default MenuComponent;

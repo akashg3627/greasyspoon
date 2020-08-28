@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function DishPost(props) {
-    const [dishname, setName] = useState('');
+    const [dish_name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
     const [featured, setFeatured] = useState(false);
@@ -10,7 +10,15 @@ function DishPost(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(dishname, category, price, description, featured);
+        console.log(dish_name, category, price, description, featured);
+const formData = new FormData();
+formData.append('dish_name', dish_name);
+formData.append('price', price);
+formData.append('category', category);
+formData.append('description', description);
+formData.append('featured', featured);
+formData.append('image',image, image.name);
+props.addDishWI(formData);
     }
     return (
         <div className="gs-color-dark">
@@ -18,7 +26,7 @@ function DishPost(props) {
                 <div className="form-group row">
                     <label className="col-sm-3 col-form-label">Dish Title</label>
                     <div className="col-sm-9">
-                        <input type="text" className="form-control" name="dishname" value={dishname} onChange={(e) => setName(e.target.value)}></input>
+                        <input type="text" className="form-control" name="dishname" value={dish_name} onChange={(e) => setName(e.target.value)}></input>
                     </div>
                 </div>
                 <div className="form-group row">

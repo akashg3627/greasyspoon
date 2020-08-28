@@ -240,7 +240,7 @@ export const fetchMenu = (cafeId) =>(dispatch)=>{
 export const deleteDish=(dishId)=>(dispatch)=>{
     const token = localStorage.getItem('token');
 
-    return fetch('api/menu/'+ dishId, {
+    return fetch(baseUrl + 'api/menu/'+ dishId, {
         method : "DELETE",
         headers:{
             'Content-Type': 'application/json',
@@ -266,3 +266,68 @@ export const deleteDish=(dishId)=>(dispatch)=>{
     })
     .catch(error => console.log(error));
 }
+
+
+export const addDish=(dish)=>(dispatch)=>{
+    const token = localStorage.getItem('token');
+
+    return fetch(baseUrl + 'api/menu/', {
+        method : "POST",
+        headers:{
+            'Content-Type': 'application/json',
+            'X-Auth-Token': token
+        },
+        credentials: 'same-origin',
+        body: dish
+    })
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+        },
+        error => {
+            throw error;
+        })
+    .then(response => response.json())
+    .then((response)=>{
+        dispatch(addMenu(response.newMenu));
+    })
+    .catch(error => console.log(error));
+}
+
+export const addDishWI=(formData)=>(dispatch)=>{
+    const token = localStorage.getItem('token');
+
+    return fetch(baseUrl + 'api/menu/withImage', {
+        method : "POST",
+        headers:{
+            'X-Auth-Token': token
+        },
+        credentials: 'same-origin',
+        body: formData,
+        
+    })
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+        },
+        error => {
+            throw error;
+        })
+    .then(response => response.json())
+    .then((response)=>{
+
+        dispatch(addMenu(response.newMenu));
+    })
+    .catch(error => console.log(error));
+}
+
