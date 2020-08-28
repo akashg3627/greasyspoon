@@ -83,8 +83,9 @@ function RenderCart({ cart }) {
                 return (
                     <div key={dish._id}>
                         <dl className="row p-1">
-                            <dt className="col-6">{dish.dish_name}</dt>
-                            <dd className="col-6">Quantity: {dish.quantity}</dd>
+                            <dt className="col-4">{dish.dish_name}</dt>
+                            <dd className="col-4">Quantity: {dish.quantity}</dd>
+                            <dd className="col-4">Rs. {dish.quantity * dish.price / 100}</dd>
                         </dl>
                     </div>
                 )
@@ -140,7 +141,7 @@ const MenuComponent = (props) => {
                             <CardBody>
                                 <RenderCart cart={props.cart} />
                             </CardBody>
-                            <CardFooter className="bg-success">Price {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
+                            <CardFooter className="bg-success">Total Price Rs. {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
                         </Card>
                     </div>
 
