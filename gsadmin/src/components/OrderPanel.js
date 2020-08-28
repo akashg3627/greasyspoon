@@ -1,72 +1,126 @@
 import React from 'react';
-function RenderMenuItem({ dish, deleteFavorite }) {
-    return(
-        <Media tag="li">
-            <Media left middle>
-                <Media object src={baseUrl + dish.image} alt={dish.name} />
-            </Media>
-            <Media body className="ml-5">
-                <Media heading>{dish.name}</Media>
-                <p>{dish.description}</p>
-                <Button outline color="danger" onClick={() => deleteFavorite(dish._id)}>
-                    <span className="fa fa-times"></span>
-                </Button>
-            </Media>
-        </Media>
+import { Card, CardHeader, CardBody, Table } from 'reactstrap';
+
+function RenderPendingOrder({ order }) {
+  const dishes = order.dishes.map((dish) => {
+    return (
+      <tr>
+        <td>{dish.dish_name}</td>
+        <td>{dish.quantity}</td>
+        <td>{dish.quantity * dish.price / 100}</td>
+      </tr>
     );
+  })
+  return (
+    <Card>
+      <CardBody>
+        <Table>
+          <thead>
+            <tr>
+              <th>Dish Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dishes}
+            <tr>
+              <td> </td>
+              <th>Total Price</th>
+              <th>{order.total_price}</th>
+            </tr>
+          </tbody>
+        </Table>
+      </CardBody>
+    </Card>
+  );
+}
+function RenderCompleteOrder({ order }) {
+  const dishes = order.dishes.map((dish) => {
+    return (
+      <tr>
+        <td>{dish.dish_name}</td>
+        <td>{dish.quantity}</td>
+        <td>{dish.quantity * dish.price / 100}</td>
+      </tr>
+    );
+  })
+  return (
+    <Card>
+      <CardBody>
+        <Table>
+          <thead>
+            <tr>
+              <th>Dish Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dishes}
+            <tr>
+              <td> </td>
+              <th>Total Price</th>
+              <th>{order.total_price}</th>
+            </tr>
+          </tbody>
+        </Table>
+      </CardBody>
+    </Card>
+  );
 }
 function OrderPanel(props) {
-    const orders = props.orders.dishes.map((dish) => {
-        return (
-            <div key={dish._id} className="col-12 mt-5">
-                <RenderMenuItem dish={dish} />
+
+  if (props.user != null) {
+    if (props.user.orders == null) {
+      return (
+        <div>
+          No orders placed yet
+        </div>
+      );
+    }
+    else {
+      const pendingOrders = props.user.orders.map((order) => {
+        if (order.status === 'pending') {
+          return (
+            <div>
+              <RenderPendingOrder order={order} />
             </div>
-        );
-    });
-    const [activeTab, setActiveTab] = useState('1');
-
-  const toggle = tab => {
-    if(activeTab !== tab) setActiveTab(tab);
-  }
-
-    return (
+          );
+        }
+        else return (<div>
+          No pending
+        </div>)
+      });
+      const completedOrders = props.user.orders.map((order) => {
+        if (order.status === 'done') {
+          return (
+            <div>
+              <h3>Completed Orders</h3>
+              <RenderCompleteOrder order={order} />
+            </div>
+          );
+        }
+        else return (<div>
+          No Order Yet
+        </div>)
+      });
+      return (
         <div className="container">
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '1' })}
-            onClick={() => { toggle('1'); }}
-          >
-            Active Orders
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '2' })}
-            onClick={() => { toggle('2'); }}
-          >
-            Pending Orders
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
-                <div className="row">
-                    <Media list>
-                        {orders}
-                    </Media>
-                </div>
-        </TabPane>
-        <TabPane tabId="2">
-                <div className="row">
-                    <Media list>
-                        {orders}
-                    </Media>
-                </div>
-        </TabPane>
-      </TabContent>
-    </div>  
-    );
+          <div className="row">
+            {pendingOrders}
+          </div>
+          <div className="row">
+            {completedOrders}
+          </div>
+        </div>
+      );
+    }
+  }
+  else return (
+    <div>No Order Yet</div>
+  );
 }
+
 
 export default OrderPanel;

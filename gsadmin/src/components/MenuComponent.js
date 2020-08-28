@@ -1,27 +1,35 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardImg, CardTitle, Breadcrumb, BreadcrumbItem, Button, CardBody, CardText, CardImgOverlay, CardHeader, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import DishPost from './DishPost';
+import EditDish from './EditDish';
 
-
-function RenderMenuItem({ dish, deleteDish }) {
+function RenderMenuItem({ dish, deleteDish, addDishWI }) {
     function handleDishdelete() {
         deleteDish(dish._id);
     }
+    const [editmodal, setEditModal] = useState(false);
+    const toggleEdit = () => {
+        setEditModal(!editmodal);
+    }
     return (
         <Card>
-
-            <CardImg top width="100%" src={baseUrl + dish.pictureURL} alt={dish.dish_name} />
+            {dish.pictureURL ? <CardImg top width="100%" src={baseUrl + dish.pictureURL} alt={dish.dish_name} /> : null}
             <CardImgOverlay>
                 <div className="row">
                     <div className="col-auto mr-auto">
-                        <Link to={`/menu/${dish._id}`} >
-                            <Button className="btn btn-success" >
-                                <span className="fa fa-pencil fa-lg"></span>
-                            </Button>
-                        </Link>
+                        <Button className="btn btn-success" onClick={toggleEdit}>
+                            <span className="fa fa-pencil fa-lg"></span>
+                        </Button>
+                        <Modal isOpen={editmodal} toggle={toggleEdit}>
+                            <ModalHeader>
+                                EDIT DISH
+                </ModalHeader>
+                            <ModalBody>
+                                <EditDish dish={dish} addDishWI={addDishWI} toggleEdit={toggleEdit} />
+                            </ModalBody>
+                        </Modal>
                     </div>
                     <div className="col-auto">
                         <Button className="btn btn-warning" onClick={handleDishdelete}>
@@ -31,7 +39,7 @@ function RenderMenuItem({ dish, deleteDish }) {
                 </div>
             </CardImgOverlay>
 
-            <CardBody>
+            <CardBody className="gs-color-dark">
                 <CardTitle>{dish.dish_name}</CardTitle>
                 <CardText>{dish.category}  Price: Rs. {dish.price}
                 </CardText>
@@ -41,7 +49,7 @@ function RenderMenuItem({ dish, deleteDish }) {
     );
 }
 
-function RenderAddDish({addDishWI}) {
+function RenderAddDish({ addDishWI }) {
     const [modal, setModal] = useState(false);
     const toggle = () => {
         setModal(!modal);
@@ -57,9 +65,6 @@ function RenderAddDish({addDishWI}) {
                 <ModalBody>
                     <DishPost addDishWI={addDishWI} />
                 </ModalBody>
-                <ModalFooter>
-                    <Button onClick={toggle}>Submit</Button>
-                </ModalFooter>
             </Modal>
         </div>
     );
@@ -88,7 +93,7 @@ const MenuComponent = (props) => {
         const menu = props.menu.items.map((dish) => {
             return (
                 <div key={dish._id} className="col py-3">
-                    <RenderMenuItem dish={dish} deleteDish={props.deleteDish} />
+                    <RenderMenuItem dish={dish} deleteDish={props.deleteDish} addDishWI={props.addDishWI} />
                 </div>
             );
         });

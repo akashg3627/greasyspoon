@@ -14,7 +14,8 @@ import SignUp from './SignUp';
 import {DISHES} from '../shared/dishes';
 import Footer from './Footer';
 
-import {signin, signup, fetchMenu, deleteDish, checkauth, addDishWI} from '../redux/ActionCreators';
+import {signin, signup, logout, fetchMenu, deleteDish, checkauth, addDishWI} from '../redux/ActionCreators';
+import OrderPanel from './OrderPanel';
 
 const mapStateToProps =(state)=>{
   return{
@@ -27,6 +28,7 @@ const mapStateToProps =(state)=>{
 const mapDispatchToProps=(dispatch)=>({
 signin: (creds)=> dispatch(signin(creds)),
 signup: (creds)=> dispatch(signup(creds)),
+logout: () => dispatch(logout()),
 fetchMenu: (cafeId)=>dispatch(fetchMenu(cafeId)),
 deleteDish: (dishId)=>dispatch(deleteDish(dishId)),
 checkauth: ()=>dispatch(checkauth()),
@@ -57,10 +59,11 @@ class Main extends Component {
 
       return (
         <div>
-          <HeaderComponent />  
+          <HeaderComponent user={this.props.auth.user} logout={this.props.logout} />  
           <Switch>
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><MenuComponet addDishWI={this.props.addDishWI} deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
+                <PrivateRoute exact path="/order" component={()=> <OrderPanel user={this.props.auth.user} />} />
                 <Route exaxt path ="/login" component={()=><LoginComponent signin={this.props.signin} signup={this.props.signup} />} />
                 <Redirect to="/home" />
           </Switch>

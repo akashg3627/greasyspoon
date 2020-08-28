@@ -178,7 +178,7 @@ router.delete("/:dishID", ensureCafe, (req, res) => {
             if (!err) {
                 res.status(200).json({
                     status: "deleted",
-                    response: response
+                    newMenu: response
                 });
             } else {
                 res.status(500).json({

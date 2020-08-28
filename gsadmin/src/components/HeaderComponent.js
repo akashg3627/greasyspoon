@@ -4,11 +4,6 @@ import { NavLink, Link } from 'react-router-dom';
 
 
 function HeaderComponent(props) {
-    const handlemenu =()=>{
-        if(props.user != null){
-            props.fetchMenu(props.user._id);
-        }
-    }
     const [isNavOpen, toggleNavbar] = useState(false);
     return (
         <React.Fragment>
@@ -31,25 +26,36 @@ function HeaderComponent(props) {
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/menu" onClick={handlemenu()}>
+                                <NavLink className="nav-link" to="/menu">
                                     Menu
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/contactus">
-                                    Contact Us
+                                <NavLink className="nav-link" to="/order">
+                                    Order
                             </NavLink>
                             </NavItem>
-                            <NavItem>
-                                <NavLink className="nav-link" to="/contactus">
-                                    <span className="fa fa-search fa-lg"></span>
-                                </NavLink>
-                            </NavItem>
-                            <Link to="/login">
-                            <Button className="nav-link btn-login">
-                                <span className="fa fa-bars fa-lg"></span>
+                            {props.user != null
+                                ?
+                                <NavItem>
+                                    <NavLink className="nav-link" to="/profile">
+                                        <span className="fa fa-user fa-lg"></span>  {props.user.name}
+                                    </NavLink>
+                                </NavItem>
+                                : null
+                            }
+                            {props.user != null
+                                ?
+                                <Button className="nav-link btn-login" onClick={props.logout}>
+                                    <span className="fa fa-sign-out fa-lg"></span> Logout
                             </Button>
-                            </Link>
+                                :
+                                <Link to="/login">
+                                    <Button>
+                                        <span className="fa fa-sign-in fa-lg"></span> Login
+                                </Button>
+                                </Link>
+                            }
                         </Nav>
                     </Collapse>
                 </div>

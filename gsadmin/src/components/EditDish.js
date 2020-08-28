@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { baseUrl } from '../shared/baseUrl';
 
-function DishPost(props) {
-    const [dish_name, setName] = useState('');
-    const [price, setPrice] = useState(0);
-    const [description, setDescription] = useState('');
-    const [featured, setFeatured] = useState(false);
-    const [category, setCategory] = useState('');
+function EditDish(props) {
+    const [dish_name, setName] = useState(props.dish.dish_name);
+    const [price, setPrice] = useState(props.dish.price);
+    const [description, setDescription] = useState(props.dish.description);
+    const [featured, setFeatured] = useState(props.dish.featured);
+    const [category, setCategory] = useState(props.dish.category);
     const [dishImage, setImage] = useState(null);
 
     function handleSubmit(event) {
@@ -20,6 +21,7 @@ function DishPost(props) {
         if (dishImage != null)
             formData.append('dishImage', dishImage, dishImage.name);
         props.addDishWI(formData);
+        props.toggleEdit();
     }
     return (
         <div className="gs-color-dark">
@@ -57,7 +59,9 @@ function DishPost(props) {
                     <div className="col-sm-9">
                         <input type="file" name="dishImage" onChange={(e) => setImage(e.target.files[0])} ></input>
                     </div>
-
+                </div>
+                <div className="row">
+                    <img alt="No image found" src={baseUrl + props.dish.pictureURL} height="256" width="256" className="rounded float-right" ></img>
                 </div>
                 <button type="submit" className="btn btn-primary" >Add Dish</button>
             </form>
@@ -65,4 +69,4 @@ function DishPost(props) {
     );
 }
 
-export default DishPost;
+export default EditDish;

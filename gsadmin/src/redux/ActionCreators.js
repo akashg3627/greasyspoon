@@ -88,11 +88,10 @@ export const receiveLogout = () => {
 }
 
 // Logs the user out
-export const logoutUser = () => (dispatch) => {
-    dispatch(requestLogout())
-    localStorage.removeItem('token');
-    localStorage.removeItem('creds');
-    dispatch(receiveLogout())
+export const logout = () => (dispatch) => {
+    dispatch(requestLogout());
+    localStorage.clear();
+    dispatch(receiveLogout());
 }
 
 
@@ -144,7 +143,7 @@ export const signin = (creds) =>(dispatch) =>{
 export const signup = (creds) =>(dispatch) =>{
     console.log("signup reducer",creds );
     dispatch(requestLogin());
-    
+    localStorage.clear();
     return fetch(baseUrl + 'api/profile/register/cafe', {
         method: 'POST',
         headers: { 
@@ -238,6 +237,7 @@ export const fetchMenu = (cafeId) =>(dispatch)=>{
 
 
 export const deleteDish=(dishId)=>(dispatch)=>{
+    dispatch(menuLoading());
     const token = localStorage.getItem('token');
 
     return fetch(baseUrl + 'api/menu/'+ dishId, {
@@ -262,13 +262,14 @@ export const deleteDish=(dishId)=>(dispatch)=>{
         })
     .then(response => response.json())
     .then((response)=>{
-        dispatch(addMenu(response));
+        dispatch(addMenu(response.newMenu));
     })
-    .catch(error => console.log(error));
+    .catch(error => dispatch(menuFailed(error.message)))
 }
 
 
 export const addDish=(dish)=>(dispatch)=>{
+    dispatch(menuLoading());
     const token = localStorage.getItem('token');
 
     return fetch(baseUrl + 'api/menu/', {
@@ -300,6 +301,7 @@ export const addDish=(dish)=>(dispatch)=>{
 }
 
 export const addDishWI=(formData)=>(dispatch)=>{
+    dispatch(menuLoading());
     const token = localStorage.getItem('token');
 
     return fetch(baseUrl + 'api/menu/withImage', {
@@ -328,6 +330,6 @@ export const addDishWI=(formData)=>(dispatch)=>{
 
         dispatch(addMenu(response.newMenu));
     })
-    .catch(error => console.log(error));
+    .catch(error => dispatch(menuFailed(error.message)))
 }
 
