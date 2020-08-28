@@ -46,7 +46,6 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                     <Media className="col-12 col-sm-5 ">
                         <ButtonGroup size="lg">
                             <Button onClick={handledelete} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
-                            <Button disabled outline color="primary"></Button>
                             <Button onClick={handlepost} outline color="success"><span className="fa fa-plus fa-lg"> </span></Button>
                         </ButtonGroup>
                     </Media>
