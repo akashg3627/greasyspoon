@@ -14,7 +14,9 @@ const {
     Cafe
 } = require('../models/Cafe');
 const router = require('express').Router();
-
+//user name
+//cafe name
+//
 router.post('/', ensureUser, async(req, res) => {
     try {
         console.log('order initiated');
@@ -34,7 +36,7 @@ router.post('/', ensureUser, async(req, res) => {
 
             workingOrder = new Order({
                 ...workingCartCopy,
-                status: 'Yet to be accepted'
+                status: 0,
 
             })
             currUser = await User.findOne({
