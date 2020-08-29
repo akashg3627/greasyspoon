@@ -37,10 +37,10 @@ router.get('/', ensureUser, async(req, res) => {
 });
 
 router.post('/', ensureUser, async(req, res) => {
+    console.log(req.user);
     //mantain only one cart at a time
     //find all carts first
     //make sure only one cart is present at a time
-    console.log('the req body is', req.body)
     if (!req.body.cafe_id || !req.body.dish_id) {
         return res.status(404).json({
             error: 'cafe_id and dish_id required in body of the post request.'
@@ -49,7 +49,6 @@ router.post('/', ensureUser, async(req, res) => {
     let workingMenu;
     let workingCafe;
     let cafe_name;
-    let workingUser;
     let user_name;
     try {
 
@@ -60,10 +59,9 @@ router.post('/', ensureUser, async(req, res) => {
             _id: req.body.cafe_id
         }).exec();
         cafe_name = workingCafe.name;
-        workingUser = await User.findOne({
-            _id: req.user._id
-        }).exec();
-        user_name = workingUser.name
+
+
+        user_name = req.user.name;
     } catch (err) {
         console.log(err.message);
     }
@@ -81,10 +79,10 @@ router.post('/', ensureUser, async(req, res) => {
                 error: err.message
             });
         }
-        console.log(workingMenu.items);
+        //console.log(workingMenu.items);
         let dish = await workingMenu.items.id(req.body.dish_id);
         dish = JSON.parse(JSON.stringify(dish))
-        console.log('the dish is', dish);
+            // console.log('the dish is', dish);
         if (dish == undefined
             //||!dish.availablity
         ) {
@@ -104,7 +102,7 @@ router.post('/', ensureUser, async(req, res) => {
         // }
         let cafe_id = req.body.cafe_id;
         if (cart) {
-            console.log(cart)
+            // console.log(cart)
             if (cart.cafe_id == cafe_id) {
                 let dishesCopy = JSON.parse(JSON.stringify(cart.dishes));
                 let dishExists = false;
