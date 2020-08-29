@@ -37,16 +37,15 @@ router.post('/', ensureUser, async(req, res) => {
             workingOrder = new Order({
                 ...workingCartCopy,
                 status: 0,
-
             })
             currUser = await User.findOne({
                 _id: req.user._id
             })
-            currUser.orders.push(workingOrder);
+            currUser.orders.splice(0, 0, workingOrder);
             currCafe = await Cafe.findOne({
                 _id: workingCart.cafe_id
             })
-            currCafe.orders.push(workingOrder);
+            currCafe.orders.splice(0, 0, workingOrder);
             currUser.save(err => {
                 if (err) {
                     res.status(500).json({

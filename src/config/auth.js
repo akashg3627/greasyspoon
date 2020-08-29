@@ -18,6 +18,8 @@ async function ensureAuthenticated(req, res, next) {
             console.log('log in request as user');
             let workingUser = await User.findOne({
                 _id: payload.userId
+            }).sort({
+                "orders.time_placed": -1
             })
             if (workingUser) {
                 req.user = workingUser
@@ -30,6 +32,8 @@ async function ensureAuthenticated(req, res, next) {
         } else {
             let workingCafe = await Cafe.findOne({
                 _id: payload.userId
+            }).sort({
+                "orders.time_placed": -1
             })
             if (workingCafe) {
                 req.user = workingCafe
