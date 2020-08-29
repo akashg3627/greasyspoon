@@ -137,9 +137,11 @@
      deepClone.availability = (deepClone.availability == 'true');
      deepClone.featured = (deepClone.featured == 'true');
      console.log(req.user._id);
+     const dish_id = deepClone.dish_id;
+     delete deepClone.dish_id;
      Menu.findOneAndUpdate({
              cafe_id: req.user._id,
-             "items._id": deepClone._id
+             "items._id": dish_id
          }, {
              $set: {
                  "items.$": deepClone,
