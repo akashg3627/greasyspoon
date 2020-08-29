@@ -57,7 +57,7 @@ export default class SignUp extends React.Component {
   }
   render() {
     return (
-      <CardBody>
+      <CardBody className="gs-color-dark">
         <form onSubmit={this.handleSubmit}>
           <div className="form-group row">
 
@@ -91,23 +91,19 @@ export default class SignUp extends React.Component {
               <input type="number" name="number" value={this.state.number} className="form-control" onChange={this.handleNumber}></input>
             </div>
           </div>
-          <div>
-            <div>
-              <label htmlFor="logoImage"></label>
-            </div>
-            <div>
+          <div className="form-group row">
+              <label htmlFor="logoImage" className="col-sm-2 col-form-label">Logo Image</label>
+            <div className="col-sm-10">
               <input type="file" name="logoImage" onChange={this.handleLogoImg}></input>
             </div>
           </div>
-          <div>
-            <div>
-              <label htmlFor="cafeImage"></label>
-            </div>
-            <div>
+          <div className="form-group row">
+              <label htmlFor="cafeImage"  className="col-sm-2 col-form-label">Cafe Image</label>
+            <div className="col-sm-10">
               <input type="file" name="cafeImage" onChange={this.handleCafeImg}></input>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">Sign Up</button>
+          <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
         </form>
       </CardBody>
     );

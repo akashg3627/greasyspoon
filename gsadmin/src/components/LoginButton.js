@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Nav, Button, Modal, Card, ModalHeader, NavItem, TabContent, TabPane, ModalBody } from 'reactstrap';
+import {Nav, Button, Modal, Card, ModalHeader, NavItem, TabContent, TabPane, ModalBody, Media } from 'reactstrap';
 import SignIn from './SignIn';
 import { NavLink } from 'react-router-dom';
 import SignUp from './SignUp';
@@ -27,16 +27,14 @@ function LoginButton(props) {
                 </Button>
             }
             <Modal isOpen={loginmodal} toggle={toggleModal} size="lg" >
-                <ModalHeader>
-                    <div className="row">
-                        <div className="col-6">
+                <div className="row justify-content-around mt-3">
+                        <div className="col-4">
                             <Button outline block color="link" onClick={() => toggleTab("1")} >SignIn</Button>
                         </div>
-                        <div className="col-6">
+                        <div className="col-4">
                             <Button block outline color="link" onClick={() => toggleTab("2")} >SignUp</Button>
                         </div>
-                    </div>
-                </ModalHeader>
+                </div>
                 <ModalBody>
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId="1">
