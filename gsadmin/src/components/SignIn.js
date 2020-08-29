@@ -11,6 +11,7 @@ export default class SignIn extends React.Component {
 
   handleSubmit(values) {
     this.props.signin({ email: values.username, password: values.password });
+    this.props.toggleModal();
   }
   render() {
     return (

@@ -135,7 +135,7 @@ export const signin = (creds) => (dispatch) => {
                 // Dispatch the success action
                 dispatch(receiveLogin(response));
                 dispatch(fetchMenu(id));
-                dispatch((fetchOrder));
+                dispatch(fetchOrder());
             } else {
                 var error = new Error('Error ' + response.status);
                 error.response = response;
@@ -341,7 +341,7 @@ export const editDishWI = (formData) => (dispatch) => {
     const token = localStorage.getItem('token');
 
     return fetch(baseUrl + 'api/menu/withImage', {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 'X-Auth-Token': token
             },
@@ -387,7 +387,7 @@ export const fetchOrder = () =>(dispatch)=>{
     dispatch(orderLoading());
     const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
-    return fetch(baseUrl + 'api/profile', {
+    return fetch(baseUrl + 'api/cafe/orders', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -409,19 +409,80 @@ export const fetchOrder = () =>(dispatch)=>{
                 throw errmess;
             })
         .then(response => response.json())
-        .then(user => {
-            const userinfo = JSON.parse(JSON.stringify(user));
-            const order = userinfo.orders;
-            dispatch(addOrder(order))
+        .then(response => {
+            const order = JSON.parse(JSON.stringify(response.orders));
+            dispatch(addOrder(order));
         })
         .catch(error => dispatch(orderFailed(error.message)));
 }
 
-export const acceptOrder = () =>(dispatch)=>{
+export const acceptOrder = (orderId) =>(dispatch)=>{
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
-    return fetch(baseUrl + 'api/order', {
+    return fetch(baseUrl + 'api/cafe/'+ orderId + '/accept', {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            dispatch(fetchOrder());
+        })
+        .catch(error => console.log(error));
+};
+
+export const rejectOrder = (orderId) =>(dispatch)=>{
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    return fetch(baseUrl + 'api/cafe/' + orderId + '/reject', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            dispatch(fetchOrder());
+        })
+        .catch(error => console.log(error));
+};
+
+export const completeOrder = (orderId) =>(dispatch)=>{
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    return fetch(baseUrl + 'api/cafe/' + orderId + '/complete', {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': bearer,

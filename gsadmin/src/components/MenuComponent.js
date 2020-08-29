@@ -5,7 +5,7 @@ import { baseUrl } from '../shared/baseUrl';
 import DishPost from './DishPost';
 import EditDish from './EditDish';
 
-function RenderMenuItem({ dish, deleteDish, addDishWI }) {
+function RenderMenuItem({ dish, deleteDish, addDishWI, editDishWI }) {
     function handleDishdelete() {
         deleteDish(dish._id);
     }
@@ -27,7 +27,7 @@ function RenderMenuItem({ dish, deleteDish, addDishWI }) {
                                 EDIT DISH
                 </ModalHeader>
                             <ModalBody>
-                                <EditDish dish={dish} addDishWI={addDishWI} toggleEdit={toggleEdit} />
+                                <EditDish dish={dish} editDishWI={editDishWI} toggleEdit={toggleEdit} />
                             </ModalBody>
                         </Modal>
                     </div>
@@ -93,7 +93,7 @@ const MenuComponent = (props) => {
         const menu = props.menu.items.map((dish) => {
             return (
                 <div key={dish._id} className="col py-3">
-                    <RenderMenuItem dish={dish} deleteDish={props.deleteDish} addDishWI={props.addDishWI} />
+                    <RenderMenuItem dish={dish} deleteDish={props.deleteDish} addDishWI={props.addDishWI} editDishWI={props.editDishWI} />
                 </div>
             );
         });

@@ -53,6 +53,7 @@ export default class SignUp extends React.Component {
     if (this.state.cafeImage != null)
       formData.append("cafeImage", this.state.cafeImage, this.state.cafeImage.name);
     this.props.signup(formData);
+    this.props.toggleModal();
   }
   render() {
     return (

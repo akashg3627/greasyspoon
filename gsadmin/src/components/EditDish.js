@@ -3,7 +3,7 @@ import { baseUrl } from '../shared/baseUrl';
 
 function EditDish(props) {
     const [dish_name, setName] = useState(props.dish.dish_name);
-    const [price, setPrice] = useState(props.dish.price);
+    const [price, setPrice] = useState(props.dish.price/100);
     const [description, setDescription] = useState(props.dish.description);
     const [featured, setFeatured] = useState(props.dish.featured);
     const [category, setCategory] = useState(props.dish.category);
@@ -14,14 +14,19 @@ function EditDish(props) {
         console.log(dish_name, category, price, description, featured);
         const formData = new FormData();
         const priceRs = price*100;
+        const dish_id = props.dish._id;
+        formData.append('dish_id', dish_id);
         formData.append('dish_name', dish_name);
         formData.append('price', priceRs);
         formData.append('category', category);
         formData.append('description', description);
         formData.append('featured', featured);
         if (dishImage != null)
-            formData.append('dishImage', dishImage, dishImage.name);
-        props.addDishWI(formData);
+            {formData.append('dishImage', dishImage, dishImage.name);}
+        else{
+            formData.append('pictureURL', props.dish.pictureURL);
+        }
+        props.editDishWI(formData);
         props.toggleEdit();
     }
     return (

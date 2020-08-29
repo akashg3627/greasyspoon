@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchDishes} from '../redux/ActionCreators';
+
 import { actions } from 'react-redux-form';
 //import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -14,7 +14,7 @@ import SignUp from './SignUp';
 import {DISHES} from '../shared/dishes';
 import Footer from './Footer';
 
-import {signin, signup, logout, fetchMenu, deleteDish, checkauth, addDishWI} from '../redux/ActionCreators';
+import {signin, signup, logout, fetchMenu, deleteDish, checkauth, addDishWI, editDishWI, acceptOrder, rejectOrder, completeOrder} from '../redux/ActionCreators';
 import OrderPanel from './OrderPanel';
 
 const mapStateToProps =(state)=>{
@@ -33,7 +33,11 @@ logout: () => dispatch(logout()),
 fetchMenu: (cafeId)=>dispatch(fetchMenu(cafeId)),
 deleteDish: (dishId)=>dispatch(deleteDish(dishId)),
 checkauth: ()=>dispatch(checkauth()),
-addDishWI: (formData)=>dispatch(addDishWI(formData))
+addDishWI: (formData)=>dispatch(addDishWI(formData)),
+editDishWI: (formData)=>{dispatch(editDishWI(formData))},
+acceptOrder: (orderId)=>dispatch(acceptOrder(orderId)),
+rejectOrder: (orderId)=>dispatch(rejectOrder(orderId)),
+completeOrder: (orderId)=>dispatch(completeOrder(orderId)),
 });
 
 class Main extends Component {
@@ -63,8 +67,8 @@ class Main extends Component {
           <HeaderComponent user={this.props.auth.user} signin={this.props.signin} signup={this.props.signup} logout={this.props.logout} />  
           <Switch>
                 <Route path="/home" component={HomeComponent} />
-                <PrivateRoute exact path="/menu" component={()=><MenuComponet addDishWI={this.props.addDishWI} deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
-                <PrivateRoute exact path="/order" component={()=> <OrderPanel orders={this.props.orders} />} />
+                <PrivateRoute exact path="/menu" component={()=><MenuComponet editDishWI={this.props.editDishWI} addDishWI={this.props.addDishWI} deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
+                <PrivateRoute exact path="/order" component={()=> <OrderPanel orders={this.props.orders} acceptOrder={this.props.acceptOrder} rejectOrder={this.props.rejectOrder} completeOrder={this.props.completeOrder} />} />
                 {/*<Route exaxt path ="/login" component={()=><LoginComponent history={this.props.history} signin={this.props.signin} signup={this.props.signup} />} />
                 */}
                 <Redirect to="/home" />

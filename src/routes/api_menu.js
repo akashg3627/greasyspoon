@@ -130,7 +130,7 @@
      console.log(req.body);
      let deepClone = JSON.parse(JSON.stringify(req.body));
      console.log(req.file);
-     if (req.file != undefined) {
+    if (req.file != undefined ) {
          deepClone.pictureURL = req.file.path;
      }
      deepClone.cafe_id = req.user._id;

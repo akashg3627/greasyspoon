@@ -41,12 +41,12 @@ function LoginButton(props) {
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId="1">
                         <Card>
-                            <SignIn signin={props.signin}/>
+                            <SignIn signin={props.signin} toggleModal={toggleModal} />
                         </Card>
                     </TabPane>
                     <TabPane tabId="2">
                         <Card>
-                            <SignUp signin={props.signup} />
+                            <SignUp signin={props.signup} toggleModal={toggleModal} />
                         </Card>
                     </TabPane>
                 </TabContent>
