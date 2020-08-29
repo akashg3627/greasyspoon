@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardBody, Table } from 'reactstrap';
+import { Loading } from './LoadingComponent';
 
 function RenderPendingOrder({ order }) {
   const dishes = order.dishes.map((dish) => {
@@ -61,7 +62,7 @@ function RenderCompleteOrder({ order }) {
             <tr>
               <td> </td>
               <th>Total Price</th>
-              <th>{order.total_price}</th>
+              <th>{order.total_price / 100}</th>
             </tr>
           </tbody>
         </Table>
@@ -71,52 +72,50 @@ function RenderCompleteOrder({ order }) {
 }
 function OrderPanel(props) {
 
-  if (props.user != null) {
-    if (props.user.orders == null) {
-      return (
-        <div>
-          No orders placed yet
-        </div>
-      );
-    }
-    else {
-      const pendingOrders = props.user.orders.map((order) => {
-        if (order.status === 'pending') {
-          return (
-            <div>
-              <RenderPendingOrder order={order} />
-            </div>
-          );
-        }
-        else return (<div>
-          No pending
-        </div>)
-      });
-      const completedOrders = props.user.orders.map((order) => {
-        if (order.status === 'done') {
-          return (
-            <div>
-              <h3>Completed Orders</h3>
-              <RenderCompleteOrder order={order} />
-            </div>
-          );
-        }
-        else return (<div>
-          No Order Yet
-        </div>)
-      });
-      return (
-        <div className="container">
-          <div className="row">
-            {pendingOrders}
-          </div>
-          <div className="row">
-            {completedOrders}
-          </div>
-        </div>
-      );
-    }
+  if(props.orders.isLoading)
+  {
+    return <div>
+      <Loading />
+    </div>
   }
+  else if(props.orders.orders != null)
+  {
+    const pendingOrders = props.orders.orders.map((order) => {
+      if (order.status === 'pending') {
+        return (
+          <div>
+            <RenderPendingOrder order={order} />
+          </div>
+        );
+      }
+      else return (<div>
+        No pending
+      </div>)
+    });
+    const completedOrders = props.orders.orders.map((order) => {
+      if (order.status === 'done') {
+        return (
+          <div>
+            <h3>Completed Orders</h3>
+            <RenderCompleteOrder order={order} />
+          </div>
+        );
+      }
+      else return (<div>
+        No Order Yet
+      </div>)
+    });
+    return (
+      <div className="container">
+        <div className="row">
+          {pendingOrders}
+        </div>
+        <div className="row">
+          {completedOrders}
+        </div>
+      </div>
+    );
+  }   
   else return (
     <div>No Order Yet</div>
   );

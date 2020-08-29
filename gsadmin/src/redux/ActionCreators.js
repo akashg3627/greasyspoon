@@ -44,6 +44,7 @@ export const checkauth =() =>(dispatch)=>{
             const id = cafe._id;
             console.log("Cafe is Autherised")
             dispatch(fetchMenu(id));
+            dispatch(fetchOrder());
         }
     } 
     })
@@ -130,6 +131,7 @@ export const signin = (creds) =>(dispatch) =>{
             // Dispatch the success action
             dispatch(receiveLogin(response));
             dispatch(fetchMenu(user._id));
+            dispatch(fetchOrder());
         }
         else {
             var error = new Error('Error ' + response.status);
@@ -174,6 +176,7 @@ export const signup = (creds) =>(dispatch) =>{
             // Dispatch the success action
             dispatch(receiveLogin(response));
             dispatch(fetchMenu(user._id));
+            dispatch(fetchOrder());
         }
         else {
             var error = new Error('Error ' + response.status);
@@ -333,3 +336,82 @@ export const addDishWI=(formData)=>(dispatch)=>{
     .catch(error => dispatch(menuFailed(error.message)))
 }
 
+
+export const orderLoading = ()=>({
+    type: ActionTypes.ORDER_LOADING
+});
+
+export const orderFailed = (message)=>({
+    type: ActionTypes.ORDER_FAILED,
+    payload: message
+});
+
+export const addOrder = (order)=>({
+    type: ActionTypes.ADD_ORDER,
+    payload: order
+});
+
+export const fetchOrder = () =>(dispatch)=>{
+    dispatch(orderLoading());
+    const token = localStorage.getItem('token');
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(baseUrl + 'api/profile', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            }
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(user => {
+            const userinfo = JSON.parse(JSON.stringify(user));
+            const order = userinfo.orders;
+            dispatch(addOrder(order))
+        })
+        .catch(error => dispatch(orderFailed(error.message)));
+}
+
+export const postOrder = () =>(dispatch)=>{
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    return fetch(baseUrl + 'api/order', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            },
+            credentials: "same-origin"
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            dispatch(fetchOrder());
+        })
+        .catch(error => console.log(error));
+};
