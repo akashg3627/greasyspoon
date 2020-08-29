@@ -21,7 +21,10 @@ const orderSchema = new mongoose.Schema({
     dishes: [
         cartDishSchema
     ],
-    status: String,
+    status: Number,//-1 for rejected 
+    //0 for nothing 
+    //1 for accepted 
+    //2 for done
     total_price: Number, //in paisas
     time_placed: {
         type: Date,

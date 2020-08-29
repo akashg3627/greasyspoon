@@ -115,7 +115,7 @@ router.get('/:orderID/reject',ensureCafe, (req, res) => {
             workingOrder = doc.orders.id(req.params.orderID);
             User.findOneAndUpdate({
                     _id: workingOrder.user_id,
-                    'orders._id': workingOrder._id
+                    'orders._id': req.params.orderID
                 }, {
                     $set: {
                         "orders.$.status": -1
