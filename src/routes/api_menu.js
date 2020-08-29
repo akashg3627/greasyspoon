@@ -126,6 +126,40 @@
              }
          })
  })
+ router.patch("/withImage", ensureCafe, upload.single('dishImage'), (req, res) => {
+     console.log(req.body);
+     let deepClone = JSON.parse(JSON.stringify(req.body));
+     console.log(req.file);
+     if (req.file != undefined) {
+         deepClone.pictureURL = req.file.path;
+     }
+     deepClone.cafe_id = req.user._id;
+     deepClone.availability = (deepClone.availability == 'true');
+     deepClone.featured = (deepClone.featured == 'true');
+     console.log(req.user._id);
+     Menu.findOneAndUpdate({
+             cafe_id: req.user._id,
+             "items._id": deepClone._id
+         }, {
+             $set: {
+                 "items.$": deepClone,
+             }
+         }, {
+             new: true,
+         },
+         (err, workingMenu) => {
+             if (err) {
+                 res.json({
+                     'error': err.message
+                 })
+             } else {
+                 res.status(200).json({
+                     status: 'Patched',
+                     newMenu: workingMenu
+                 });
+             }
+         })
+ })
  router.put("/:dish_id/onlyImage/", ensureCafe, upload.single('dishImage'), async(req, res) => {
      try {
          let workingMenu = await Menu.findOne({
