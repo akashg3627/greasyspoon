@@ -44,6 +44,7 @@ else{
     else if(response.user){
         console.log("Authorized User");
         dispatch(fetchCart());
+        dispatch(fetchOrder());
     }
 } 
 })
@@ -107,6 +108,7 @@ export const loginGoogleUser = (creds) => (dispatch) => {
                 // Dispatch the success action
                 dispatch(receiveLogin(response.token, response.user));
                 dispatch(fetchCart());
+                dispatch(fetchOrder());
             } else {
                 var error = new Error('Error ' + response.status);
                 error.response = response;
@@ -417,8 +419,55 @@ export const addcafelist = (cafeList) => ({
 });
 
 
+export const orderLoading = ()=>({
+    type: ActionTypes.ORDER_LOADING
+});
 
-export const addOrder = () =>(dispatch)=>{
+export const orderFailed = (message)=>({
+    type: ActionTypes.ORDER_FAILED,
+    payload: message
+});
+
+export const addOrder = (order)=>({
+    type: ActionTypes.ADD_ORDER,
+    payload: order
+});
+
+export const fetchOrder = () =>(dispatch)=>{
+    dispatch(orderLoading());
+    const token = localStorage.getItem('token');
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(baseUrl + 'api/profile', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': bearer,
+                'X-Auth-Token': token
+            }
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(user => {
+            const userinfo = JSON.parse(JSON.stringify(user));
+            const order = userinfo.orders;
+            dispatch(addOrder(order))
+        })
+        .catch(error => dispatch(orderFailed(error.message)));
+}
+
+export const postOrder = () =>(dispatch)=>{
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/order', {
@@ -444,7 +493,7 @@ export const addOrder = () =>(dispatch)=>{
             })
         .then(response => response.json())
         .then(response => {
-            console.log("order completed", response.object);
+            dispatch(fetchOrder());
         })
         .catch(error => console.log(error));
-}
+};

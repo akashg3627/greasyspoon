@@ -17,6 +17,10 @@ export const ADD_CART = 'ADD_CART';
 export const CART_LOADING = 'CART_LOADING';
 export const CART_FAILED = 'CART_FAILED';
 
-export const CAFE_LIST_ADD = 'CAFE_LIST_ADD'
-export const CAFE_LIST_FAIL= 'CAFE_LIST_FAIL'
-export const CAFE_LIST_LOAD = 'CAFE_LIST_LOAD'
+export const CAFE_LIST_ADD = 'CAFE_LIST_ADD';
+export const CAFE_LIST_FAIL= 'CAFE_LIST_FAIL';
+export const CAFE_LIST_LOAD = 'CAFE_LIST_LOAD';
+
+export const ORDER_LOADING = 'ORDER_LOADING';
+export const ADD_ORDER = 'ADD_ORDER';
+export const ORDER_FAILED = 'ORDER_FAILED';

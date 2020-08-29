@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, checkauth, addOrder} from '../redux/ActionCreators';
+import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, checkauth, postOrder} from '../redux/ActionCreators';
 
 //import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -20,7 +20,8 @@ const mapStateToProps = state => {
     auth: state.auth,
     menu: state.menu,
     cart: state.cart,
-    cafeList: state.cafeList
+    cafeList: state.cafeList,
+    orders: state.orders
   }
 }
 
@@ -33,7 +34,7 @@ reduceCartdish: (dishId)=>{dispatch(reduceCartdish(dishId))},
 logoutUser: () => {dispatch(logoutUser())},
 loginGoogleUser: (data)=>dispatch(loginGoogleUser(data)),
 checkauth: ()=>dispatch(checkauth()),
-addOrder: ()=>dispatch(addOrder())
+postOrder: ()=>dispatch(postOrder())
 });
 
 
@@ -82,7 +83,7 @@ this.props.fetchcafeList();
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
                 <PrivateRoute path="/menu/:cafeId" component={MenuCafe} />
-                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth} cart={this.props.cart} addOrder={this.props.addOrder} />} />
+                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth} orders={this.props.orders} cart={this.props.cart} postOrder={this.props.postOrder} />} />
                 <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>

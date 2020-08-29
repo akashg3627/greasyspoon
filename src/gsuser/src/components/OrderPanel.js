@@ -1,12 +1,27 @@
 import React from 'react';
-import { Card, CardHeader, CardFooter, CardBody, Button } from 'reactstrap';
+import { Card, CardHeader, CardFooter, CardBody, Button, Table } from 'reactstrap';
 //import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 
 function RenderUserProfile({ user }) {
     if (user != null){
         return (
-        <div className="cartinner">Name: {user.name}</div>
+          <Card className="cartinner">
+            <CardBody>
+              <dl className="row p-1">
+                <dt className="col">Name: </dt>
+                <dd className="col">{user.name} </dd>
+              </dl>
+              <dl className="row p-1">
+                <dt className="col">Mobile No: </dt>
+        <dd className="col">{user.number}</dd>
+              </dl>
+              <dl className="row p-1">
+                <dt className="col">Email Id: </dt>
+                <dd className="col">{user.email}</dd>
+              </dl>
+            </CardBody>
+          </Card>
         );
     }
     else return (
@@ -14,12 +29,94 @@ function RenderUserProfile({ user }) {
     )
 }
 
+function RenderOrder (props){
+  if(props.orders.isLoading)
+  {
+    return (
+      <div>
+        <Loading />
+      </div>
+    )
+  }
+  else if(props.orders.orders != null)
+  {
+    const pendingOrders = props.orders.orders.map((order)=>{
+      if(order.status == 0)
+      return (
+        <div>
+        <RenderOrderItem order={order} />
+        </div>
+        )
+      else return(
+        <div></div>
+      )
+    })
+    const completedOrders = props.orders.orders.map((order)=>{
+      if(order.status == 2)
+      return (
+        <div>
+        <RenderOrderItem order={order} />
+        </div>
+        )
+      else return(
+        <div></div>
+      )
+    })
+    return (
+<div className="col-12 ">
+  <h2>Pending Orders</h2>
+  <div>
+  {pendingOrders}
+  </div>
+  <h2>Completed Orders</h2>
+  <div>
+{completedOrders}
+  </div>
+</div>
+    );
+  }
+  else return(
+    <div>
+      No order found
+    </div>
+  )
+}
 
 
-
-/*function RenderOrder({ order }) {
-
-}*/
+function RenderOrderItem({ order }) {
+  const dishes = order.dishes.map((dish) => {
+    return (
+      <tr>
+        <td>{dish.dish_name}</td>
+        <td>{dish.quantity}</td>
+        <td>{dish.quantity * dish.price / 100}</td>
+      </tr>
+    );
+  })
+  return (
+    <Card className="mt-2">
+      <CardBody className="cartinner">
+        <Table>
+          <thead>
+            <tr>
+              <th>Dish Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dishes}
+            <tr>
+              <td> </td>
+              <th>Total Price</th>
+              <th>{order.total_price / 100}</th>
+            </tr>
+          </tbody>
+        </Table>
+      </CardBody>
+    </Card>
+  );
+}
 
 function RenderCart({cart}) {
   if (cart.isLoading) {
@@ -31,17 +128,7 @@ function RenderCart({cart}) {
         </div>
     );
 }
-else if (cart.errMess) {
-    return (
-    
-            <div className="cartinner">
-                <h4>{cart.errMess}</h4>
-            </div>
-        
-    );
-}
-else {
-    if (cart.cart != null){
+else if (cart.cart != null){
         const AddedDish = cart.cart.dishes.map((dish) => {
             return (
                 <div key={dish._id}>
@@ -53,19 +140,18 @@ else {
             )
         });
         return (
-        <div className="cartinner">{AddedDish}</div>
+        <CardBody>{AddedDish}</CardBody>
         );
     }
     else return (
-        <div className="cartinner">Empty Cart</div>
+      <CardBody>Empty Cart</CardBody>
     )
-}
 }
 
 
 function OrderPanel(props) {
   function handleOrder(){
-    props.addOrder();
+    props.postOrder();
   }
 
   return (
@@ -81,15 +167,16 @@ function OrderPanel(props) {
           }
         </div>
         <div className="col col-md-6">
-          <Card>
+          <Card className="cartinner">
+            <CardHeader>Cart</CardHeader>
           <RenderCart cart={props.cart} />
-          <CardFooter><Button onClick={handleOrder} className="btn btn-primary">Place Order</Button></CardFooter>
+          <CardFooter><Button onClick={handleOrder} className="btn" color="primary">Place Order</Button></CardFooter>
           </Card>
         </div>
       </div>
-     {/* <div className="row">
-        <RenderOrder order={props.order} />
-        </div>*/}
+     <div className="row">
+        <RenderOrder orders={props.orders} />
+        </div>
         </div>
   );
 }
