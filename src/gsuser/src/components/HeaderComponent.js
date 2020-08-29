@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
+import LoginModal from './LoginModal';
 
 
 function HeaderComponent(props) {
@@ -46,19 +47,7 @@ function HeaderComponent(props) {
                                 :
                                 null
                             }
-                            {
-                                props.auth.isAuthenticated
-                                    ?
-                                    <Button className="nav-link btn-login" onClick={props.logoutUser}>
-                                        <span className="fa fa-sign-out fa-lg"></span> Logout
-                                    </Button>
-                                    :
-                                    <Link to="/login">
-                                        <Button className="nav-link btn-login">
-                                            <span className="fa fa-sign-in fa-lg"></span> Login
-                                        </Button>
-                                    </Link>
-                            }
+                            <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
                         </Nav>
                     </Collapse>
                 </div>
