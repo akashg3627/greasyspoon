@@ -31,7 +31,6 @@ router.get('/', ensureAuthenticated, (req, res) => {
     if (req.user.password) {
         delete deepClone.password;
     }
-    console.log('the response is', deepClone)
     res.json(deepClone);
 });
 //provides ability to edit user document details.

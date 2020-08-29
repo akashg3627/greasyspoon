@@ -29,7 +29,7 @@ function Menu(props) {
 
     const cafe = props.cafeList.list.map((cafe) => {
         return (
-            <div key={cafe._id} className="col col-md-4 m-1" >
+            <div key={cafe._id} className="col-12 col-sm-4 col-md-3" >
                 <RenderCafe cafe={cafe} />
             </div>
         )
@@ -42,12 +42,7 @@ function Menu(props) {
             </div>
         )
     }
-    else if (props.cafeList.errMess) {
-        return (
-            <div>{props.cafeList.errMess}</div>
-        )
-    }
-    else
+    else if (props.cafeList.list != null)
         return (
             <div className="container">
                 <div className="row">
@@ -55,6 +50,9 @@ function Menu(props) {
                 </div>
             </div>
         );
+    else return (
+        <div>No Cafe Found</div>
+    );
 }
 
 export default Menu;

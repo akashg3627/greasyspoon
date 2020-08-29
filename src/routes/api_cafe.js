@@ -47,8 +47,7 @@ router.post('/:orderID/accept',ensureCafe, (req, res) => {
                     $set: {
                         "orders.$.status": 1
                     }
-                })
-                .then((err, result) => {
+                }, (err, result) => {
                     if (err) {
                         res.status(501).json({message:'Could not update in user but updated in cafe'});
                     } else {
@@ -84,8 +83,7 @@ router.get('/:orderID/complete',ensureCafe, (req, res) => {
                     $set: {
                         "orders.$.status": 2
                     }
-                })
-                .then((err, result) => {
+                }, (err, result) => {
                     if (err) {
                         res.status(501).json({message:'Could not update in user but updated in cafe'});
                     } else {
@@ -120,8 +118,7 @@ router.get('/:orderID/reject',ensureCafe, (req, res) => {
                     $set: {
                         "orders.$.status": -1
                     }
-                })
-                .then((err, result) => {
+                }, (err, result) => {
                     if (err) {
                         res.status(501).json({message:'Could not update in user but updated in cafe'})
                     } else {

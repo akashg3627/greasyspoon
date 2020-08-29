@@ -40,7 +40,7 @@ function RenderOrder(props) {
   }
   else if (props.orders.orders != null) {
     const pendingOrders = props.orders.orders.map((order) => {
-      if (order.status === '0')
+      if (order.status === 0 || order.status === 1)
         return (
           <div>
             <RenderOrderItem order={order} />
@@ -51,7 +51,7 @@ function RenderOrder(props) {
       )
     })
     const completedOrders = props.orders.orders.map((order) => {
-      if (order.status === '2')
+      if (order.status === 2 || order.status === -1)
         return (
           <div>
             <RenderOrderItem order={order} />
@@ -83,6 +83,19 @@ function RenderOrder(props) {
 
 
 function RenderOrderItem({ order }) {
+  const Status = () => {
+    switch (order.status) {
+      case 1:
+        return <Button className="btn btn-sm" disabled color="primary" block>Accepted</Button>
+      case 2:
+        return <Button className="btn btn-sm" disabled color="success" block>Completed</Button>
+      case -1:
+        return <Button className="btn btn-sm" disabled color="danger" block>Rejected</Button>
+      default:
+        return <Button className="btn btn-sm" disabled color="warning" block>Pending</Button>
+    }
+  }
+
   const dishes = order.dishes.map((dish) => {
     return (
       <tr>
@@ -94,7 +107,14 @@ function RenderOrderItem({ order }) {
   })
   return (
     <Card className="cartinner mt-2">
-      <CardHeader>{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null}</CardHeader>
+      <CardHeader className=" row justify-content-between"><span className="col-auto">{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null}</span>
+        <span className="col-auto">
+          {new Intl.DateTimeFormat('default', {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric'
+          }).format(new Date(Date.parse(order.time_placed)))}
+        </span>
+      </CardHeader>
       <CardBody>
         <Table>
           <thead>
@@ -114,6 +134,9 @@ function RenderOrderItem({ order }) {
           </tbody>
         </Table>
       </CardBody>
+      <CardFooter>
+        <Status />
+      </CardFooter>
     </Card>
   );
 }
