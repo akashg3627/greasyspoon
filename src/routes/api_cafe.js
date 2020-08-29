@@ -113,9 +113,9 @@ router.get('/:orderID/reject', (req, res) => {
                 });
         } else {
             workingOrder = doc.orders.id(req.params.orderID);
-            User.update({
+            User.findOneAndUpdate({
                     _id: workingOrder.user_id,
-                    'orders._id': workingOrder._id
+                    'orders._id': req.params.orderID
                 }, {
                     $set: {
                         "orders.$.status": -1

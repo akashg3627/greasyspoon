@@ -7,7 +7,7 @@ const dishSchema = new mongoose.Schema({
     cafe_id: {
         type: String,
         required: true,
-        ref: 'Cafe'
+        ref: 'Cafe', 
     },
     price: {
         type: Number
