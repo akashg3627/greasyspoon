@@ -232,8 +232,8 @@ router.post('/register/cafe/withImage', upload.fields([{
             role: 'Cafe',
             description: req.body.description,
             password: bcrypt.hashSync(req.body.password, 10),
-            logoURL: req.files.logoImage !== undefined ? req.files.logoImage[0].path : null,
-            imageURL: req.files.cafeImage !== undefined ? req.files.cafeImage[0].path : null,
+            logoURL: req.files.logoImage !== undefined ? req.files.logoImage[0].path : '',
+            imageURL: req.files.cafeImage !== undefined ? req.files.cafeImage[0].path : '',
         })
 
         try {

@@ -31,7 +31,7 @@ function HeaderComponent(props) {
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/orderpanel">
+                                <NavLink className="nav-link" to="/order">
                                     Orders
                             </NavLink>
                             </NavItem>

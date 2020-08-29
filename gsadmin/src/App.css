@@ -123,6 +123,11 @@ margin: auto 1vw;
 .login-card{
   color: var(--dark-color);
 padding: 10px 20px;
+position: fixed;
+top: 0;
+width: 100vw;
+height: 100vh;
+z-index: 10;
 }
 
 .footer{

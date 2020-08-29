@@ -462,7 +462,7 @@ export const fetchOrder = () =>(dispatch)=>{
         .then(user => {
             const userinfo = JSON.parse(JSON.stringify(user));
             const order = userinfo.orders;
-            dispatch(addOrder(order))
+            dispatch(addOrder(order));
         })
         .catch(error => dispatch(orderFailed(error.message)));
 }
@@ -493,7 +493,9 @@ export const postOrder = () =>(dispatch)=>{
             })
         .then(response => response.json())
         .then(response => {
+            dispatch(fetchCart());
             dispatch(fetchOrder());
         })
         .catch(error => console.log(error));
 };
+

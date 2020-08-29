@@ -35,7 +35,7 @@ function LoginComponent(props) {
 <SignUp signup={props.signup}/>
                         </TabPane>
                         <TabPane tabId="2">
-<SignIn signin={props.signin} />
+<SignIn signin={props.signin}/>
                         </TabPane>
                     </TabContent>
                 </Card>

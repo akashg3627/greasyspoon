@@ -81,9 +81,9 @@ function OrderPanel(props) {
   else if(props.orders.orders != null)
   {
     const pendingOrders = props.orders.orders.map((order) => {
-      if (order.status === 'pending') {
+      if (order.status == 0) {
         return (
-          <div>
+          <div className="col-12">
             <RenderPendingOrder order={order} />
           </div>
         );
@@ -93,9 +93,9 @@ function OrderPanel(props) {
       </div>)
     });
     const completedOrders = props.orders.orders.map((order) => {
-      if (order.status === 'done') {
+      if (order.status == 2) {
         return (
-          <div>
+          <div className="col-12">
             <h3>Completed Orders</h3>
             <RenderCompleteOrder order={order} />
           </div>
@@ -107,10 +107,10 @@ function OrderPanel(props) {
     });
     return (
       <div className="container">
-        <div className="row">
+        <div className="row mt-2">
           {pendingOrders}
         </div>
-        <div className="row">
+        <div className="row mt-2">
           {completedOrders}
         </div>
       </div>

@@ -12,8 +12,9 @@ function DishPost(props) {
         event.preventDefault();
         console.log(dish_name, category, price, description, featured);
         const formData = new FormData();
+        const priceRs = price *100;
         formData.append('dish_name', dish_name);
-        formData.append('price', price);
+        formData.append('price', priceRs);
         formData.append('category', category);
         formData.append('description', description);
         formData.append('featured', featured);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardFooter, CardBody, Button, Table } from 'reactstrap';
-//import { baseUrl } from '../shared/baseUrl';
+import { baseUrl } from '../shared/baseUrl';
+import {Link} from 'react-router-dom'
 import { Loading } from './LoadingComponent';
 
 function RenderUserProfile({ user }) {
@@ -41,7 +42,7 @@ function RenderOrder (props){
   else if(props.orders.orders != null)
   {
     const pendingOrders = props.orders.orders.map((order)=>{
-      if(order.status == 0)
+      if(order.status === '0')
       return (
         <div>
         <RenderOrderItem order={order} />
@@ -52,7 +53,7 @@ function RenderOrder (props){
       )
     })
     const completedOrders = props.orders.orders.map((order)=>{
-      if(order.status == 2)
+      if(order.status === '2')
       return (
         <div>
         <RenderOrderItem order={order} />
@@ -94,20 +95,21 @@ function RenderOrderItem({ order }) {
     );
   })
   return (
-    <Card className="mt-2">
-      <CardBody className="cartinner">
+    <Card className="cartinner mt-2">
+      <CardHeader>{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null }</CardHeader>
+      <CardBody>
         <Table>
           <thead>
             <tr>
-              <th>Dish Name</th>
-              <th>Quantity</th>
-              <th>Price</th>
+              <th scope="col">Dish Name</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
             </tr>
           </thead>
           <tbody>
             {dishes}
             <tr>
-              <td> </td>
+              <th scope="row"> </th>
               <th>Total Price</th>
               <th>{order.total_price / 100}</th>
             </tr>

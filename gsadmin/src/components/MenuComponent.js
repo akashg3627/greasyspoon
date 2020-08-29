@@ -41,7 +41,7 @@ function RenderMenuItem({ dish, deleteDish, addDishWI }) {
 
             <CardBody className="gs-color-dark">
                 <CardTitle>{dish.dish_name}</CardTitle>
-                <CardText>{dish.category}  Price: Rs. {dish.price}
+                <CardText>{dish.category}  Price: Rs. {dish.price / 100}
                 </CardText>
             </CardBody>
 
@@ -57,7 +57,7 @@ function RenderAddDish({ addDishWI }) {
 
     return (
         <div>
-            <Button onClick={toggle}> ADD DISH </Button>
+            <Button onClick={toggle} className="btn" color="primary" > ADD DISH </Button>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader>
                     ADD DISH

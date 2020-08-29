@@ -170,3 +170,7 @@ address {
 .cartinner {
     color: var(--dark-color);
 }
+
+.gs-reverse{
+    flex-direction: column-reverse;
+}

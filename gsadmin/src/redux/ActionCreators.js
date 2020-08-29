@@ -1,62 +1,64 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from '../shared/baseUrl';
+import {
+    baseUrl
+} from '../shared/baseUrl';
 
 
-export const checkauth =() =>(dispatch)=>{
+export const checkauth = () => (dispatch) => {
     const token = localStorage.getItem('token');
     console.log("token", token);
     //const bearer = 'Bearer ' + localStorage.getItem('token');
-    return fetch(baseUrl + 'api/profile/check',{
-        method: 'GET',
-        headers:{
-            'Content-Type': 'application/json',
-            'X-Auth-Token': token
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            console.log("error 1");
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-    },
-    error => {
-        console.log("error 2");
-        throw error;
-    })
-    .then(response => response.json())
-    .then(response => {
-    if (!response.isAuthorized) {
-        // Session Expired
-        localStorage.clear();
-    }
-    else{
-        if(response.user){
-            localStorage.clear();
-            console.log("user is authorised")
-        }
-        else if(response.cafe){
-            const cafe = JSON.parse(response.cafe);
-            const id = cafe._id;
-            console.log("Cafe is Autherised")
-            dispatch(fetchMenu(id));
-            dispatch(fetchOrder());
-        }
-    } 
-    })
-    .catch(error => dispatch(loginError(error.message)))
-    }
+    return fetch(baseUrl + 'api/profile/check', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Token': token
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    console.log("error 1");
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                console.log("error 2");
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            if (!response.isAuthorized) {
+                // Session Expired
+                localStorage.clear();
+            } else {
+                if (response.user) {
+                    localStorage.clear();
+                    console.log("user is authorised")
+                } else if (response.cafe) {
+                    const cafe = JSON.parse(response.cafe);
+                    console.log(cafe);
+                    const id = cafe._id;
+                    console.log(id);
+                    console.log("Cafe is Autherised")
+                    dispatch(fetchMenu(id));
+                    dispatch(fetchOrder());
+                }
+            }
+        })
+        .catch(error => dispatch(loginError(error.message)))
+}
 
 export const requestLogin = () => {
     return {
         type: ActionTypes.LOGIN_REQUEST
     }
 }
-  
+
 export const receiveLogin = (response) => {
     return {
         type: ActionTypes.LOGIN_SUCCESS,
@@ -65,7 +67,7 @@ export const receiveLogin = (response) => {
 
     }
 }
-  
+
 export const loginError = (message) => {
     localStorage.clear();
     return {
@@ -75,16 +77,16 @@ export const loginError = (message) => {
 }
 
 
-       
+
 export const requestLogout = () => {
     return {
-      type: ActionTypes.LOGOUT_REQUEST
+        type: ActionTypes.LOGOUT_REQUEST
     }
 }
-  
+
 export const receiveLogout = () => {
     return {
-      type: ActionTypes.LOGOUT_SUCCESS
+        type: ActionTypes.LOGOUT_SUCCESS
     }
 }
 
@@ -96,246 +98,276 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const signin = (creds) =>(dispatch) =>{
+export const signin = (creds) => (dispatch) => {
     console.log("signin reducer");
     localStorage.removeItem('token');
     localStorage.removeItem('creds');
     dispatch(requestLogin());
-    
+
     return fetch(baseUrl + 'api/profile/login/cafe', {
-        method: 'POST',
-        headers: { 
-            'Content-Type':'application/json' 
-        },
-        body: JSON.stringify(creds)
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-        },
-        error => {
-            throw error;
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(creds)
         })
-    .then(response => response.json())
-    .then(response => {
-        if (response.success) {
-            // If login was successful, set the token in local storage
-            localStorage.setItem('token', response.token);
-            const user=JSON.stringify(response.user)
-            localStorage.setItem('creds', user);
-            // Dispatch the success action
-            dispatch(receiveLogin(response));
-            dispatch(fetchMenu(user._id));
-            dispatch(fetchOrder());
-        }
-        else {
-            var error = new Error('Error ' + response.status);
-            error.response = response;
-            throw error;
-        }
-    })
-    .catch(error => dispatch(loginError(error.message)))
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            if (response.success) {
+                // If login was successful, set the token in local storage
+                localStorage.setItem('token', response.token);
+                const id = response.user._id;
+                const user = JSON.stringify(response.user)
+                console.log(user);
+                localStorage.setItem('creds', user);
+                // Dispatch the success action
+                dispatch(receiveLogin(response));
+                dispatch(fetchMenu(id));
+                dispatch((fetchOrder));
+            } else {
+                var error = new Error('Error ' + response.status);
+                error.response = response;
+                throw error;
+            }
+        })
+        .catch(error => dispatch(loginError(error.message)))
 }
 
-export const signup = (creds) =>(dispatch) =>{
-    console.log("signup reducer",creds );
+export const signup = (formData) => (dispatch) => {
     dispatch(requestLogin());
     localStorage.clear();
-    return fetch(baseUrl + 'api/profile/register/cafe', {
-        method: 'POST',
-        headers: { 
-            'Content-Type':'application/json' 
-        },
-        body: JSON.stringify(creds),
-        credentials:'same-origin'
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-        },
-        error => {
-            throw error;
+    return fetch(baseUrl + 'api/profile/register/cafe/withImage', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
         })
-    .then(response => response.json())
-    .then(response => {
-        if (response.success) {
-            // If login was successful, set the token in local storage
-            localStorage.setItem('token', response.token);
-            const user=JSON.stringify(response.user)
-            localStorage.setItem('creds', user);
-            // Dispatch the success action
-            dispatch(receiveLogin(response));
-            dispatch(fetchMenu(user._id));
-            dispatch(fetchOrder());
-        }
-        else {
-            var error = new Error('Error ' + response.status);
-            error.response = response;
-            throw error;
-        }
-    })
-    .catch(error => dispatch(loginError(error.message)))
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            if (response.success) {
+                // If login was successful, set the token in local storage
+                localStorage.setItem('token', response.token);
+                const id = response.user._id;
+                const user = JSON.stringify(response.user)
+                localStorage.setItem('creds', user);
+                // Dispatch the success action
+                dispatch(receiveLogin(response));
+                dispatch(fetchMenu(id));
+                dispatch(fetchOrder());
+            } else {
+                var error = new Error('Error ' + response.status);
+                error.response = response;
+                throw error;
+            }
+        })
+        .catch(error => dispatch(loginError(error.message)))
 }
 
 
-export const addMenu=(menu)=>{
-return{
-    type: ActionTypes.ADD_MENU,
-    payload: menu
-}
+export const addMenu = (menu) => {
+    return {
+        type: ActionTypes.ADD_MENU,
+        payload: menu
+    }
 }
 
-export const menuLoading=()=>{
-    return{
+export const menuLoading = () => {
+    return {
         type: ActionTypes.MENU_LOADING
     }
 }
 
-export const menuFailed = ()=>{
-    return{
+export const menuFailed = () => {
+    return {
         type: ActionTypes.MENU_FAILED
     }
 }
 
-export const fetchMenu = (cafeId) =>(dispatch)=>{
+export const fetchMenu = (cafeId) => (dispatch) => {
 
     dispatch(menuLoading());
     const token = localStorage.getItem('token');
     const cafe_id = cafeId;
-    return fetch(baseUrl + 'api/menu/'+ cafe_id,{
-        method:"GET",
-        headers:{
-            'Content-Type': 'application/json',
-            'X-Auth-Token': token
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-        },
-        error => {
-            throw error;
+    console.log('cafe_id is', cafe_id)
+    return fetch(baseUrl + 'api/menu/' + cafe_id, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Token': token
+            }
         })
-    .then(response => response.json())
-    .then((response)=>{
-        dispatch(addMenu(response));
-    })
-    .catch(error => dispatch(menuFailed(error.message)))
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then((response) => {
+            dispatch(addMenu(response));
+        })
+        .catch(error => dispatch(menuFailed(error.message)))
 }
 
 
-export const deleteDish=(dishId)=>(dispatch)=>{
+export const deleteDish = (dishId) => (dispatch) => {
     dispatch(menuLoading());
     const token = localStorage.getItem('token');
 
-    return fetch(baseUrl + 'api/menu/'+ dishId, {
-        method : "DELETE",
-        headers:{
-            'Content-Type': 'application/json',
-            'X-Auth-Token': token
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-        },
-        error => {
-            throw error;
+    return fetch(baseUrl + 'api/menu/' + dishId, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Token': token
+            },
+            credentials: 'same-origin'
         })
-    .then(response => response.json())
-    .then((response)=>{
-        dispatch(addMenu(response.newMenu));
-    })
-    .catch(error => dispatch(menuFailed(error.message)))
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then((response) => {
+            dispatch(addMenu(response.newMenu));
+        })
+        .catch(error => dispatch(menuFailed(error.message)))
 }
 
 
-export const addDish=(dish)=>(dispatch)=>{
+export const addDish = (dish) => (dispatch) => {
     dispatch(menuLoading());
     const token = localStorage.getItem('token');
 
     return fetch(baseUrl + 'api/menu/', {
-        method : "POST",
-        headers:{
-            'Content-Type': 'application/json',
-            'X-Auth-Token': token
-        },
-        credentials: 'same-origin',
-        body: dish
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-        },
-        error => {
-            throw error;
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Token': token
+            },
+            credentials: 'same-origin',
+            body: dish
         })
-    .then(response => response.json())
-    .then((response)=>{
-        dispatch(addMenu(response.newMenu));
-    })
-    .catch(error => console.log(error));
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then((response) => {
+            dispatch(addMenu(response.newMenu));
+        })
+        .catch(error => console.log(error));
 }
 
-export const addDishWI=(formData)=>(dispatch)=>{
+export const addDishWI = (formData) => (dispatch) => {
     dispatch(menuLoading());
     const token = localStorage.getItem('token');
 
     return fetch(baseUrl + 'api/menu/withImage', {
-        method : "POST",
-        headers:{
-            'X-Auth-Token': token
-        },
-        credentials: 'same-origin',
-        body: formData,
-        
-    })
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
-        },
-        error => {
-            throw error;
-        })
-    .then(response => response.json())
-    .then((response)=>{
+            method: "POST",
+            headers: {
+                'X-Auth-Token': token
+            },
+            credentials: 'same-origin',
+            body: formData,
 
-        dispatch(addMenu(response.newMenu));
-    })
-    .catch(error => dispatch(menuFailed(error.message)))
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then((response) => {
+
+            dispatch(addMenu(response.newMenu));
+        })
+        .catch(error => dispatch(menuFailed(error.message)))
 }
 
+export const editDishWI = (formData) => (dispatch) => {
+    dispatch(menuLoading());
+    const token = localStorage.getItem('token');
+
+    return fetch(baseUrl + 'api/menu/withImage', {
+            method: "POST",
+            headers: {
+                'X-Auth-Token': token
+            },
+            credentials: 'same-origin',
+            body: formData,
+
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then((response) => {
+
+            dispatch(addMenu(response.newMenu));
+        })
+        .catch(error => dispatch(menuFailed(error.message)))
+}
 
 export const orderLoading = ()=>({
     type: ActionTypes.ORDER_LOADING
@@ -385,7 +417,7 @@ export const fetchOrder = () =>(dispatch)=>{
         .catch(error => dispatch(orderFailed(error.message)));
 }
 
-export const postOrder = () =>(dispatch)=>{
+export const acceptOrder = () =>(dispatch)=>{
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/order', {

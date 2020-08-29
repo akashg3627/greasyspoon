@@ -83,7 +83,7 @@ this.props.fetchcafeList();
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
                 <PrivateRoute path="/menu/:cafeId" component={MenuCafe} />
-                <PrivateRoute exact path="/orderpanel" component={()=><OrderPanel auth={this.props.auth} orders={this.props.orders} cart={this.props.cart} postOrder={this.props.postOrder} />} />
+                <PrivateRoute exact path="/order" component={()=><OrderPanel auth={this.props.auth} orders={this.props.orders} cart={this.props.cart} postOrder={this.props.postOrder} />} />
                 <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>

@@ -1,11 +1,14 @@
 import React from 'react';
 import { LocalForm, Control } from 'react-redux-form';
 import { FormGroup, Label, Card, CardBody, Button } from 'reactstrap';
+import { Link, useHistory, Redirect } from 'react-router-dom';
+
 export default class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(values) {
     this.props.signin({ email: values.username, password: values.password });
   }

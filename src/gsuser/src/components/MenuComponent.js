@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, CardImg } from 'reactstrap';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { reduceCartdish } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl'
@@ -25,10 +25,6 @@ function RenderCafe({ cafe }) {
 
 function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     function handlepost() {
-        //const body ={
-        //   dish_id: dish._id,
-        //   cafe_id: dish.cafe_id
-        // } ;
         postCart(dish._id, dish.cafe_id);
     };
     function handledelete() {
@@ -72,36 +68,26 @@ function RenderCart({ cart }) {
             </div>
         );
     }
-    else if (cart.errMess) {
+    else if (cart.cart != null) {
+        const AddedDish = cart.cart.dishes.map((dish) => {
+            return (
+                <div key={dish._id}>
+                    <dl className="row p-1">
+                        <dt className="col-4">{dish.dish_name}</dt>
+                        <dd className="col-4">Quantity: {dish.quantity}</dd>
+                        <dd className="col-4">Rs. {dish.quantity * dish.price / 100}</dd>
+                    </dl>
+                </div>
+            )
+        });
         return (
-
-            <div className="cartinner">
-                <h4>{cart.errMess}</h4>
-            </div>
-
+            <div>{AddedDish}</div>
         );
     }
-    else {
-        if (cart.cart != null) {
-            const AddedDish = cart.cart.dishes.map((dish) => {
-                return (
-                    <div key={dish._id}>
-                        <dl className="row p-1">
-                            <dt className="col-4">{dish.dish_name}</dt>
-                            <dd className="col-4">Quantity: {dish.quantity}</dd>
-                            <dd className="col-4">Rs. {dish.quantity * dish.price / 100}</dd>
-                        </dl>
-                    </div>
-                )
-            });
-            return (
-                <div className="cartinner">{AddedDish}</div>
-            );
-        }
-        else return (
-            <div className="cartinner">Empty Cart</div>
-        )
-    }
+    else return (
+        <div>Empty Cart</div>
+    )
+
 
 }
 
@@ -112,16 +98,6 @@ const MenuComponent = (props) => {
                 <RenderCafe cafe={props.cafe} />
                 <div className="row">
                     <Loading />
-                </div>
-            </div>
-        );
-    }
-    else if (props.errMess) {
-        return (
-            <div className="container">
-                <RenderCafe cafe={props.cafe} />
-                <div className="row">
-                    <h4>{props.errMess}</h4>
                 </div>
             </div>
         );
@@ -144,10 +120,10 @@ const MenuComponent = (props) => {
                     <div className="col-12 col-sm-4 mt-2">
                         <Card>
                             <CardHeader className="bg-success">Cart</CardHeader>
-                            <CardBody>
+                            <CardBody className="cartinner">
                                 <RenderCart cart={props.cart} />
                             </CardBody>
-                            <CardFooter className="bg-success">Total Price Rs. {props.cart.cart != null ? props.cart.cart.total_price / 100 : null}</CardFooter>
+                            <CardFooter className="bg-success">Total Price Rs. {props.cart.cart != null ? props.cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="success">Order</Button></Link> </CardFooter>
                         </Card>
                     </div>
                 </div>
@@ -155,7 +131,12 @@ const MenuComponent = (props) => {
         );
     }
     else return (
-        <div>No Dish Found</div>
+        <div className="container">
+            <RenderCafe cafe={props.cafe} />
+            <div className="row">
+                <h4> No Dish Found</h4>
+            </div>
+        </div>
     );
 }
 

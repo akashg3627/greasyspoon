@@ -1,10 +1,12 @@
 import React, { Component, useState } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button } from 'reactstrap';
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button, Modal } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
+import LoginButton from './LoginButton';
 
 
 function HeaderComponent(props) {
     const [isNavOpen, toggleNavbar] = useState(false);
+    const [loginmodal, toggleLogin] = useState(false);
     return (
         <React.Fragment>
             <Navbar light expand="md" >
@@ -44,18 +46,7 @@ function HeaderComponent(props) {
                                 </NavItem>
                                 : null
                             }
-                            {props.user != null
-                                ?
-                                <Button className="nav-link btn-login" onClick={props.logout}>
-                                    <span className="fa fa-sign-out fa-lg"></span> Logout
-                            </Button>
-                                :
-                                <Link to="/login">
-                                    <Button>
-                                        <span className="fa fa-sign-in fa-lg"></span> Login
-                                </Button>
-                                </Link>
-                            }
+                            <LoginButton user={props.user} signin={props.signin} signup={props.signup} logout={props.logout}/>
                         </Nav>
                     </Collapse>
                 </div>

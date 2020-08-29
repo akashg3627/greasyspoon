@@ -28,7 +28,7 @@ const mapStateToProps =(state)=>{
 
 const mapDispatchToProps=(dispatch)=>({
 signin: (creds)=> dispatch(signin(creds)),
-signup: (creds)=> dispatch(signup(creds)),
+signup: (formData)=> dispatch(signup(formData)),
 logout: () => dispatch(logout()),
 fetchMenu: (cafeId)=>dispatch(fetchMenu(cafeId)),
 deleteDish: (dishId)=>dispatch(deleteDish(dishId)),
@@ -60,12 +60,13 @@ class Main extends Component {
 
       return (
         <div>
-          <HeaderComponent user={this.props.auth.user} logout={this.props.logout} />  
+          <HeaderComponent user={this.props.auth.user} signin={this.props.signin} signup={this.props.signup} logout={this.props.logout} />  
           <Switch>
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><MenuComponet addDishWI={this.props.addDishWI} deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
                 <PrivateRoute exact path="/order" component={()=> <OrderPanel orders={this.props.orders} />} />
-                <Route exaxt path ="/login" component={()=><LoginComponent signin={this.props.signin} signup={this.props.signup} />} />
+                {/*<Route exaxt path ="/login" component={()=><LoginComponent history={this.props.history} signin={this.props.signin} signup={this.props.signup} />} />
+                */}
                 <Redirect to="/home" />
           </Switch>
               <Footer />
