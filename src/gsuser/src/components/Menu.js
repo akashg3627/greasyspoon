@@ -29,7 +29,7 @@ function Menu(props) {
 
     const cafe = props.cafeList.list.map((cafe) => {
         return (
-            <div key={cafe._id} className="col-12 col-sm-4 col-md-3" >
+            <div key={cafe._id} className="col py-3" >
                 <RenderCafe cafe={cafe} />
             </div>
         )
@@ -45,7 +45,7 @@ function Menu(props) {
     else if (props.cafeList.list != null)
         return (
             <div className="container">
-                <div className="row">
+                <div className="row row-cols-2 row-cols-md-6">
                     {cafe}
                 </div>
             </div>

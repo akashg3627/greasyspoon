@@ -157,13 +157,21 @@ function RenderCart({ cart }) {
         <div key={dish._id}>
           <dl className="row p-1">
             <dt className="col-6">{dish.dish_name}</dt>
-            <dd className="col-6">Quantity: {dish.quantity}</dd>
+            <dd className="col-3">Quantity: {dish.quantity}</dd>
+      <dd className="col-3"> Rs. {dish.price * dish.quantity /100}</dd>
           </dl>
         </div>
       )
     });
     return (
-      <CardBody>{AddedDish}</CardBody>
+      <CardBody>
+        {AddedDish}
+        <div className="row">
+          <dt className="col-6"></dt>
+          <dt className="col-3">Total Price</dt>
+          <dt className="col-3">Rs. {cart.cart.total_price / 100} </dt>
+        </div>
+      </CardBody>
     );
   }
   else return (
@@ -193,7 +201,7 @@ function OrderPanel(props) {
           <Card className="cartinner">
             <CardHeader>Cart</CardHeader>
             <RenderCart cart={props.cart} />
-            <CardFooter><Button onClick={handleOrder} className="btn" color="primary">Place Order</Button></CardFooter>
+            <CardFooter className="row"><Button block onClick={handleOrder} className="btn btn-block" color="primary">Place Order</Button></CardFooter>
           </Card>
         </div>
       </div>

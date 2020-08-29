@@ -80,15 +80,6 @@ const MenuComponent = (props) => {
             </div>
         );
     }
-    else if (props.errMess) {
-        return (
-            <div className="container gs-body">
-                <div className="row">
-                    <h4>{props.errMess}</h4>
-                </div>
-            </div>
-        );
-    }
     else if (props.menu != null) {
         const menu = props.menu.items.map((dish) => {
             return (

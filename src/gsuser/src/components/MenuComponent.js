@@ -32,12 +32,11 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
     };
     return (
         <Media tag="li" className="media-menu row align-items-center mb-1">
-            <Media left middle className="col-5 col-sm-4 col-md-3">
+            <Media left className="mr-2">
                 <Media object src={baseUrl + dish.pictureURL} alt={dish.dish_name} className="menuImage" />
             </Media>
-            <Media className="col-7 col-sm-8 col-md-9">
-                <Media className="row ml-1">
-                    <Media body className="col-12 col-sm-7">
+           
+                    <Media middle body className=" ml-5">
                         <Media heading>
                             {dish.dish_name}
                         </Media>
@@ -45,14 +44,12 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                     Price  Rs {dish.price / 100}
                     </Media>
 
-                    <Media className="col-12 col-sm-5 ">
-                        <ButtonGroup size="lg">
-                            <Button onClick={handledelete} outline color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
-                            <Button onClick={handlepost} outline color="success"><span className="fa fa-plus fa-lg"> </span></Button>
+                    <Media right className="mr-5">
+                        <ButtonGroup size="sm">
+                            <Button onClick={handledelete} color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
+                            <Button onClick={handlepost} color="success"><span className="fa fa-plus fa-lg"> </span></Button>
                         </ButtonGroup>
                     </Media>
-                </Media>
-            </Media >
         </Media >
     );
 }
@@ -81,11 +78,16 @@ function RenderCart({ cart }) {
             )
         });
         return (
-            <div>{AddedDish}</div>
+            <div>
+               <CardBody className="cartinner">
+                   {AddedDish}
+               </CardBody>
+               <CardFooter className="bg-success">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="success">Order</Button></Link> </CardFooter> 
+            </div>
         );
     }
     else return (
-        <div>Empty Cart</div>
+        <CardBody className="cartinner">Empty Cart</CardBody>
     )
 
 
@@ -114,16 +116,13 @@ const MenuComponent = (props) => {
             <div className="container">
                 <div className="row"><RenderCafe cafe={props.cafe} /></div>
                 <div className="row">
-                    <div className="col-12 col-sm-7 offset-sm-1 mt-2">
+                    <div className="col-12 col-sm-7 offset-md-1 mt-2">
                         {menu}
                     </div>
                     <div className="col-12 col-sm-4 mt-2">
                         <Card>
                             <CardHeader className="bg-success">Cart</CardHeader>
-                            <CardBody className="cartinner">
                                 <RenderCart cart={props.cart} />
-                            </CardBody>
-                            <CardFooter className="bg-success">Total Price Rs. {props.cart.cart != null ? props.cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="success">Order</Button></Link> </CardFooter>
                         </Card>
                     </div>
                 </div>

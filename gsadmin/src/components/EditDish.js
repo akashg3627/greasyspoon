@@ -3,7 +3,7 @@ import { baseUrl } from '../shared/baseUrl';
 
 function EditDish(props) {
     const [dish_name, setName] = useState(props.dish.dish_name);
-    const [price, setPrice] = useState(props.dish.price/100);
+    const [price, setPrice] = useState(props.dish.price / 100);
     const [description, setDescription] = useState(props.dish.description);
     const [featured, setFeatured] = useState(props.dish.featured);
     const [category, setCategory] = useState(props.dish.category);
