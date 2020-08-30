@@ -149,7 +149,8 @@ router.post('/', ensureUser, async(req, res) => {
                     user_id: req.user._id,
                     cafe_id,
                     total_price: Number(dish.price),
-                    dishes: [tobepushed]
+                    dishes: [tobepushed],
+                    cafe_name, user_name
                 });
 
                 try {
