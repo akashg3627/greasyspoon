@@ -9,6 +9,8 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require('cors');
+const path = require('path');
+
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
