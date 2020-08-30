@@ -39,11 +39,12 @@ app.use(bodyParser.json());
 app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", 'code.jquery.com', 'apis.google.com', 'maxcdn.bootstrapcdn.com'],
+        scriptSrc: ["'self'", 'code.jquery.com', 'maxcdn.bootstrapcdn.com'],
         styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
         fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
     }
 }));
+
 
 
 app.use(cors())
