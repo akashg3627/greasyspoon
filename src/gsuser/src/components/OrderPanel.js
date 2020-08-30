@@ -87,7 +87,7 @@ function RenderOrderItem({ order }) {
   })
   return (
     <Card className="cartinner mt-2">
-      <CardHeader ><div className="row justify-content-between"><span className="col-auto">{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null}</span>
+      <CardHeader ><div className="row justify-content-between"><span className="col-auto text-capitalize">{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null}</span>
         <span className="col-auto">
           {new Intl.DateTimeFormat('default', {
             year: 'numeric', month: 'numeric', day: 'numeric',

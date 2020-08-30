@@ -21,7 +21,7 @@ function RenderPendingOrder(props) {
   const dishes = props.order.dishes.map((dish) => {
     return (
       <tr>
-        <td>{dish.dish_name}</td>
+        <td className=" text-capitalize">{dish.dish_name}</td>
         <td>{dish.quantity}</td>
         <td>{dish.quantity * dish.price / 100}</td>
       </tr>
@@ -29,7 +29,7 @@ function RenderPendingOrder(props) {
   })
   return (
     <Card className="gs-color-dark">
-      <CardHeader><div className=" row justify-content-between"><span className="col-auto">Ordered by {props.order.user_name}</span>
+      <CardHeader><div className=" row justify-content-between"><span className="col-auto text-capitalize">Ordered by {props.order.user_name}</span>
         <span className="col-auto">
           {new Intl.DateTimeFormat('default', {
             year: 'numeric', month: 'numeric', day: 'numeric',
@@ -52,7 +52,7 @@ function RenderPendingOrder(props) {
             <tr>
               <th></th>
               <th>Total Price</th>
-              <th>{props.order.total_price}</th>
+              <th>{props.order.total_price /100}</th>
             </tr>
           </tbody>
         </Table>
@@ -82,7 +82,7 @@ function RenderCompleteOrder({ order }) {
   const dishes = order.dishes.map((dish) => {
     return (
       <tr>
-        <td>{dish.dish_name}</td>
+        <td className=" text-capitalize">{dish.dish_name}</td>
         <td>{dish.quantity}</td>
         <td>{dish.quantity * dish.price / 100}</td>
       </tr>
@@ -91,7 +91,7 @@ function RenderCompleteOrder({ order }) {
   return (
     <Card className="gs-color-dark">
       <CardHeader><div className=" row justify-content-between">
-        <span className="col-auto">Ordered by {order.user_name}</span>
+        <span className="col-auto  text-capitalize">Ordered by {order.user_name}</span>
         <span className="col-auto">
           {new Intl.DateTimeFormat('default', {
             year: 'numeric', month: 'numeric', day: 'numeric',

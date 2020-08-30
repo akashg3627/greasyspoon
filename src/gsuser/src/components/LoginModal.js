@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalBody, Card, CardImg } from 'reactstrap';
+import { Button, Modal, ModalBody, Card, CardImg, CardFooter, CardBody } from 'reactstrap';
 import GoogleLogin from 'react-google-login';
 
 function LoginModal(props) {
@@ -21,7 +21,7 @@ function LoginModal(props) {
             <GoogleLogin
                 clientId="899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
                 render={renderProps => (
-                    <button className="btn btn-danger" onClick={renderProps.onClick} disabled={renderProps.disabled}>Google</button>
+                    <button className="btn btn-danger" onClick={renderProps.onClick} disabled={renderProps.disabled}>Google Login</button>
                 )}
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
@@ -49,8 +49,9 @@ function LoginModal(props) {
                     </div>
                     <div className="row align-items-center justify-content-center">
                         <Card>
+                            <CardImg className="user-i" src="/user.png" alt="user" />
+                            <CardBody className="text-center"><Userlogin /></CardBody>
                         </Card>
-                        <Userlogin />
                     </div>
                 </ModalBody>
             </Modal>

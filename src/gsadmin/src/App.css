@@ -39,7 +39,6 @@ body {
   font-size: small;
 } */
 .btn-login{
-  margin-left: 5vw;
   font-size: auto;
   color: var(--dark-color);
   background-color: transparent;
@@ -99,8 +98,9 @@ margin: auto 1vw;
   top: 0;
 }
 
-.logo{
-  margin-left: 3vw;
+.user-info{
+  font-size: 1rem;
+  color: var(--dark-color);
 }
 .g{
   color: var(--secondary-color);

@@ -40,7 +40,7 @@ function RenderMenuItem({ dish, deleteDish, addDishWI, editDishWI }) {
             </CardImgOverlay>
 
             <CardBody className="gs-color-dark">
-                <CardTitle>{dish.dish_name}</CardTitle>
+                <CardTitle className=" text-capitalize">{dish.dish_name}</CardTitle>
                 <CardText>{dish.category}  Price: Rs. {dish.price / 100}
                 </CardText>
             </CardBody>
