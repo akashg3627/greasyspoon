@@ -39,13 +39,12 @@ app.use(bodyParser.json());
 app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", 'https://apis.google.com/', 'https://kit.fontawesome.com',
-            'maxcdn.bootstrapcdn.com'
-        ],
-        styleSrc: ["'self'", 'https://fonts.googleapis.com', 'https://kit-free.fontawesome.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://kit-free.fontawesome.com']
+        scriptSrc: ["'self'", 'code.jquery.com', 'apis.google.com', 'maxcdn.bootstrapcdn.com'],
+        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
+        fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
     }
 }));
+
 
 app.use(cors())
     //Express session
