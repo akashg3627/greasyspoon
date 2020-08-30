@@ -166,7 +166,7 @@ function OrderPanel(props) {
   }
 
   return (
-    <div className="container">
+    <div className="container gs-container">
       <div className="row">
         <div className="col col-md-6">
           {
