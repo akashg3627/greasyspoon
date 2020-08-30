@@ -44,7 +44,7 @@ function Menu(props) {
     }
     else if (props.cafeList.list != null)
         return (
-            <div className="container">
+            <div className="container gs-container">
                 <div className="row row-cols-2 row-cols-md-6">
                     {cafe}
                 </div>

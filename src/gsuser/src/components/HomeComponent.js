@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 
 function HomeComponent(props) {
     return (
-        <div className="container">
+        <div className="container gs-container">
             <div className="row row-700">
             <div className="col-12 col-md-5 align-self-center">
             <h4><span className="line"> </span> Discover your taste</h4>

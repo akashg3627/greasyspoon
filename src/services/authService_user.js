@@ -91,7 +91,7 @@ exports.signToken = (req, res) => {
         role: req.user.role,
         name: req.user.name,
     }, process.env.JWT_SECRET, {
-        expiresIn: 3600,
+        expiresIn: 3600*6,
     }, (err, token) => {
         if (err) {
             console.log(err);

@@ -113,7 +113,7 @@ const MenuComponent = (props) => {
             );
         });
         return (
-            <div className="container">
+            <div className="container gs-container">
                 <div className="row"><RenderCafe cafe={props.cafe} /></div>
                 <div className="row">
                     <div className="col-12 col-sm-7 offset-md-1 mt-2">
