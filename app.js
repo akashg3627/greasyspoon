@@ -36,6 +36,15 @@ app.use(
     })
 );
 app.use(bodyParser.json());
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://apis.google.com/*', 'maxcdn.bootstrapcdn.com'],
+        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
+        fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+    }
+}));
+
 
 
 app.use(cors())
@@ -71,10 +80,6 @@ app.use(passport.initialize());
 // app.use((req, res, next) => [
 //     res.setHeader("default-src 'self'; script-src 'report-sample' 'self' https://apis.google.com/js/api.js https://kit.fontawesome.com/5a3d56a40e.js; style-src 'report-sample' 'self' https://fonts.googleapis.com https://kit-free.fontawesome.com; object-src 'none'; base-uri 'self'; connect-src 'self'; font-src 'self' https://fonts.gstatic.com https://kit-free.fontawesome.com; frame-src 'self' https://accounts.google.com; img-src 'self'; manifest-src 'self'; media-src 'self'; report-uri https://5f4b9f5fb641482c3e7cfaaa.endpoint.csper.io/; worker-src 'self';")
 // ])
-app.use(function(req, res, next) {
-    res.setHeader("Content-Security-Policy", "script-src 'self' https://apis.google.com");
-    return next();
-});
 app.use('/public', express.static('public'))
 
 //Routes
