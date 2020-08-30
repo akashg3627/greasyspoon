@@ -101,11 +101,9 @@ const MenuComponent = (props) => {
         );
     }
     else return (
-        <div className="container gs-body">
+        <div className="container gs-body gs-error">
             <div>No Dish Added</div>
-            <div className="row">
-                <RenderAddDish addDishWI={props.addDishWI} />
-            </div>
+            <RenderAddDish addDishWI={props.addDishWI} />
         </div>
     );
 

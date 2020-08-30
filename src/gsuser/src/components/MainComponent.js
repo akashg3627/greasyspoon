@@ -79,6 +79,7 @@ this.props.fetchcafeList();
       return (
         <div>
           <HeaderComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} logoutUser={this.props.logoutUser} />  
+          
               <Switch>
                 <Route path="/home" component={HomeComponent} />
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
@@ -87,6 +88,7 @@ this.props.fetchcafeList();
                 <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>
+              
           <Footer />  
         </div>
       );

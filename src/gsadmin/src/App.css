@@ -7,14 +7,14 @@
 --dark-color: #2f2838;
 }
 
-.App {
+.gs-error {
   text-align: center;
   min-height: 100vh;
-  background-color: #282c34;
+  background-color: transparent;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 5vmin);
-  color: white;
+  color:#fff;
   padding: 20vw 20vh 20vw 20vh;
 }
 
@@ -25,20 +25,19 @@ body {
   fill-opacity: 30%;
   margin: 0px auto;
   justify-content: center;
-  font-size: calc(10px + 1vmin);
   color: #ffffff;
   font-family: 'Viga', sans-serif;
 }
 .container{
-  min-width: 95vw;
+  min-width: 85vw;
 }
 .container .c-h{
   background-color: #fff;
   z-index: 2;
 }
-span{
+/* span{
   font-size: small;
-}
+} */
 .btn-login{
   margin-left: 5vw;
   font-size: auto;
@@ -105,11 +104,11 @@ margin: auto 1vw;
 }
 .g{
   color: var(--secondary-color);
-  font-size: 3em;
+  font-size: calc(16px + 5vmin);
 }
 .s{
   color: var(--dark-color);
-  font-size: 3em;
+  font-size: calc(16px + 5vmin);
 }
 
 

@@ -55,8 +55,8 @@ function RenderOrder(props) {
     );
   }
   else return (
-    <div>
-      No order found
+    <div className="Error">
+      Make Your First Order
     </div>
   )
 }
@@ -87,13 +87,14 @@ function RenderOrderItem({ order }) {
   })
   return (
     <Card className="cartinner mt-2">
-      <CardHeader className=" row justify-content-between"><span className="col-auto">{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null}</span>
+      <CardHeader ><div className="row justify-content-between"><span className="col-auto">{order.cafe_name ? <div>Ordered @ <Link to={`/menu/${order.cafe_id}`} >{order.cafe_name}</Link></div> : null}</span>
         <span className="col-auto">
           {new Intl.DateTimeFormat('default', {
             year: 'numeric', month: 'numeric', day: 'numeric',
             hour: 'numeric', minute: 'numeric', second: 'numeric'
           }).format(new Date(Date.parse(order.time_placed)))}
         </span>
+        </div>
       </CardHeader>
       <CardBody>
         <Table>
@@ -155,7 +156,7 @@ function RenderCart({ cart }) {
     );
   }
   else return (
-    <CardBody>Empty Cart</CardBody>
+    <CardBody className="gs-error">Empty Cart</CardBody>
   )
 }
 
@@ -167,7 +168,7 @@ function OrderPanel(props) {
 
   return (
     <div className="container gs-container">
-      <div className="row">
+      <div className="row mt-1">
         <div className="col col-md-6">
           {
             props.auth.user != null ?
@@ -181,7 +182,7 @@ function OrderPanel(props) {
           <Card className="cartinner">
             <CardHeader>Cart</CardHeader>
             <RenderCart cart={props.cart} />
-            <CardFooter className="row"><Button block onClick={handleOrder} className="btn btn-block" color="primary">Place Order</Button></CardFooter>
+            <CardFooter><Button block onClick={handleOrder} className="btn btn-block" color="primary">Place Order</Button></CardFooter>
           </Card>
         </div>
       </div>

@@ -64,7 +64,7 @@ exports.verifyToken = (req, res) => {
 // Issue Token
 getToken = function(user) {
     return jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: 3600
+        expiresIn: 3600*6
     });
 };
 exports.loginuser = (req, res, next) => {
@@ -73,7 +73,6 @@ exports.loginuser = (req, res, next) => {
             userId: req.user._id,
             role: 'User',
         });
-        console.log(req.user);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json({
@@ -85,7 +84,6 @@ exports.loginuser = (req, res, next) => {
     }
 }
 exports.signToken = (req, res) => {
-    console.log('req is ', req.user);
     jwt.sign({
         userId: req.user._id,
         role: req.user.role,

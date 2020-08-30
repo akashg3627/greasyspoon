@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon app.js",
-    "client-user": "npm start --prefix gsuser",
-    "dev": "concurrently \"npm run server\" \"npm run client-user\""
+    "user": "npm start --prefix gsuser",
+    "admin": "npm start --prefix gsadmin",
+    "dev": "concurrently \"npm run server\" \"npm run user\" \"npm run admin\""
   },
   "keywords": [],
   "author": "",

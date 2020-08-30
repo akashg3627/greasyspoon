@@ -44,7 +44,7 @@ function LoginButton(props) {
                     </TabPane>
                     <TabPane tabId="2">
                         <Card>
-                            <SignUp signin={props.signup} toggleModal={toggleModal} />
+                            <SignUp signup={props.signup} toggleModal={toggleModal} />
                         </Card>
                     </TabPane>
                 </TabContent>

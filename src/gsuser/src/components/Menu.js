@@ -2,10 +2,12 @@ import React from 'react';
 import { Card, CardBody, CardImg, CardImgOverlay, CardTitle, CardHeader, Button } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 import { Link } from 'react-router-dom'
-import { baseUrl } from '../shared/baseUrl'
+import { baseUrl } from '../shared/baseUrl';
+
 
 const RenderCafe = ({ cafe }) => {
     return (
+        
         <Card>
             <Link to={`/menu/${cafe._id}`} >
                 <CardHeader>{cafe.name}</CardHeader>
@@ -18,6 +20,7 @@ const RenderCafe = ({ cafe }) => {
                     : null}
             </Link>
         </Card>
+        
     )
 }
 
@@ -29,7 +32,7 @@ function Menu(props) {
 
     const cafe = props.cafeList.list.map((cafe) => {
         return (
-            <div key={cafe._id} className="col py-3" >
+            <div key={cafe._id} className="col-6 col-sm-4 col-md-3 py-3" >
                 <RenderCafe cafe={cafe} />
             </div>
         )
@@ -44,11 +47,13 @@ function Menu(props) {
     }
     else if (props.cafeList.list != null)
         return (
+            
             <div className="container gs-container">
-                <div className="row row-cols-2 row-cols-md-6">
+                <div className="row ">
                     {cafe}
                 </div>
             </div>
+            
         );
     else return (
         <div>No Cafe Found</div>
