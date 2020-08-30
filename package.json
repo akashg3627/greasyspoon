@@ -7,7 +7,11 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "server": "nodemon app.js",
         "client-user": "npm start --prefix gsuser",
-        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix gsuser && npm run build --prefix gsuser"
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix gsuser && npm run build --prefix gsuser",
+        "client-install": "npm install --prefix client",
+        "start": "node app.js",
+        "client": "npm start --prefix gsuser",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
     },
     "keywords": [],
     "author": "",
@@ -21,6 +25,7 @@
         "express-session": "^1.17.1",
         "express-validator": "^6.6.1",
         "google-auth-library": "^6.0.6",
+        "concurrently": "^3.5.1",
         "helmet": "^4.1.0",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.19",
