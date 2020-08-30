@@ -8,6 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const cors = require('cors');
 //Passport config
 require("./config/passport-google")(passport);
 //passport is for authenticating only
@@ -17,11 +18,11 @@ require("./config/passport-google")(passport);
 const db = require("./config/keys").MongoURI;
 //Connect to mongo
 mongoose
-    .connect(db, {
+    .connect(process.env.Mongo_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-    .then(() => console.log("MongoDB connected"))
+    .then(() => console.log("MongoDB connected", process.env.Mongo_URI))
     .catch((err) => console.log(err.message));
 //EJS
 //app.use(expressLayouts);
@@ -34,25 +35,26 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(helmet())
+app.use(cors())
     //Express session
-app.use(
-    session({
-        secret: "keyboard cat",
-        resave: false,
-        saveUninitialized: false,
-    })
-);
-//when user is authenticated its serialised to cookies and then attached to req.user(as well as req.session.passport.user)
-//on subsequent requests, passport.initialize() middleware is called. 
-//It finds the passport.user attached to the session, if it doesnt(user yet not authenticated) it creates it like req.passport.user={}
-//passport.initialize middleware is invoked on every request. It ensures the session contains a passport.user object, which may be empty
+    // app.use(
+    //     session({
+    //         secret: "keyboard cat",
+    //         resave: false,
+    //         saveUninitialized: false,
+    //     })
+    // );
+    //when user is authenticated its serialised to cookies and then attached to req.user(as well as req.session.passport.user)
+    //on subsequent requests, passport.initialize() middleware is called. 
+    //It finds the passport.user attached to the session, if it doesnt(user yet not authenticated) it creates it like req.passport.user={}
+    //passport.initialize middleware is invoked on every request. It ensures the session contains a passport.user object, which may be empty
 app.use(passport.initialize());
 //next passport.session() is invoked. If it finds a serialised user object in the session, it considers the request to be authenticated. 
 //it then calls the passport.deserializeUser whule attaching the loaded user ibject to req as req.user()
 //passport.session middleware is a Passport Strategy which will load the user object onto req.user if a serialised user object was found in the server.
 //passport.deserializeUser is invoked on every request by passport.session. It enables us to load additional user information on every request. This user object is attached to the request as req.user making it accessible in our request handling.
 //
-app.use(passport.session());
+// app.use(passport.session());
 //Connect flash
 // app.use(flash());
 
@@ -63,6 +65,7 @@ app.use(passport.session());
 //     res.locals.error_msg = req.flash('error')
 //     next();
 // });
+
 app.use('/public', express.static('public'))
 
 //Routes
@@ -119,15 +122,15 @@ app.use(function(req, res, next) {
 // would remain being executed, however here
 // we simply respond with an error page.
 
-app.use(function(err, req, res, next) {
-    // we may use properties of the error object
-    // here and next(err) appropriately, or if
-    // we possibly recovered from the error, simply next().
-    res.status(err.status || 500).json({
-        error: err.message
-    });
-});
-const PORT = process.env.PORT || 3000;
-app.listen(3000, () => {
+// app.use(function(err, req, res, next) {
+//     // we may use properties of the error object
+//     // here and next(err) appropriately, or if
+//     // we possibly recovered from the error, simply next().
+//     res.status(err.status || 500).json({
+//         error: err.message
+//     });
+// });
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
     console.log(`Server started on ${PORT}`);
 });

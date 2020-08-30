@@ -1,10 +1,12 @@
 import React, { Component, useState } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button, Modal } from 'reactstrap';
+import { NavLink, Link } from 'react-router-dom';
+import LoginButton from './LoginButton';
 
 
 function HeaderComponent(props) {
     const [isNavOpen, toggleNavbar] = useState(false);
+    const [loginmodal, toggleLogin] = useState(false);
     return (
         <React.Fragment>
             <Navbar light expand="md" >
@@ -31,18 +33,20 @@ function HeaderComponent(props) {
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/contactus">
-                                    Contact Us
+                                <NavLink className="nav-link" to="/order">
+                                    Order
                             </NavLink>
                             </NavItem>
-                            <NavItem>
-                                <NavLink className="nav-link" to="/contactus">
-                                    <span className="fa fa-search fa-lg"></span>
-                                </NavLink>
-                            </NavItem>
-                            <Button className="nav-link btn-login">
-                                <span className="fa fa-bars fa-lg"></span>
-                            </Button>
+                            {props.user != null
+                                ?
+                                <NavItem>
+                                    <NavLink className="nav-link" to="/profile">
+                                        <span className="fa fa-user fa-lg"></span>  {props.user.name}
+                                    </NavLink>
+                                </NavItem>
+                                : null
+                            }
+                            <LoginButton user={props.user} signin={props.signin} signup={props.signup} logout={props.logout}/>
                         </Nav>
                     </Collapse>
                 </div>

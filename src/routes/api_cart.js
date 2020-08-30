@@ -23,39 +23,50 @@ router.get('/', ensureUser, async(req, res) => {
             user_id: req.user._id
         }).exec();
         if (cart) {
-            res.status(200).json(cart);
+            return res.status(200).json(cart);
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'cart not found'
             })
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             error: err.message
         });
     }
 });
 
 router.post('/', ensureUser, async(req, res) => {
+    console.log(req.user);
     //mantain only one cart at a time
     //find all carts first
     //make sure only one cart is present at a time
-    console.log('the req body is', req.body)
     if (!req.body.cafe_id || !req.body.dish_id) {
-        res.status(404).json({
+        return res.status(404).json({
             error: 'cafe_id and dish_id required in body of the post request.'
         })
     }
     let workingMenu;
+    let workingCafe;
+    let cafe_name;
+    let user_name;
     try {
+
         workingMenu = await Menu.findOne({
             cafe_id: req.body.cafe_id
         }).exec();
+        workingCafe = await Cafe.findOne({
+            _id: req.body.cafe_id
+        }).exec();
+        cafe_name = workingCafe.name;
+
+
+        user_name = req.user.name;
     } catch (err) {
         console.log(err.message);
     }
     if (!workingMenu) {
-        res.status(404).json({
+        return res.status(404).json({
             error: 'Menu not found'
         })
     }
@@ -64,18 +75,18 @@ router.post('/', ensureUser, async(req, res) => {
     }, async(err, cart) => {
         if (err) {
             console.log(err)
-            res.status(501).json({
+            return res.status(501).json({
                 error: err.message
             });
         }
-        console.log(workingMenu.items);
+        //console.log(workingMenu.items);
         let dish = await workingMenu.items.id(req.body.dish_id);
         dish = JSON.parse(JSON.stringify(dish))
-        console.log('the dish is', dish);
+            // console.log('the dish is', dish);
         if (dish == undefined
             //||!dish.availablity
         ) {
-            res.status(405).send({
+            return res.status(405).send({
                 error: 'Unable to add to cart,either it is not available or dish id is invalid'
             });
         }
@@ -91,7 +102,7 @@ router.post('/', ensureUser, async(req, res) => {
         // }
         let cafe_id = req.body.cafe_id;
         if (cart) {
-            console.log(cart)
+            // console.log(cart)
             if (cart.cafe_id == cafe_id) {
                 let dishesCopy = JSON.parse(JSON.stringify(cart.dishes));
                 let dishExists = false;
@@ -137,8 +148,11 @@ router.post('/', ensureUser, async(req, res) => {
                 cart.overwrite({
                     user_id: req.user._id,
                     cafe_id,
+                    cafe_name,
+                    user_name,
                     total_price: Number(dish.price),
-                    dishes: [tobepushed]
+                    dishes: [tobepushed],
+                    cafe_name, user_name
                 });
 
                 try {
@@ -162,6 +176,8 @@ router.post('/', ensureUser, async(req, res) => {
             let newCart = new Cart({
                 user_id: req.user._id,
                 cafe_id,
+                user_name,
+                cafe_name,
                 total_price: Number(dish.price),
                 dishes: [tobepushed]
             })
@@ -195,10 +211,14 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
             }
         }).exec();
         if (!resp1.nModified) {
-            await res.status(404).json({
-                error: 'Cart is unchanged. Please check if the dish exists or dishid is correct'
+            let cart = await Cart.findOne({
+                user_id: req.user._id
             });
-            res.end();
+            return res.status(200).json({
+
+                error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
+                cart
+            });
         }
         let resp2 = await Cart.findOneAndUpdate({
             user_id: req.user._id
@@ -226,9 +246,11 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
         })
     } catch (err) {
         console.log(err);
+
         res.status(500).json({
             error: 'Unable to remove dish',
-            err: err.message
+            err: err.message,
+            cart
         });
     }
 });

@@ -4,33 +4,31 @@ const {
 const {
     Cafe
 } = require('../models/Cafe');
+const User = require('../models/User');
 
 const router = require('express').Router();
 
-router.get('/orders', ensureCafe, (req, res) => {
-    Cafe.findOne({
+router.get('/orders', ensureCafe, async(req, res, next) => {
+
+    try {
+        let workingCafe = await Cafe.findOne({
             _id: req.user._id
-        }).then(
-            cafe => {
-                res.status(400).json({
-                    orders: cafe.orders
-                });
-            }
-        )
-        .catch(err => {
-            res.status(500).json({
-                Error: err.message
-            })
         })
+        await res.status(workingCafe ? 200 : 404).json({
+            orders: workingCafe.orders ? workingCafe.orders : null
+        })
+    } catch (err) {
+        next(err);
+    }
 
 });
-router.get('/:orderID/accept', (req, res) => {
+router.post('/:orderID/accept',ensureCafe, (req, res) => {
     Cafe.findOneAndUpdate({
         _id: req.user._id,
         "orders._id": req.params.orderID,
     }, {
         $set: {
-            "orders.$.status": 'Accepted,currently making the order'
+            "orders.$.status": 1
         }
     }, {
         new: true
@@ -38,36 +36,35 @@ router.get('/:orderID/accept', (req, res) => {
         if (err) {
             res.status(500)
                 .json({
-                    error: 'Unable to accept.',
+                    error: 'Unable to accept.'
                 });
         } else {
             workingOrder = doc.orders.id(req.params.orderID);
-            User.update({
+            User.findOneAndUpdate({
                     _id: workingOrder.user_id,
                     'orders._id': workingOrder._id
                 }, {
                     $set: {
-                        "orders.$.status": 'Accepted, currently making the order'
+                        "orders.$.status": 1
                     }
-                })
-                .then((err, result) => {
+                }, (err, result) => {
                     if (err) {
-                        res.status(501).json('Could not update in user but updated in cafe')
+                        res.status(501).json({message:'Could not update in user but updated in cafe'});
                     } else {
-                        res.status(200).json('Accepted the order');
+                        res.status(200).json({message:'Accepted the order'});
                     };
                 })
         }
     })
 
 })
-router.get('/:orderID/complete', (req, res) => {
+router.get('/:orderID/complete',ensureCafe, (req, res) => {
     Cafe.findOneAndUpdate({
         _id: req.user._id,
         "orders._id": req.params.orderID,
     }, {
         $set: {
-            "orders.$.status": 'Completed the order, please take the order'
+            "orders.$.status": 2
         }
     }, {
         new: true
@@ -75,23 +72,57 @@ router.get('/:orderID/complete', (req, res) => {
         if (err) {
             res.status(500)
                 .json({
-                    error: 'Unable to make the operation.',
+                    error: 'Unable to make the operation.'
                 });
         } else {
             workingOrder = doc.orders.id(req.params.orderID);
-            User.update({
+            User.findOneAndUpdate({
                     _id: workingOrder.user_id,
                     'orders._id': workingOrder._id
                 }, {
                     $set: {
-                        "orders.$.status": 'Completed the order, please take the order'
+                        "orders.$.status": 2
                     }
-                })
-                .then((err, result) => {
+                }, (err, result) => {
                     if (err) {
-                        res.status(501).json('Could not update in user but updated in cafe')
+                        res.status(501).json({message:'Could not update in user but updated in cafe'});
                     } else {
-                        res.status(200).json('Operation completed');
+                        res.status(200).json({message:'Operation completed'});
+                    };
+                })
+        }
+    })
+})
+router.get('/:orderID/reject',ensureCafe, (req, res) => {
+    Cafe.findOneAndUpdate({
+        _id: req.user._id,
+        "orders._id": req.params.orderID,
+    }, {
+        $set: {
+            "orders.$.status": -1
+        }
+    }, {
+        new: true
+    }, (err, doc) => {
+        if (err) {
+            res.status(500)
+                .json({
+                    error: 'Unable to make the operation.'
+                });
+        } else {
+            workingOrder = doc.orders.id(req.params.orderID);
+            User.findOneAndUpdate({
+                    _id: workingOrder.user_id,
+                    'orders._id': req.params.orderID
+                }, {
+                    $set: {
+                        "orders.$.status": -1
+                    }
+                }, (err, result) => {
+                    if (err) {
+                        res.status(501).json({message:'Could not update in user but updated in cafe'})
+                    } else {
+                        res.status(200).json({message:'Operation completed'});
                     };
                 })
         }

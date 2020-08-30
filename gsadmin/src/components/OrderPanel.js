@@ -1,72 +1,175 @@
 import React from 'react';
-function RenderMenuItem({ dish, deleteFavorite }) {
-    return(
-        <Media tag="li">
-            <Media left middle>
-                <Media object src={baseUrl + dish.image} alt={dish.name} />
-            </Media>
-            <Media body className="ml-5">
-                <Media heading>{dish.name}</Media>
-                <p>{dish.description}</p>
-                <Button outline color="danger" onClick={() => deleteFavorite(dish._id)}>
-                    <span className="fa fa-times"></span>
-                </Button>
-            </Media>
-        </Media>
-    );
-}
-function OrderPanel(props) {
-    const orders = props.orders.dishes.map((dish) => {
-        return (
-            <div key={dish._id} className="col-12 mt-5">
-                <RenderMenuItem dish={dish} />
-            </div>
-        );
-    });
-    const [activeTab, setActiveTab] = useState('1');
+import { Card, CardHeader, CardBody, Table, ButtonGroup, Button, CardFooter } from 'reactstrap';
+import { Loading } from './LoadingComponent';
 
-  const toggle = tab => {
-    if(activeTab !== tab) setActiveTab(tab);
+function RenderPendingOrder(props) {
+  const handleAccept = () => {
+    const orderId = props.order._id.toString();
+    props.acceptOrder(orderId);
+    console.log("Accepted");
   }
-
+  const handleReject = () => {
+    const orderId = props.order._id.toString();
+    props.rejectOrder(orderId);
+    console.log("Rejected");
+  }
+  const handleComplete = () => {
+    const orderId = props.order._id.toString();
+    props.completeOrder(orderId);
+    console.log("Completed");
+  }
+  const dishes = props.order.dishes.map((dish) => {
     return (
-        <div className="container">
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '1' })}
-            onClick={() => { toggle('1'); }}
-          >
-            Active Orders
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '2' })}
-            onClick={() => { toggle('2'); }}
-          >
-            Pending Orders
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
-                <div className="row">
-                    <Media list>
-                        {orders}
-                    </Media>
-                </div>
-        </TabPane>
-        <TabPane tabId="2">
-                <div className="row">
-                    <Media list>
-                        {orders}
-                    </Media>
-                </div>
-        </TabPane>
-      </TabContent>
-    </div>  
+      <tr>
+        <td>{dish.dish_name}</td>
+        <td>{dish.quantity}</td>
+        <td>{dish.quantity * dish.price / 100}</td>
+      </tr>
     );
+  })
+  return (
+    <Card className="gs-color-dark">
+      <CardHeader className=" row justify-content-between"><span className="col-auto">Ordered by {props.order.user_name}</span>
+        <span className="col-auto">
+          {new Intl.DateTimeFormat('default', {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric'
+          }).format(new Date(Date.parse(props.order.time_placed)))}
+        </span>
+      </CardHeader>
+      <CardBody>
+        <Table>
+          <thead>
+            <tr>
+              <th>Dish Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dishes}
+            <tr>
+              <th></th>
+              <th>Total Price</th>
+              <th>{props.order.total_price}</th>
+            </tr>
+          </tbody>
+        </Table>
+      </CardBody>
+
+      {props.order.status === 0
+        ?
+        <CardFooter className="row justify-content-between">
+          <div className="col-6">
+            <Button block color="success" onClick={handleAccept} className="btn btn-sm">Accept</Button>
+          </div>
+          <div className="col-6">
+            <Button block color="danger" onClick={handleReject} className="btn btn-sm">Reject</Button>
+          </div>
+        </CardFooter>
+        :
+        <CardFooter className="row">
+          <Button block color="primary" onClick={handleComplete} className="btn btn-sm">Ready</Button>
+        </CardFooter>
+      }
+
+    </Card>
+  );
 }
+function RenderCompleteOrder({ order }) {
+
+  const dishes = order.dishes.map((dish) => {
+    return (
+      <tr>
+        <td>{dish.dish_name}</td>
+        <td>{dish.quantity}</td>
+        <td>{dish.quantity * dish.price / 100}</td>
+      </tr>
+    );
+  })
+  return (
+    <Card className="gs-color-dark">
+      <CardHeader className=" row justify-content-between"><span className="col-auto">Ordered by {order.user_name}</span>
+        <span className="col-auto">
+          {new Intl.DateTimeFormat('default', {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric'
+          }).format(new Date(Date.parse(order.time_placed)))}
+        </span>
+      </CardHeader>
+      <CardBody>
+        <Table>
+          <thead>
+            <tr>
+              <th>Dish Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dishes}
+            <tr>
+              <th></th>
+              <th>Total Price </th>
+              <th>{order.total_price / 100} </th>
+            </tr>
+          </tbody>
+        </Table>
+      </CardBody>
+      <CardFooter>
+        {order.status === 2
+          ?
+          <Button color="success" disabled className="btn btn-sm" block>Completed</Button>
+          :
+          <Button color="danger" disabled className="btn btn-sm" block>Rejected</Button>
+        }
+      </CardFooter>
+    </Card>
+  );
+}
+
+function OrderPanel(props) {
+
+  if (props.orders.isLoading) {
+    return <div>
+      <Loading />
+    </div>
+  }
+  else if (props.orders.orders != null) {
+    const pendingOrders = props.orders.orders.map((order) => {
+      if (order.status === 0 || order.status === 1) {
+        return (
+          <div className="col-12 mt-1">
+            <RenderPendingOrder order={order} acceptOrder={props.acceptOrder} rejectOrder={props.rejectOrder} completeOrder={props.completeOrder} />
+          </div>
+        );
+      }
+    });
+    const completedOrders = props.orders.orders.map((order) => {
+      if (order.status === 2 || order.status === -1) {
+        return (
+          <div className="col-12 m-1">
+            <RenderCompleteOrder order={order} />
+          </div>
+        );
+      }
+    });
+    return (
+      <div className="container">
+        <div className="row">
+          {pendingOrders}
+        </div>
+        <div className="row">
+        <h3>Completed Orders</h3>
+          {completedOrders}
+        </div>
+      </div>
+    );
+  }
+  else return (
+    <div>No Order Yet</div>
+  );
+}
+
 
 export default OrderPanel;

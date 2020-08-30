@@ -5,16 +5,16 @@ var Currency = mongoose.Types.Currency;
 const dishSchema = new mongoose.Schema({
     dish_name: String,
     cafe_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
-        ref: 'Cafe'
+        ref: 'Cafe', 
     },
     price: {
         type: Number
     },
     availability: Boolean,
-    totalRating: Number,
-    ratingCount: Number,
+    category: String,
+    featured: Boolean,
     pictureURL: String,
     description: String,
 }, {

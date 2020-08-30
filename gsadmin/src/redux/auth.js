@@ -14,21 +14,24 @@ export const Auth = (state = {
         case ActionTypes.LOGIN_REQUEST:
             return {...state,
                 isLoading: true,
-                isAuthenticated: false,
-                user: action.creds
+                isAuthenticated: false
             };
         case ActionTypes.LOGIN_SUCCESS:
             return {...state,
                 isLoading: false,
                 isAuthenticated: true,
+                token: action.token,
                 errMess: '',
-                token: action.token
+                user: action.user
             };
         case ActionTypes.LOGIN_FAILURE:
+            
             return {...state,
                 isLoading: false,
                 isAuthenticated: false,
-                errMess: action.message
+                token:'',
+                errMess: action.message,
+                user: null
             };
         case ActionTypes.LOGOUT_REQUEST:
             return {...state,
@@ -39,7 +42,8 @@ export const Auth = (state = {
             return {...state,
                 isLoading: false,
                 isAuthenticated: false,
-                token: '',
+                token:'',
+                errMess: action.message,
                 user: null
             };
         default:

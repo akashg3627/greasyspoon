@@ -14,7 +14,9 @@ const {
     Cafe
 } = require('../models/Cafe');
 const router = require('express').Router();
-
+//user name
+//cafe name
+//
 router.post('/', ensureUser, async(req, res) => {
     try {
         console.log('order initiated');
@@ -34,17 +36,16 @@ router.post('/', ensureUser, async(req, res) => {
 
             workingOrder = new Order({
                 ...workingCartCopy,
-                status: 'Yet to be accepted'
-
+                status: 0,
             })
             currUser = await User.findOne({
                 _id: req.user._id
             })
-            currUser.orders.push(workingOrder);
+            currUser.orders.splice(0, 0, workingOrder);
             currCafe = await Cafe.findOne({
                 _id: workingCart.cafe_id
             })
-            currCafe.orders.push(workingOrder);
+            currCafe.orders.splice(0, 0, workingOrder);
             currUser.save(err => {
                 if (err) {
                     res.status(500).json({

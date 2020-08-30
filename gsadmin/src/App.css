@@ -123,6 +123,11 @@ margin: auto 1vw;
 .login-card{
   color: var(--dark-color);
 padding: 10px 20px;
+position: fixed;
+top: 0;
+width: 100vw;
+height: 100vh;
+z-index: 10;
 }
 
 .footer{
@@ -135,4 +140,13 @@ address{
   font-size:80%;
   margin:0px;
   color:#0f0f0f;
+}
+
+.gs-body{
+  min-height: 600px;
+}
+
+.gs-color-dark
+{
+  color: var(--dark-color);
 }

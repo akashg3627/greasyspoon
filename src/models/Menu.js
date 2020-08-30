@@ -3,7 +3,7 @@ const dishSchema = dishImport.dishSchema;
 const mongoose = require("mongoose");
 const menuSchema = new mongoose.Schema({
     cafe_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
         ref: 'Cafe',
         unique: true,

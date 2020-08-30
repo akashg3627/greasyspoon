@@ -6,7 +6,8 @@ const {
 } = require('express-validator/check')
 const _ = require('lodash')
 const {
-    ensureAuthenticated
+    ensureAuthenticated,
+    ensureCafe
 } = require('../config/auth');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -18,6 +19,8 @@ const {
 const bodyParser = require('body-parser');
 const Cafe = require('../models/Cafe').Cafe;
 const upload = require('../config/multer_support')
+const authService = require('../services/authService_user');
+const jwt = require('jsonwebtoken');
 
 //working api route is /api/profile
 
@@ -28,11 +31,61 @@ router.get('/', ensureAuthenticated, (req, res) => {
     if (req.user.password) {
         delete deepClone.password;
     }
-    console.log('the response is', deepClone)
     res.json(deepClone);
 });
 //provides ability to edit user document details.
+router.get('/check', async(req, res) => {
+    // if (req.isAuthenticated()) {
+    //     return next();
+    // }
+    // res.status(401).json({
+    //     error: 'Unauthorized'
+    // })
+    const token = req.header('x-auth-token');
+    if (!token) res.status(201).json({
+        isAuthorized: false
+    })
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        if (payload.role == 'User') {
+            console.log('checking auth as user');
+            let workingUser = await User.findOne({
+                _id: payload.userId
+            })
+            if (workingUser) {
+                res.status(200).json({
+                    isAuthorized: true,
+                    user: JSON.stringify(workingUser)
+                })
+            } else {
+                return res.status(201).json({
+                    isAuthorized: false
+                })
+            }
+        } else {
+            let workingCafe = await Cafe.findOne({
+                _id: payload.userId
+            })
+            if (workingCafe) {
+                res.status(200).json({
+                    isAuthorized: true,
+                    cafe: JSON.stringify(workingCafe)
+                })
+            } else {
+                return res.status(201).json({
+                    isAuthorized: false
+                })
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({
+            error: e,
+            isAuthorized: false
+        })
+    }
 
+});
 router.patch('/', ensureAuthenticated, (req, res) => {
     if (req.user.role == 'User') {
         //User object
@@ -72,19 +125,51 @@ router.patch('/', ensureAuthenticated, (req, res) => {
 //api endpoint to register a cafe using local strategy
 //sends 200 if success
 //the post request data should(or form names) should have (name,email,number,password)
-
-
-router.post('/register/cafe/', upload.fields([{
+router.post('/register/images', upload.fields([{
     name: 'logoImage',
     maxCount: 1,
 }, {
     name: 'cafeImage',
     maxCount: 1,
 
-}]), (req, res) => {
-    if (req.isAuthenticated()) {
-        res.status(405).json({
-            error: 'Please log out first'
+}]), ensureCafe, async(req, res) => {
+    let workingCafe = await Cafe.findOne({
+        _id: req.user._id
+    });
+    if (req.files.logoImage !== undefined) {
+        workingCafe.logoURL = req.files.logoImage[0].path
+    }
+    if (req.files.cafeImage !== undefined) {
+        workingCafe.imageURL = req.files.cafeImage[0].path
+    }
+    try {
+        let savedCafe = await workingCafe.save();
+        req.logIn(savedCafe, {
+                session: false
+            },
+            err => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err.message
+                    })
+                } else {
+                    res.status(200).json({
+                        status: 'success'
+                    });
+                }
+            })
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/register/cafe/', async(req, res) => {
+    var token = req.header('x-auth-token')
+    if (token) {
+        res.status(403).json({
+            error: 'You need to be logged out first'
         })
     } else {
         console.log('registering Cafe ', req.body);
@@ -96,29 +181,91 @@ router.post('/register/cafe/', upload.fields([{
             ordersToBeAccepted: [],
             mobNumber: req.body.number,
             role: 'Cafe',
+            description: req.body.description,
             password: bcrypt.hashSync(req.body.password, 10),
         })
-        if (req.files.logoImage !== undefined) {
-            newAcc.logoURL = req.files.logoImage[0].path
+        try {
+            var newCafe = await newAcc.save();
+            req.login(newCafe, {
+                session: false
+            }, err => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        message: 'unable to login the registered Cafe'
+                    })
+                } else {
+                    authService.signToken(req, res);
+
+                }
+            })
+        } catch (error) {
+            res.sendStatus(500)
         }
-        if (req.files.cafeImage !== undefined) {
-            newAcc.imageURL = req.files.cafeImage[0].path
-        }
-        newAcc.save(err => {
-            if (err) {
-                console.log(err)
-            } else {
-                res.status(200).json({
-                    message: 'Successfully created object',
-                    uploaded: req.files,
-                });
-            }
+
+    }
+})
+router.post('/register/cafe/withImage', upload.fields([{
+    name: 'logoImage',
+    maxCount: 1,
+}, {
+    name: 'cafeImage',
+    maxCount: 1,
+
+}]), async(req, res) => {
+    var token = req.header('x-auth-token')
+    if (token) {
+        res.status(403).json({
+            error: 'You need to be logged out first'
         })
+    } else {
+        console.log('registering Cafe ', req.body);
+
+        var newAcc = new Cafe({
+            name: req.body.name,
+            email_id: req.body.email,
+            ordersCompleted: [],
+            ordersPending: [],
+            ordersToBeAccepted: [],
+            mobNumber: req.body.number,
+            role: 'Cafe',
+            description: req.body.description,
+            password: bcrypt.hashSync(req.body.password, 10),
+            logoURL: req.files.logoImage !== undefined ? req.files.logoImage[0].path : '',
+            imageURL: req.files.cafeImage !== undefined ? req.files.cafeImage[0].path : '',
+        })
+
+        try {
+            var newCafe = await newAcc.save();
+            req.login(newCafe, {
+                session: false
+            }, err => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: 'unable to login the registered Cafe'
+                    })
+                } else {
+                    authService.signToken(req, res);
+
+                }
+            })
+        } catch (error) {
+            res.sendStatus(500)
+        }
+
     }
 })
 
-//checks whether a user(User or Cafe) is logged in or not
-router.get('/check', (req, res) => {
+
+
+router.post('/login/cafe', passport.authenticate('local', {
+        session: false,
+    }), (req, res) => {
+        authService.signToken(req, res);
+    })
+    //checks whether a user(User or Cafe) is logged in or not
+/*router.get('/check', (req, res) => {
         console.log('checking');
         if (req.user) {
             res.status.json({
@@ -127,37 +274,47 @@ router.get('/check', (req, res) => {
         } else {
             res.sendStatus(404);
         }
-    })
+    })*/
     //allows User login using google oauth 2 (login only if from iiti domain name)
-router.get('/login/user',
-        passport.authenticate("google", {
-            scope: ["profile", "email"],
-            failureRedirect: '/login/failure'
-        }), (req, res) => {
-            console.log('login request');
-        })
+    // router.get('/login/user',
+    //         passport.authenticate("google", {
+    //             scope: ["profile", "email"],
+    //             failureRedirect: '/login/failure',
+    //             accessType: 'offline',
+    //             approvalPrompt: 'force'
+    //         }), (req, res) => {
+    //             console.log('login request');
+    //         })
+router.post('/login/user', authService.checkOAUTHtoken, passport.authenticate('custom', {
+        failureRedirect: '/login/failure',
+        session: false,
+    }), (req, res) => {
+        authService.loginuser(req, res);
+    })
     //login api endpoint for Cafe login
     //redirects to working_route/login/failure if not authenticated
-router.post('/login/cafe', passport.authenticate('local', {
-        failureRedirect: '/login/failure'
-    }), (req, res) => {
-        res.status(200).json({
-            message: 'Cafe log-in successful'
-        })
-    })
-    //callback for google login.
-    //do not send direct requests to this endpoint
-router.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
-        res.status(200).json({
-            status: 'Successfully logged in using google '
-        })
+
+router.get('/verify', authService.checkTokenMW, (req, res) => {
+    authService.verifyToken(req, res);
+    if (null === req.authData) {
+        res.sendStatus(403);
+    } else {
+        res.json(req.authData);
+    }
+});
+//callback for google login.
+//do not send direct requests to this endpoint
+router.get('/auth/google/callback', passport.authenticate('google', {
+        session: false
+    }), function(req, res) {
+        authService.signToken(req, res);
     })
     //logout route for all user types
-router.get('/logout', (req, res) => {
-    console.log('logging out')
-    req.logout();
-    res.status(200).json({
-        message: 'logged out successfully'
-    })
-})
+    // router.get('/logout', (req, res) => {
+    //     console.log('logging out')
+    //     req.logout();
+    //     res.status(200).json({
+    //         message: 'logged out successfully'
+    //     })
+    // })
 module.exports = router;
