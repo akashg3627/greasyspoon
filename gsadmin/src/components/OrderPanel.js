@@ -111,7 +111,7 @@ function RenderCompleteOrder({ order }) {
             <tr>
               <th></th>
               <th>Total Price </th>
-              <th>{order.total_price} </th>
+              <th>{order.total_price / 100} </th>
             </tr>
           </tbody>
         </Table>
@@ -139,7 +139,7 @@ function OrderPanel(props) {
     const pendingOrders = props.orders.orders.map((order) => {
       if (order.status === 0 || order.status === 1) {
         return (
-          <div className="col-12">
+          <div className="col-12 mt-1">
             <RenderPendingOrder order={order} acceptOrder={props.acceptOrder} rejectOrder={props.rejectOrder} completeOrder={props.completeOrder} />
           </div>
         );
@@ -148,8 +148,7 @@ function OrderPanel(props) {
     const completedOrders = props.orders.orders.map((order) => {
       if (order.status === 2 || order.status === -1) {
         return (
-          <div className="col-12">
-            <h3>Completed Orders</h3>
+          <div className="col-12 m-1">
             <RenderCompleteOrder order={order} />
           </div>
         );
@@ -157,10 +156,11 @@ function OrderPanel(props) {
     });
     return (
       <div className="container">
-        <div className="row mt-2">
+        <div className="row">
           {pendingOrders}
         </div>
-        <div className="row mt-2">
+        <div className="row">
+        <h3>Completed Orders</h3>
           {completedOrders}
         </div>
       </div>

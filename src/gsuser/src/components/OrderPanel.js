@@ -39,37 +39,17 @@ function RenderOrder(props) {
     )
   }
   else if (props.orders.orders != null) {
-    const pendingOrders = props.orders.orders.map((order) => {
-      if (order.status === 0 || order.status === 1)
+    const yourOrders = props.orders.orders.map((order) => {
         return (
           <div>
             <RenderOrderItem order={order} />
           </div>
         )
-      else return (
-        <div></div>
-      )
-    })
-    const completedOrders = props.orders.orders.map((order) => {
-      if (order.status === 2 || order.status === -1)
-        return (
-          <div>
-            <RenderOrderItem order={order} />
-          </div>
-        )
-      else return (
-        <div></div>
-      )
     })
     return (
       <div className="col-12 ">
-        <h2>Pending Orders</h2>
         <div>
-          {pendingOrders}
-        </div>
-        <h2>Completed Orders</h2>
-        <div>
-          {completedOrders}
+          {yourOrders}
         </div>
       </div>
     );
