@@ -148,6 +148,8 @@ router.post('/', ensureUser, async(req, res) => {
                 cart.overwrite({
                     user_id: req.user._id,
                     cafe_id,
+                    cafe_name,
+                    user_name,
                     total_price: Number(dish.price),
                     dishes: [tobepushed]
                 });
