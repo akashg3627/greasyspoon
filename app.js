@@ -18,7 +18,7 @@ require("./config/passport-google")(passport);
 const db = require("./config/keys").MongoURI;
 //Connect to mongo
 mongoose
-    .connect(MongoURI, {
+    .connect(db, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
