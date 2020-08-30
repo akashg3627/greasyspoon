@@ -27,11 +27,11 @@
 }
 
 body {
-    /* background-image: url("/bg-2.jpg");
+     background-image: url("/bg-2.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    fill-opacity: 30%; */
-    background-image: linear-gradient(to right, #120136,#035aa6,#120136 ) ;
+    fill-opacity: 30%; 
+ 
     margin: 0px auto;
     justify-content: center;
     font-size: calc(10px + 1vmin);
