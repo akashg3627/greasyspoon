@@ -39,7 +39,7 @@ app.use(bodyParser.json());
 app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://apis.google.com/*", 'maxcdn.bootstrapcdn.com'],
+        scriptSrc: ["'self' https://apis.google.com/*"],
         styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
         fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
     }
