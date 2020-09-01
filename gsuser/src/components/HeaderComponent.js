@@ -8,7 +8,7 @@ function HeaderComponent(props) {
     const [isNavOpen, toggleNavbar] = useState(false);
     return (
         <React.Fragment>
-            <Navbar light expand="md" >
+            <Navbar light expand="lg" >
                 <div className="container c-h">
                     <NavbarBrand href="/">
                         <span className="g">GREASY</span><span className="s">SPOON</span>
@@ -36,20 +36,21 @@ function HeaderComponent(props) {
                                     Orders
                             </NavLink>
                             </NavItem>
+                            </Nav>
+                    </Collapse>
                             {
                                 props.auth.isAuthenticated
                                 ?
-                                <NavItem>
+                                <NavbarBrand>
                                 <NavLink className="nav-link btn-profile" to="/contactus">
                                     <span className="fa fa-user fa-lg"></span> {props.auth.user ? props.auth.user.name : null}
                                 </NavLink>
-                            </NavItem>
+                            </NavbarBrand>
                                 :
                                 null
                             }
                             <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
-                        </Nav>
-                    </Collapse>
+                        
                 </div>
             </Navbar>
         </React.Fragment>

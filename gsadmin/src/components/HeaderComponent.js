@@ -9,12 +9,12 @@ function HeaderComponent(props) {
     const [loginmodal, toggleLogin] = useState(false);
     return (
         <React.Fragment>
-            <Navbar light expand="md" >
+            <Navbar light expand="lg" >
                 <div className="container c-h">
                     <NavbarBrand href="/">
                         <span className="g">GREASY</span><span className="s">SPOON</span>
                     </NavbarBrand>
-                    <NavbarToggler className="ml-auto" onClick={() => toggleNavbar(!isNavOpen)} />
+                    <NavbarToggler className="ml-auto float-left" onClick={() => toggleNavbar(!isNavOpen)} />
                     <Collapse isOpen={isNavOpen} navbar>
                         <Nav navbar className="ml-auto">
                             <NavItem>
@@ -36,19 +36,21 @@ function HeaderComponent(props) {
                                 <NavLink className="nav-link" to="/order">
                                     Order
                             </NavLink>
+                            
                             </NavItem>
+                            </Nav>
+                    </Collapse>
                             {props.user != null
                                 ?
-                                <NavItem>
-                                    <NavLink className="nav-link" to="/profile">
-                                        <span className="fa fa-user fa-lg"></span>  {props.user.name}
+                                <NavbarBrand>
+                                    <NavLink className="nav-link user-info" to="/profile">
+                                        <span className="fa fa-user fa-lg"></span> <span className="text-capitalize"> {props.user.name}</span>
                                     </NavLink>
-                                </NavItem>
+                                </NavbarBrand>
                                 : null
                             }
+                            
                             <LoginButton user={props.user} signin={props.signin} signup={props.signup} logout={props.logout}/>
-                        </Nav>
-                    </Collapse>
                 </div>
             </Navbar>
         </React.Fragment>

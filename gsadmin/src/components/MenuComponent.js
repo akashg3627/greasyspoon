@@ -40,7 +40,7 @@ function RenderMenuItem({ dish, deleteDish, addDishWI, editDishWI }) {
             </CardImgOverlay>
 
             <CardBody className="gs-color-dark">
-                <CardTitle>{dish.dish_name}</CardTitle>
+                <CardTitle className=" text-capitalize">{dish.dish_name}</CardTitle>
                 <CardText>{dish.category}  Price: Rs. {dish.price / 100}
                 </CardText>
             </CardBody>
@@ -101,11 +101,9 @@ const MenuComponent = (props) => {
         );
     }
     else return (
-        <div className="container gs-body">
+        <div className="container gs-body gs-error">
             <div>No Dish Added</div>
-            <div className="row">
-                <RenderAddDish addDishWI={props.addDishWI} />
-            </div>
+            <RenderAddDish addDishWI={props.addDishWI} />
         </div>
     );
 

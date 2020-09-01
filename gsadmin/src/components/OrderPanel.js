@@ -21,7 +21,7 @@ function RenderPendingOrder(props) {
   const dishes = props.order.dishes.map((dish) => {
     return (
       <tr>
-        <td>{dish.dish_name}</td>
+        <td className=" text-capitalize">{dish.dish_name}</td>
         <td>{dish.quantity}</td>
         <td>{dish.quantity * dish.price / 100}</td>
       </tr>
@@ -29,13 +29,14 @@ function RenderPendingOrder(props) {
   })
   return (
     <Card className="gs-color-dark">
-      <CardHeader className=" row justify-content-between"><span className="col-auto">Ordered by {props.order.user_name}</span>
+      <CardHeader><div className=" row justify-content-between"><span className="col-auto text-capitalize">Ordered by {props.order.user_name}</span>
         <span className="col-auto">
           {new Intl.DateTimeFormat('default', {
             year: 'numeric', month: 'numeric', day: 'numeric',
             hour: 'numeric', minute: 'numeric', second: 'numeric'
           }).format(new Date(Date.parse(props.order.time_placed)))}
         </span>
+        </div> 
       </CardHeader>
       <CardBody>
         <Table>
@@ -51,7 +52,7 @@ function RenderPendingOrder(props) {
             <tr>
               <th></th>
               <th>Total Price</th>
-              <th>{props.order.total_price}</th>
+              <th>{props.order.total_price /100}</th>
             </tr>
           </tbody>
         </Table>
@@ -81,7 +82,7 @@ function RenderCompleteOrder({ order }) {
   const dishes = order.dishes.map((dish) => {
     return (
       <tr>
-        <td>{dish.dish_name}</td>
+        <td className=" text-capitalize">{dish.dish_name}</td>
         <td>{dish.quantity}</td>
         <td>{dish.quantity * dish.price / 100}</td>
       </tr>
@@ -89,13 +90,15 @@ function RenderCompleteOrder({ order }) {
   })
   return (
     <Card className="gs-color-dark">
-      <CardHeader className=" row justify-content-between"><span className="col-auto">Ordered by {order.user_name}</span>
+      <CardHeader><div className=" row justify-content-between">
+        <span className="col-auto  text-capitalize">Ordered by {order.user_name}</span>
         <span className="col-auto">
           {new Intl.DateTimeFormat('default', {
             year: 'numeric', month: 'numeric', day: 'numeric',
             hour: 'numeric', minute: 'numeric', second: 'numeric'
           }).format(new Date(Date.parse(order.time_placed)))}
         </span>
+        </div>
       </CardHeader>
       <CardBody>
         <Table>
@@ -135,7 +138,7 @@ function OrderPanel(props) {
       <Loading />
     </div>
   }
-  else if (props.orders.orders != null) {
+  else if (props.orders.orders[0] != null) {
     const pendingOrders = props.orders.orders.map((order) => {
       if (order.status === 0 || order.status === 1) {
         return (
@@ -160,14 +163,13 @@ function OrderPanel(props) {
           {pendingOrders}
         </div>
         <div className="row">
-        <h3>Completed Orders</h3>
           {completedOrders}
         </div>
       </div>
     );
   }
   else return (
-    <div>No Order Yet</div>
+    <div className="gs-error">No Orders Yet</div>
   );
 }
 

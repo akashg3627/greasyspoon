@@ -6,22 +6,32 @@
     --dark-color: #2f2838;
 }
 
-.App {
+.Error {
     text-align: center;
     min-height: 100vh;
-    background-color: #282c34;
+    background-color: transparent;
     align-items: center;
     justify-content: center;
-    font-size: calc(10px + 5vmin);
-    color: white;
+    font-size: calc(10px + 1vmin);
+    color: #fff;
     padding: 20vw 20vh 20vw 20vh;
+}
+.gs-error{
+    text-align: center;
+    min-height: 100%;
+    background-color: #ffffff;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 1vmin);
+    color: var(--dark-color);
 }
 
 body {
-    background-image: url("/header-bg.jpg");
+     background-image: url("/header-bg.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    fill-opacity: 30%;
+    fill-opacity: 30%; 
+ 
     margin: 0px auto;
     justify-content: center;
     font-size: calc(10px + 1vmin);
@@ -30,7 +40,7 @@ body {
 }
 
 .container {
-    min-width: 95vw;
+    min-width: 85vw;
 }
 
 .container .c-h {
@@ -38,12 +48,11 @@ body {
     z-index: 2;
 }
 
-span {
+/* span {
     font-size: small;
-}
+} */
 
 .btn-login {
-    margin-left: 5vw;
     font-size: auto;
     color: var(--dark-color);
     background-color: transparent;
@@ -113,12 +122,12 @@ span {
 
 .g {
     color: var(--secondary-color);
-    font-size: 3em;
+    font-size: calc(16px + 5vmin);
 }
 
 .s {
     color: var(--dark-color);
-    font-size: 3em;
+    font-size: calc(16px + 5vmin);
 }
 
 .media-menu {
@@ -153,13 +162,6 @@ address {
     border-radius: 30px;
 }
 
-.btn-profile {
-    background-color: #fff;
-    color: var(--dark-color);
-    border: 1px solid white;
-    border-radius: 30px;
-}
-
 .menuImage {
     height: 128px;
     width: 128px;
@@ -174,3 +176,40 @@ address {
 .gs-reverse{
     flex-direction: column-reverse;
 }
+
+.page-enter {
+    opacity: 0.01;
+    transform: translateX(-100%);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateX(0%);
+    transition: all 300ms ease-in;
+}
+
+.page-exit {
+    opacity: 1;
+    transform: translateX(0%);
+}
+
+.page-exit-active {
+    opacity: 0.01;
+    transform: translateX(100%);
+    transition: all 300ms ease-out;
+}
+.bg-c{
+    background-image: url('/sb-1.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    min-height: 120vh;
+}
+.custom-tag {
+    min-width: 100%;
+    height: 500px;
+  }
+
+  .user-i{
+      width: 200px;
+      height: 200px;
+  }

@@ -16,7 +16,7 @@ exports.checkTokenMW = (req, res, next) => {
     }
 };
 exports.checkOAUTHtoken = async(req, res, next) => {
-        const CLIENT_ID = '899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com'
+        const CLIENT_ID = '931450817326-25po48n0tc1q5f81e06mdgp74k2tumhh.apps.googleusercontent.com'
         if (req.body.tokenId) {
             const client = new OAuth2Client(CLIENT_ID);
             async function verify() {
@@ -64,7 +64,7 @@ exports.verifyToken = (req, res) => {
 // Issue Token
 getToken = function(user) {
     return jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: 3600*6
+        expiresIn: 3600 * 6
     });
 };
 exports.loginuser = (req, res, next) => {
@@ -89,7 +89,7 @@ exports.signToken = (req, res) => {
         role: req.user.role,
         name: req.user.name,
     }, process.env.JWT_SECRET, {
-        expiresIn: 3600*6,
+        expiresIn: 3600 * 6,
     }, (err, token) => {
         if (err) {
             console.log(err);
