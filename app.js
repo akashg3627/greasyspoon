@@ -1,3 +1,9 @@
+const {
+    expressCspHeader,
+    INLINE,
+    NONE,
+    SELF
+} = require('express-csp-header');
 require("dotenv").config(); //for env vars
 const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
@@ -36,31 +42,30 @@ app.use(
     })
 );
 app.use(bodyParser.json());
-app.use(helmet.contentSecurityPolicy({
+
+
+
+app.use(cors());
+app.use(expressCspHeader({
     directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self' https://apis.google.com/*"],
-        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
-        fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+        'default-src': [SELF, '*.google.com'],
+        'script-src': [SELF, INLINE, 'apis.google.com'],
     }
 }));
-
-
-
-app.use(cors())
-    //Express session
-    // app.use(
-    //     session({
-    //         secret: "keyboard cat",
-    //         resave: false,
-    //         saveUninitialized: false,
-    //     })
-    // );
-    //when user is authenticated its serialised to cookies and then attached to req.user(as well as req.session.passport.user)
-    //on subsequent requests, passport.initialize() middleware is called. 
-    //It finds the passport.user attached to the session, if it doesnt(user yet not authenticated) it creates it like req.passport.user={}
-    //passport.initialize middleware is invoked on every request. It ensures the session contains a passport.user object, which may be empty
+//Express session
+// app.use(
+//     session({
+//         secret: "keyboard cat",
+//         resave: false,
+//         saveUninitialized: false,
+//     })
+// );
+//when user is authenticated its serialised to cookies and then attached to req.user(as well as req.session.passport.user)
+//on subsequent requests, passport.initialize() middleware is called. 
+//It finds the passport.user attached to the session, if it doesnt(user yet not authenticated) it creates it like req.passport.user={}
+//passport.initialize middleware is invoked on every request. It ensures the session contains a passport.user object, which may be empty
 app.use(passport.initialize());
+
 //next passport.session() is invoked. If it finds a serialised user object in the session, it considers the request to be authenticated. 
 //it then calls the passport.deserializeUser whule attaching the loaded user ibject to req as req.user()
 //passport.session middleware is a Passport Strategy which will load the user object onto req.user if a serialised user object was found in the server.
