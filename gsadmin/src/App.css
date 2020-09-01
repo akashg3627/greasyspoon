@@ -118,7 +118,7 @@ body {
 }
 
 .s {
-    color: var(--light-color);
+    color: var(--dark-color);
     font-size: calc(16px + 5vmin);
 }
 
