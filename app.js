@@ -48,7 +48,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(expressCspHeader({
     directives: {
-        'default-src': [SELF, '*.google.com', '*://*.google.com/*', 'https://apis.google.com/js/'],
+        'default-src': [SELF, '*.google.com', '*.googleapis.com', 'kit.fontawesome.com', 'https://apis.google.com/js/'],
         'script-src': [SELF, INLINE, 'apis.google.com', 'https://apis.google.com/js/api.js'],
     }
 }));

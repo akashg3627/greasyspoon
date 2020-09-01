@@ -17,7 +17,7 @@ class LoginComponent extends Component {
             this.props.loginGoogleUser({ "googleId": res.profileObj.googleId, "name": res.profileObj.name, "email": res.profileObj.email, "tokenId": res.tokenId });
         }
         else {
-            console.log("Invalid");
+            console.log(res);
         }
     }
 
