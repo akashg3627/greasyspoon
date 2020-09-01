@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Squada+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Squada+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Viga&display=swap");
 :root {
     --secondary-color: #ff4e00;
     --dark-color: #2f2838;
@@ -27,15 +27,15 @@
 }
 
 body {
-    background-image: url("/header-bg.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-image: url("https://images.squarespace-cdn.com/content/v1/5c5c3833840b161566b02a76/1573133725500-Y5PCN0V04I86HDAT8AT0/ke17ZwdGBToddI8pDm48kLkXF2pIyv_F2eUT9F60jBl7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0iyqMbMesKd95J-X4EagrgU9L3Sa3U8cogeb0tjXbfawd0urKshkc5MgdBeJmALQKw/WBC_7095.jpg?format=2500w");
+    background-repeat: repeat;
+    background-size: cover;
     fill-opacity: 30%;
     margin: 0px auto;
     justify-content: center;
     font-size: calc(10px + 1vmin);
     color: #ffffff;
-    font-family: 'Viga', sans-serif;
+    font-family: "Viga", sans-serif;
 }
 
 .container {
@@ -200,7 +200,7 @@ address {
 }
 
 .bg-c {
-    background-image: url('/sb-1.jpg');
+    background-image: url("/sb-1.jpg");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     min-height: 120vh;
