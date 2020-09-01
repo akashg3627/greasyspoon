@@ -8,7 +8,7 @@
         "server": "nodemon app.js",
         "client-user": "npm start --prefix gsuser",
         "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix gsuser && npm run build --prefix gsuser",
-        "client-install": "npm install --prefix client",
+        "client-install": "npm install --prefix gsuser",
         "start": "node app.js",
         "client": "npm start --prefix gsuser",
         "dev": "concurrently \"npm run server\" \"npm run client\""
