@@ -19,7 +19,7 @@ function LoginModal(props) {
     const Userlogin = () => {
         return (
             <GoogleLogin
-                clientId="899648060120-1mcodnjvohl5rpi4rfep56ms682f20t6.apps.googleusercontent.com"
+                clientId="931450817326-25po48n0tc1q5f81e06mdgp74k2tumhh.apps.googleusercontent.com"
                 render={renderProps => (
                     <button className="btn btn-danger" onClick={renderProps.onClick} disabled={renderProps.disabled}>Google</button>
                 )}
