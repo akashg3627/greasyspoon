@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, CardImg } from 'reactstrap';
+import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, CardImg, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { reduceCartdish } from '../redux/ActionCreators';
@@ -82,7 +82,7 @@ function RenderCart({ cart }) {
                 <CardBody className="cartinner">
                     {AddedDish}
                 </CardBody>
-                <CardFooter className="cartinner">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="primary">Order</Button></Link> </CardFooter>
+                <CardFooter className="cartinner"><Row><Col className="text-center mb-1">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0}</Col> </Row><Row><Col><Link to="/order"><Button className="btn float-right" block color="primary">Order</Button></Link></Col></Row> </CardFooter>
             </div>
         );
     }
@@ -113,7 +113,7 @@ const MenuComponent = (props) => {
             );
         });
         return (
-            <div className="container gs-container">
+            <div className="container-fluid gs-container">
                 <div className="row"><RenderCafe cafe={props.cafe} /></div>
                 <div className="row">
                     <div className="col-12 col-sm-7 offset-md-1 mt-2">

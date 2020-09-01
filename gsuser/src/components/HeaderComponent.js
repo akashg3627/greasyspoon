@@ -5,13 +5,25 @@ import LoginModal from './LoginModal';
 
 
 function HeaderComponent(props) {
+    const [gsnavbar, setNavbar] = useState(false);
     const [isNavOpen, toggleNavbar] = useState(false);
+
+    const changeNavBg =()=>{
+        if(window.scrollY >= 70)
+        {
+            setNavbar(true);
+        }else {
+            setNavbar(false);
+        }
+    }
+    window.addEventListener('scroll', changeNavBg);
     return (
         <React.Fragment>
-            <Navbar light expand="lg" >
-                <div className="container c-h">
+            <div >
+            <Navbar fixed="top" expand="lg" className={gsnavbar ? 'navbar-light gs-nav-active' : 'navbar-dark'} >
+                <div className="container">
                     <NavbarBrand href="/">
-                        <span className="g">GREASY</span><span className="s">SPOON</span>
+                        <span className="g">GREASY</span><span className={gsnavbar ? "s-active": "s"}>SPOON</span>
                     </NavbarBrand>
                     <NavbarToggler className="ml-auto" onClick={() => toggleNavbar(!isNavOpen)} />
                     <Collapse isOpen={isNavOpen} navbar>
@@ -41,10 +53,10 @@ function HeaderComponent(props) {
                     {
                         props.auth.isAuthenticated
                             ?
-                            <NavbarBrand>
-                                <NavLink className="nav-link btn-profile" to="/contactus">
+                            <NavbarBrand disabled className="btn-profile">
+                                
                                     <span className="fa fa-user fa-lg"></span> {props.auth.user ? props.auth.user.name : null}
-                                </NavLink>
+                            
                             </NavbarBrand>
                             :
                             null
@@ -52,7 +64,9 @@ function HeaderComponent(props) {
                     <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
 
                 </div>
+
             </Navbar>
+            </div>
         </React.Fragment>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalBody, Card, CardImg, CardFooter, CardBody } from 'reactstrap';
+import { Button, Modal, ModalBody, Card, CardImg, CardFooter, CardBody, CardTitle, CardText } from 'reactstrap';
 import GoogleLogin from 'react-google-login';
 
 function LoginModal(props) {
@@ -45,12 +45,15 @@ function LoginModal(props) {
             <Modal size="lg" isOpen={modal} toggle={toggleModal} >
                 <ModalBody>
                     <div className="row align-items-center justify-content-center">
-                        <span className="g">GREASY</span><span className="s">SPOON</span>
+                        <span className="g">GREASY</span><span className="s-active">SPOON</span>
                     </div>
                     <div className="row align-items-center justify-content-center">
                         <Card>
                             <CardImg className="user-i" src="/user.png" alt="user" />
-                            <CardBody className="text-center"><Userlogin /></CardBody>
+                            <CardBody className="text-center">
+                               <CardTitle> <Userlogin /></CardTitle>
+                               <CardText><small className="text-muted">Please use institute id only!</small></CardText> 
+                            </CardBody>
                         </Card>
                     </div>
                 </ModalBody>
