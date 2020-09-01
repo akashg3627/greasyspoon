@@ -36,21 +36,21 @@ function HeaderComponent(props) {
                                     Orders
                             </NavLink>
                             </NavItem>
-                            </Nav>
+                        </Nav>
                     </Collapse>
-                            {
-                                props.auth.isAuthenticated
-                                ?
-                                <NavbarBrand>
+                    {
+                        props.auth.isAuthenticated
+                            ?
+                            <NavbarBrand>
                                 <NavLink className="nav-link btn-profile" to="/contactus">
                                     <span className="fa fa-user fa-lg"></span> {props.auth.user ? props.auth.user.name : null}
                                 </NavLink>
                             </NavbarBrand>
-                                :
-                                null
-                            }
-                            <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
-                        
+                            :
+                            null
+                    }
+                    <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
+
                 </div>
             </Navbar>
         </React.Fragment>

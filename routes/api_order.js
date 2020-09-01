@@ -23,7 +23,7 @@ router.post('/', ensureUser, async(req, res) => {
         workingCart = await Cart.findOne({
             user_id: req.user._id
         }).lean();
-        if (!workingCart) {
+        if (!workingCart || workingCart.total_price === 0) {
             res.status(404).json({
                 error: 'no working cart found'
             });

@@ -12,7 +12,7 @@ function RenderCafe({ cafe }) {
     if (cafe != null)
         return (
             <Media className="media-menu col-12 justify-content-center">
-                <Media heading className="text-align-center">
+                <Media heading className="text-align-center" style={{ fontWeight: '900', fontSize: '50px' }}>
                     {cafe.name}
                 </Media>
             </Media>
@@ -36,8 +36,8 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
                 <Media object src={baseUrl + dish.pictureURL} alt={dish.dish_name} className="menuImage" />
             </Media>
 
-            <Media middle body className=" ml-5">
-                <Media heading>
+            <Media middle body className=" ml-5" >
+                <Media heading style={{ fontWeight: 'bold', fontFamily: 'Raleway' }}>
                     {dish.dish_name}
                 </Media>
                 {dish.category}
@@ -82,7 +82,7 @@ function RenderCart({ cart }) {
                 <CardBody className="cartinner">
                     {AddedDish}
                 </CardBody>
-                <CardFooter className="bg-info">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="light">Order</Button></Link> </CardFooter>
+                <CardFooter className="cartinner">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="primary">Order</Button></Link> </CardFooter>
             </div>
         );
     }
@@ -121,7 +121,7 @@ const MenuComponent = (props) => {
                     </div>
                     <div className="col-12 col-sm-4 mt-2">
                         <Card>
-                            <CardHeader className="bg-info">Cart</CardHeader>
+                            <CardHeader className="cartinner" style={{ fontWeight: 'bold', fontSize: '30px' }}>Cart</CardHeader>
                             <RenderCart cart={props.cart} />
                         </Card>
                     </div>
