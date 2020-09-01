@@ -35,21 +35,21 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
             <Media left className="mr-2">
                 <Media object src={baseUrl + dish.pictureURL} alt={dish.dish_name} className="menuImage" />
             </Media>
-           
-                    <Media middle body className=" ml-5">
-                        <Media heading>
-                            {dish.dish_name}
-                        </Media>
-                        {dish.category}
-                    Price  Rs {dish.price / 100}
-                    </Media>
 
-                    <Media right className="mr-5">
-                        <ButtonGroup size="sm">
-                            <Button onClick={handledelete} color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
-                            <Button onClick={handlepost} color="success"><span className="fa fa-plus fa-lg"> </span></Button>
-                        </ButtonGroup>
-                    </Media>
+            <Media middle body className=" ml-5">
+                <Media heading>
+                    {dish.dish_name}
+                </Media>
+                {dish.category}
+                    Price  Rs {dish.price / 100}
+            </Media>
+
+            <Media right className="mr-5">
+                <ButtonGroup size="sm">
+                    <Button onClick={handledelete} color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
+                    <Button onClick={handlepost} color="light"><span className="fa fa-plus fa-lg"> </span></Button>
+                </ButtonGroup>
+            </Media>
         </Media >
     );
 }
@@ -79,10 +79,10 @@ function RenderCart({ cart }) {
         });
         return (
             <div>
-               <CardBody className="cartinner">
-                   {AddedDish}
-               </CardBody>
-               <CardFooter className="bg-success">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="success">Order</Button></Link> </CardFooter> 
+                <CardBody className="cartinner">
+                    {AddedDish}
+                </CardBody>
+                <CardFooter className="bg-info">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="light">Order</Button></Link> </CardFooter>
             </div>
         );
     }
@@ -121,8 +121,8 @@ const MenuComponent = (props) => {
                     </div>
                     <div className="col-12 col-sm-4 mt-2">
                         <Card>
-                            <CardHeader className="bg-success">Cart</CardHeader>
-                                <RenderCart cart={props.cart} />
+                            <CardHeader className="bg-info">Cart</CardHeader>
+                            <RenderCart cart={props.cart} />
                         </Card>
                     </div>
                 </div>
