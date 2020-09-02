@@ -3,7 +3,6 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser, loginGoogleUser, fetchMenu, fetchCart, reduceCartdish, postCart, fetchcafeList, checkauth, postOrder} from '../redux/ActionCreators';
 
-//import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import HeaderComponent from './HeaderComponent';
 import HomeComponent from './HomeComponent';
@@ -12,8 +11,6 @@ import Footer from './Footer';
 import Menu from './Menu';
 import OrderPanel from './OrderPanel';
 
-//import {DISHES} from '../shared/dishes';
-import LoginComponent from './LoginComponent';
 
 const mapStateToProps = state => {
   return {
@@ -85,7 +82,6 @@ this.props.fetchcafeList();
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
                 <PrivateRoute path="/menu/:cafeId" component={MenuCafe} />
                 <PrivateRoute exact path="/order" component={()=><OrderPanel auth={this.props.auth} orders={this.props.orders} cart={this.props.cart} postOrder={this.props.postOrder} />} />
-                <Route path="/login" component={()=><LoginComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} addUser={this.props.addUser} /> } />
                 <Redirect to="/home" />
               </Switch>
               

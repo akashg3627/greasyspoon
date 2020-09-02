@@ -4,11 +4,11 @@ import { Button } from 'reactstrap';
 function HomeComponent(props) {
   return (
     <div className="container-fluid gs-container">
-      <div className="row row-700 justify-content-center">
-        <div className="col-6 align-self-center">
+      <div className="row row-700">
+        <div className="col align-self-center">
           <h4><span className="line"> </span> Discover your taste</h4>
           <h1><span className="space"></span>Eat healthy stay wealthy</h1>
-          <span className="space"></span><Button className="btn-nav">
+          <span className="space"></span><Button color="danger" className="btn-nav">
             Discover Now    <span className="fa fa-angle-right i-nav"></span>
           </Button><br></br>
           <span className="line"></span><span className="fa-stack ">

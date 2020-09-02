@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalBody, Card, CardImg, CardFooter, CardBody, CardTitle, CardText } from 'reactstrap';
+import { Button, Modal, ModalBody, Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
 import GoogleLogin from 'react-google-login';
 
 function LoginModal(props) {

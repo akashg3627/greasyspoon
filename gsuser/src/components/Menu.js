@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, CardImg, CardImgOverlay, CardTitle, CardHeader, Button } from 'reactstrap';
+import { Card, CardImg, CardImgOverlay, CardTitle, CardHeader } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 import { Link } from 'react-router-dom'
 import { baseUrl } from '../shared/baseUrl';
@@ -40,7 +40,7 @@ function Menu(props) {
 
     if (props.cafeList.isLoading) {
         return (
-            <div>
+            <div className="Error">
                 <Loading />
             </div>
         )
@@ -56,7 +56,7 @@ function Menu(props) {
             
         );
     else return (
-        <div>No Cafe Found</div>
+        <div className="container-fluid Error">No Cafe Found</div>
     );
 }
 

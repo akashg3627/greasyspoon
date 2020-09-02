@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Button } from 'reactstrap';
-import { NavLink, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import LoginModal from './LoginModal';
 
 
@@ -20,7 +20,7 @@ function HeaderComponent(props) {
     return (
         <React.Fragment>
             <div >
-            <Navbar fixed="top" expand="lg" className={gsnavbar ? 'navbar-light gs-nav-active' : 'navbar-dark'} >
+            <Navbar fixed="top" expand="lg" className={gsnavbar+isNavOpen ? 'navbar-light gs-nav-active' : 'navbar-dark'} >
                 <div className="container">
                     <NavbarBrand href="/">
                         <span className="g">GREASY</span><span className={gsnavbar ? "s-active": "s"}>SPOON</span>
@@ -29,22 +29,30 @@ function HeaderComponent(props) {
                     <Collapse isOpen={isNavOpen} navbar>
                         <Nav navbar className="ml-auto">
                             <NavItem>
-                                <NavLink className="nav-link" to="/home">
+                                <NavLink onClick={() => {
+                                    if(isNavOpen){toggleNavbar(!isNavOpen)}
+                                    }} className="nav-link" to="/home">
                                     Home
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/aboutus">
+                                <NavLink onClick={() => {
+                                    if(isNavOpen){toggleNavbar(!isNavOpen)}
+                                    }} className="nav-link" to="/aboutus">
                                     About Us
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/menu">
+                                <NavLink onClick={() => {
+                                    if(isNavOpen){toggleNavbar(!isNavOpen)}
+                                    }} className="nav-link" to="/menu">
                                     Menu
                             </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="nav-link" to="/order">
+                                <NavLink onClick={() => {
+                                    if(isNavOpen){toggleNavbar(!isNavOpen)}
+                                    }} className="nav-link" to="/order">
                                     Orders
                             </NavLink>
                             </NavItem>
@@ -61,8 +69,9 @@ function HeaderComponent(props) {
                             :
                             null
                     }
+                    <NavbarBrand>
                     <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
-
+                    </NavbarBrand>
                 </div>
 
             </Navbar>

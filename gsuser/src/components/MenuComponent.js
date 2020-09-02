@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, CardImg, Row, Col } from 'reactstrap';
+import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
-import { reduceCartdish } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl'
 
 
@@ -11,11 +10,11 @@ function RenderCafe({ cafe }) {
 
     if (cafe != null)
         return (
-            <Media className="media-menu col-12 justify-content-center">
-                <Media heading className="text-align-center" style={{ fontWeight: '900', fontSize: '50px' }}>
+            
+                <div className="gs-cafe-name">
                     {cafe.name}
-                </Media>
-            </Media>
+                </div>
+            
         );
     else return (<div>
         cafe detail not found
@@ -96,9 +95,9 @@ function RenderCart({ cart }) {
 const MenuComponent = (props) => {
     if (props.isLoading) {
         return (
-            <div className="container">
+            <div className="container-fluid">
                 <RenderCafe cafe={props.cafe} />
-                <div className="row">
+                <div className="row Error">
                     <Loading />
                 </div>
             </div>
@@ -130,7 +129,7 @@ const MenuComponent = (props) => {
         );
     }
     else return (
-        <div className="container">
+        <div className="container-fluid">
             <RenderCafe cafe={props.cafe} />
             <div className="row">
                 <h4> No Dish Found</h4>
