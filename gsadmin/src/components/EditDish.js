@@ -67,7 +67,7 @@ function EditDish(props) {
                     </div>
                 </div>
                 <div className="row">
-                    <img alt="No image found" src={baseUrl + props.dish.pictureURL} height="256" width="256" className="rounded float-right" ></img>
+                    <img src={baseUrl + props.dish.pictureURL} height="256" width="256" className="rounded float-right" alt="Dish Image"></img>
                 </div>
                 <button type="submit" className="btn btn-primary" >Add Dish</button>
             </form>

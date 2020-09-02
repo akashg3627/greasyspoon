@@ -18,11 +18,11 @@ function LoginButton(props) {
         <div>
             {props.user != null
                 ?
-                <Button className="nav-link btn-login" onClick={props.logout}>
+                <Button color="link" className="nav-link btn-login" onClick={props.logout}>
                     <span className="fa fa-sign-out fa-lg"></span> Logout
                 </Button>
                 :
-                <Button className="nav-link btn-login" onClick={toggleModal}>
+                <Button color="link" className="nav-link btn-login" onClick={toggleModal}>
                     <span className="fa fa-sign-in fa-lg"></span> Login
                 </Button>
             }

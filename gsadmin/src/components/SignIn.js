@@ -1,7 +1,5 @@
 import React from 'react';
-import { LocalForm, Control } from 'react-redux-form';
-import { FormGroup, Label, Card, CardBody, Button, Col } from 'reactstrap';
-import { Link, useHistory, Redirect } from 'react-router-dom';
+import {  CardBody} from 'reactstrap';
 
 export default class SignIn extends React.Component {
   constructor(props) {

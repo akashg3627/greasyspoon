@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardBody, Table, ButtonGroup, Button, CardFooter } from 'reactstrap';
+import { Card, CardHeader, CardBody, Table, Button, CardFooter } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 
 function RenderPendingOrder(props) {
@@ -158,7 +158,7 @@ function OrderPanel(props) {
       }
     });
     return (
-      <div className="container">
+      <div className="container-fluid gs-container">
         <div className="row">
           {pendingOrders}
         </div>
@@ -169,7 +169,7 @@ function OrderPanel(props) {
     );
   }
   else return (
-    <div className="gs-error">No Orders Yet</div>
+    <div className="container-fluid gs-container gs-error">No Orders Yet</div>
   );
 }
 
