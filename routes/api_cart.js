@@ -215,11 +215,20 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
             let cart = await Cart.findOne({
                 user_id: req.user._id
             });
-            return res.status(200).json({
 
-                error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
-                cart
-            });
+            if (cart.total_price === 0) {
+                return res.status(404).json({
+
+                    error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
+                    cart
+                });
+            } else {
+                return res.status(200).json({
+
+                    error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
+                    cart
+                });
+            }
         }
         let resp2 = await Cart.findOneAndUpdate({
             user_id: req.user._id
