@@ -3,7 +3,7 @@ const {
     INLINE,
     NONE,
     SELF
-} = require('express-csp-header');
+} = require("express-csp-header");
 require("dotenv").config(); //for env vars
 const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
@@ -14,8 +14,8 @@ const session = require("express-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
-const cors = require('cors');
-const path = require('path');
+const cors = require("cors");
+const path = require("path");
 
 //Passport config
 require("./config/passport-google")(passport);
@@ -43,17 +43,30 @@ app.use(
 );
 app.use(bodyParser.json());
 
-
-
 app.use(cors());
-app.use(expressCspHeader({
-    directives: {
-        'default-src': [SELF, '*.google.com', 'https://kit.fontawesome.com/', 'https://fonts.gstatic.com/',
-            '*.googleapis.com', 'kit.fontawesome.com', 'https://apis.google.com/js/'
-        ],
-        'script-src': [SELF, INLINE, 'apis.google.com', 'https://apis.google.com/js/api.js'],
-    }
-}));
+app.use(
+    expressCspHeader({
+        directives: {
+            "default-src": [
+                SELF,
+                "*.google.com",
+                "https://kit.fontawesome.com/",
+                "https://images.squarespace-cdn.com/",
+                "https://fonts.gstatic.com/",
+                "*.googleapis.com",
+                "kit.fontawesome.com",
+                "https://apis.google.com/js/",
+            ],
+            "script-src": [
+                SELF,
+                INLINE,
+                "apis.google.com",
+                "https://apis.google.com/js/api.js",
+            ],
+            'img-src': ['self', 'data: *']
+        },
+    })
+);
 //Express session
 // app.use(
 //     session({
@@ -63,12 +76,12 @@ app.use(expressCspHeader({
 //     })
 // );
 //when user is authenticated its serialised to cookies and then attached to req.user(as well as req.session.passport.user)
-//on subsequent requests, passport.initialize() middleware is called. 
+//on subsequent requests, passport.initialize() middleware is called.
 //It finds the passport.user attached to the session, if it doesnt(user yet not authenticated) it creates it like req.passport.user={}
 //passport.initialize middleware is invoked on every request. It ensures the session contains a passport.user object, which may be empty
 app.use(passport.initialize());
 
-//next passport.session() is invoked. If it finds a serialised user object in the session, it considers the request to be authenticated. 
+//next passport.session() is invoked. If it finds a serialised user object in the session, it considers the request to be authenticated.
 //it then calls the passport.deserializeUser whule attaching the loaded user ibject to req as req.user()
 //passport.session middleware is a Passport Strategy which will load the user object onto req.user if a serialised user object was found in the server.
 //passport.deserializeUser is invoked on every request by passport.session. It enables us to load additional user information on every request. This user object is attached to the request as req.user making it accessible in our request handling.
@@ -87,7 +100,7 @@ app.use(passport.initialize());
 // app.use((req, res, next) => [
 //     res.setHeader("default-src 'self'; script-src 'report-sample' 'self' https://apis.google.com/js/api.js https://kit.fontawesome.com/5a3d56a40e.js; style-src 'report-sample' 'self' https://fonts.googleapis.com https://kit-free.fontawesome.com; object-src 'none'; base-uri 'self'; connect-src 'self'; font-src 'self' https://fonts.gstatic.com https://kit-free.fontawesome.com; frame-src 'self' https://accounts.google.com; img-src 'self'; manifest-src 'self'; media-src 'self'; report-uri https://5f4b9f5fb641482c3e7cfaaa.endpoint.csper.io/; worker-src 'self';")
 // ])
-app.use('/public', express.static('public'))
+app.use("/public", express.static("public"));
 
 //Routes
 app.use("/api/menu", require("./routes/api_menu"));
@@ -96,31 +109,31 @@ app.use("/api/profile", require("./routes/api_profile"));
 app.use("/api/cart", require("./routes/api_cart"));
 app.use("/api/order", require("./routes/api_order"));
 app.use("/api/cafe", require("./routes/api_cafe"));
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
     // Set static folder
-    app.use(express.static('gsadmin/build'));
+    app.use(express.static("gsuser/build"));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'gsadmin', 'build', 'index.html'));
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "gsuser", "build", "index.html"));
     });
 }
-app.get('/404', function(req, res, next) {
+app.get("/404", function (req, res, next) {
     // trigger a 404 since no other middleware
     // will match /404 after this one, and we're not
     // responding here
     next();
 });
 
-app.get('/403', function(req, res, next) {
+app.get("/403", function (req, res, next) {
     // trigger a 403 error
-    var err = new Error('not allowed!');
+    var err = new Error("not allowed!");
     err.status = 403;
     next(err);
 });
 
-app.get('/500', function(req, res, next) {
+app.get("/500", function (req, res, next) {
     // trigger a generic (500) error
-    next(new Error('keyboard cat!'));
+    next(new Error("keyboard cat!"));
 });
 
 // Error handlers
@@ -133,10 +146,10 @@ app.get('/500', function(req, res, next) {
 // $ curl http://localhost:3000/notfound -H "Accept: application/json"
 // $ curl http://localhost:3000/notfound -H "Accept: text/plain"
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.status(404).json({
-        message: "Requested route not found"
-    })
+        message: "Requested route not found",
+    });
 });
 
 // error-handling middleware, take the same form
