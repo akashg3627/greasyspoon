@@ -1,4 +1,9 @@
-const { expressCspHeader, INLINE, NONE, SELF } = require("express-csp-header");
+const {
+    expressCspHeader,
+    INLINE,
+    NONE,
+    SELF
+} = require("express-csp-header");
 require("dotenv").config(); //for env vars
 const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
@@ -92,7 +97,31 @@ app.use(
                 "data: *",
                 INLINE,
             ],
-            "img-src": ["data:image/svg+xml"],
+            "img-src": ["data:image/svg+xml", SELF,
+                "*.google.com",
+                "https://*/",
+                "https://kit.fontawesome.com/",
+                "https://images.squarespace-cdn.com/",
+                "https://fonts.gstatic.com/",
+                "*.googleapis.com",
+                "kit.fontawesome.com",
+                "https://apis.google.com/js/",
+                "https://kit.fontawesome.com/*",
+                "*.google.com",
+                "https://kit.fontawesome.com/",
+                "https://images.squarespace-cdn.com/",
+                "https://fonts.gstatic.com/",
+                "*.googleapis.com",
+                "kit.fontawesome.com",
+                "https://apis.google.com/js/",
+                "data:",
+                "https://apis.google.com/js/api.js",
+                "apis.google.com",
+                "self",
+
+                SELF,
+                INLINE,
+            ],
         },
     })
 );
