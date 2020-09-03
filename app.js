@@ -58,6 +58,7 @@ app.use(
                 "apis.google.com",
                 "https://apis.google.com/js/api.js",
             ],
+            "img-src": ["self", "data: *"],
         },
     })
 );
