@@ -1,9 +1,4 @@
-const {
-    expressCspHeader,
-    INLINE,
-    NONE,
-    SELF
-} = require("express-csp-header");
+const { expressCspHeader, INLINE, NONE, SELF } = require("express-csp-header");
 require("dotenv").config(); //for env vars
 const express = require("express");
 //const expressLayouts = require('express-ejs-layouts');
@@ -67,12 +62,35 @@ app.use(
                 "data:",
                 "https://apis.google.com/js/api.js",
                 "apis.google.com",
-            ],
-            "script-src": [
+                "self",
+                "data: *",
                 SELF,
                 INLINE,
             ],
-            "img-src": ["self", "data: *"],
+            "script-src": [
+                SELF,
+                "*.google.com",
+                "https://kit.fontawesome.com/",
+                "https://images.squarespace-cdn.com/",
+                "https://fonts.gstatic.com/",
+                "*.googleapis.com",
+                "kit.fontawesome.com",
+                "https://apis.google.com/js/",
+                "https://kit.fontawesome.com/*",
+                "*.google.com",
+                "https://kit.fontawesome.com/",
+                "https://images.squarespace-cdn.com/",
+                "https://fonts.gstatic.com/",
+                "*.googleapis.com",
+                "kit.fontawesome.com",
+                "https://apis.google.com/js/",
+                "data:",
+                "https://apis.google.com/js/api.js",
+                "apis.google.com",
+                "self",
+                "data: *",
+                INLINE,
+            ],
         },
     })
 );
@@ -126,21 +144,21 @@ if (process.env.NODE_ENV === "production") {
         res.sendFile(path.resolve(__dirname, "gsuser", "build", "index.html"));
     });
 }
-app.get("/404", function (req, res, next) {
+app.get("/404", function(req, res, next) {
     // trigger a 404 since no other middleware
     // will match /404 after this one, and we're not
     // responding here
     next();
 });
 
-app.get("/403", function (req, res, next) {
+app.get("/403", function(req, res, next) {
     // trigger a 403 error
     var err = new Error("not allowed!");
     err.status = 403;
     next(err);
 });
 
-app.get("/500", function (req, res, next) {
+app.get("/500", function(req, res, next) {
     // trigger a generic (500) error
     next(new Error("keyboard cat!"));
 });
@@ -155,7 +173,7 @@ app.get("/500", function (req, res, next) {
 // $ curl http://localhost:3000/notfound -H "Accept: application/json"
 // $ curl http://localhost:3000/notfound -H "Accept: text/plain"
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.status(404).json({
         message: "Requested route not found",
     });
