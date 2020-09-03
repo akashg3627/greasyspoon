@@ -52,6 +52,7 @@ app.use(expressCspHeader({
             '*.googleapis.com', 'kit.fontawesome.com', 'https://apis.google.com/js/'
         ],
         'script-src': [SELF, INLINE, 'apis.google.com', 'https://apis.google.com/js/api.js'],
+        'img-src': ['self', 'data: *']
     }
 }));
 //Express session
