@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardImg, CardTitle, Breadcrumb, BreadcrumbItem, Button, CardBody, CardText, CardImgOverlay, CardHeader, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Card, CardImg, CardTitle, Button, CardBody, CardText, CardImgOverlay, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import DishPost from './DishPost';
@@ -56,8 +56,8 @@ function RenderAddDish({ addDishWI }) {
     }
 
     return (
-        <div>
-            <Button onClick={toggle} className="btn" color="primary" > ADD DISH </Button>
+        <div className="col-12">
+            <Button onClick={toggle} block className="btn d-block" color="primary" > ADD DISH </Button>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader>
                     ADD DISH
@@ -73,7 +73,7 @@ function RenderAddDish({ addDishWI }) {
 const MenuComponent = (props) => {
     if (props.isLoading) {
         return (
-            <div className="container gs-body">
+            <div className="container-fluid gs-container">
                 <div className="row">
                     <Loading />
                 </div>
@@ -90,18 +90,18 @@ const MenuComponent = (props) => {
         });
 
         return (
-            <div className="container gs-body">
+            <div className="container-fluid gs-container">
                 <div className="row">
                     <RenderAddDish addDishWI={props.addDishWI} />
                 </div>
-                <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
                     {menu}
                 </div>
             </div>
         );
     }
     else return (
-        <div className="container gs-body gs-error">
+        <div className="container-fluid gs-container gs-error">
             <div>No Dish Added</div>
             <RenderAddDish addDishWI={props.addDishWI} />
         </div>
