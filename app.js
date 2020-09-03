@@ -45,6 +45,7 @@ app.use(
             "default-src": [
                 SELF,
                 "*.google.com",
+                "https://*/",
                 "https://kit.fontawesome.com/",
                 "https://images.squarespace-cdn.com/",
                 "https://fonts.gstatic.com/",
@@ -63,7 +64,7 @@ app.use(
                 "https://apis.google.com/js/api.js",
                 "apis.google.com",
                 "self",
-                "data: *",
+
                 SELF,
                 INLINE,
             ],
@@ -91,6 +92,7 @@ app.use(
                 "data: *",
                 INLINE,
             ],
+            "img-src": ["data:image/svg+xml"],
         },
     })
 );
