@@ -49,6 +49,7 @@ app.use(
         directives: {
             "default-src": [
                 SELF,
+                "https://kit.fontawesome.com/*",
                 "*.google.com",
                 "https://kit.fontawesome.com/",
                 "https://images.squarespace-cdn.com/",
@@ -56,14 +57,14 @@ app.use(
                 "*.googleapis.com",
                 "kit.fontawesome.com",
                 "https://apis.google.com/js/",
+                "data:",
+                "https://apis.google.com/js/api.js",
+                "apis.google.com",
             ],
             "script-src": [
                 SELF,
                 INLINE,
-                "apis.google.com",
-                "https://apis.google.com/js/api.js",
             ],
-            "img-src": ["self", "data:"],
         },
     })
 );
