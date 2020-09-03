@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import {Nav, Button, Modal, Card, ModalHeader, NavItem, TabContent, TabPane, ModalBody, Media } from 'reactstrap';
 import SignIn from './SignIn';
-import { NavLink } from 'react-router-dom';
 import SignUp from './SignUp';
 
 function LoginButton(props) {
-    const [loginmodal, setLogin] = useState(false);
-    const toggleModal = () => {
-        setLogin(!loginmodal);
-    }
+    
     const [activeTab, setActive] = useState("1");
     const toggleTab = tab => {
         if (activeTab !== tab)
@@ -22,11 +18,11 @@ function LoginButton(props) {
                     <span className="fa fa-sign-out fa-lg"></span> Logout
                 </Button>
                 :
-                <Button color="link" className="nav-link btn-login" onClick={toggleModal}>
+                <Button color="link" className="nav-link btn-login" onClick={props.toggleModal}>
                     <span className="fa fa-sign-in fa-lg"></span> Login
                 </Button>
             }
-            <Modal isOpen={loginmodal} toggle={toggleModal} size="lg" >
+            <Modal isOpen={props.loginmodal} toggle={props.toggleModal} size="lg" >
                 <div className="row justify-content-around mt-3">
                         <div className="col-4">
                             <Button outline block color="link" onClick={() => toggleTab("1")} >SignIn</Button>
@@ -39,12 +35,12 @@ function LoginButton(props) {
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId="1">
                         <Card>
-                            <SignIn signin={props.signin} toggleModal={toggleModal} />
+                            <SignIn signin={props.signin} toggleModal={props.toggleModal} />
                         </Card>
                     </TabPane>
                     <TabPane tabId="2">
                         <Card>
-                            <SignUp signup={props.signup} toggleModal={toggleModal} />
+                            <SignUp signup={props.signup} toggleModal={props.toggleModal} />
                         </Card>
                     </TabPane>
                 </TabContent>

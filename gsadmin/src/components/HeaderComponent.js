@@ -6,8 +6,9 @@ import LoginButton from './LoginButton';
 
 function HeaderComponent(props) {
     const [isNavOpen, toggleNavbar] = useState(false);
-    const [loginmodal, toggleLogin] = useState(false);
+    
     const [gsnavbar, setNavbar] = useState(false);
+    
 
     const changeNavBg =()=>{
         if(window.scrollY >= 70)
@@ -69,7 +70,7 @@ function HeaderComponent(props) {
                                 : null
                             }
                             <NavbarBrand>
-                            <LoginButton user={props.user} signin={props.signin} signup={props.signup} logout={props.logout}/>
+                            <LoginButton loginmodal={props.loginmodal} toggleModal={props.toggleModal} user={props.user} signin={props.signin} signup={props.signup} logout={props.logout}/>
                             </NavbarBrand>
                 </div>
             </Navbar>
