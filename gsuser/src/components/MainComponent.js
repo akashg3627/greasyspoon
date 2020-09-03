@@ -10,6 +10,7 @@ import MenuComponet from './MenuComponent';
 import Footer from './Footer';
 import Menu from './Menu';
 import OrderPanel from './OrderPanel';
+import Aboutus from './Aboutus';
 
 
 const mapStateToProps = state => {
@@ -38,6 +39,17 @@ postOrder: ()=>dispatch(postOrder())
 
 
 class Main extends Component {
+constructor(props){
+  super(props);
+  this.state={
+    loginmodal: false
+  };
+  this.toggleModal = this.toggleModal.bind(this);
+}
+toggleModal(){
+  this.setState({loginmodal: !this.state.loginmodal});
+}
+
 componentDidMount() {
   if(localStorage.getItem('token') != null)
     {
@@ -75,10 +87,11 @@ this.props.fetchcafeList();
   );
       return (
         <div>
-          <HeaderComponent auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} logoutUser={this.props.logoutUser} />  
+          <HeaderComponent loginmodal={this.state.loginmodal} toggleModal={this.toggleModal} auth={this.props.auth} loginGoogleUser={this.props.loginGoogleUser} logoutUser={this.props.logoutUser} />  
           
               <Switch>
-                <Route path="/home" component={HomeComponent} />
+              <Route path="/home" component={()=><HomeComponent auth={this.props.auth} loginmodal={this.state.loginmodal} toggleModal={this.toggleModal} />} />
+               <Route exact path="/aboutus" component={Aboutus} />
                 <PrivateRoute exact path="/menu" component={()=><Menu cafeList={this.props.cafeList} />} />
                 <PrivateRoute path="/menu/:cafeId" component={MenuCafe} />
                 <PrivateRoute exact path="/order" component={()=><OrderPanel auth={this.props.auth} orders={this.props.orders} cart={this.props.cart} postOrder={this.props.postOrder} />} />

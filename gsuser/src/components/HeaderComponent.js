@@ -70,7 +70,7 @@ function HeaderComponent(props) {
                             null
                     }
                     <NavbarBrand>
-                    <LoginModal auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
+                    <LoginModal loginmodal={props.loginmodal} toggleModal={props.toggleModal} auth={props.auth} loginGoogleUser={props.loginGoogleUser} logoutUser={props.logoutUser} />
                     </NavbarBrand>
                 </div>
 
