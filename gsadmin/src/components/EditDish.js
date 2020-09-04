@@ -4,9 +4,12 @@ import { baseUrl } from '../shared/baseUrl';
 function EditDish(props) {
     const [dish_name, setName] = useState(props.dish.dish_name);
     const [price, setPrice] = useState(props.dish.price / 100);
-    const [description, setDescription] = useState(props.dish.description);
-    const [featured, setFeatured] = useState(props.dish.featured);
-    const [category, setCategory] = useState(props.dish.category);
+    const idescription = props.dish.description ? props.dish.description : '';
+    const [description, setDescription] = useState(idescription);
+    const ifeatured = props.dish.featured ? props.dish.featured : false;
+    const [featured, setFeatured] = useState(ifeatured);
+    const icategory = props.dish.category ? props.dish.category : '';
+    const [category, setCategory] = useState(icategory);
     const [dishImage, setImage] = useState(null);
 
     function handleSubmit(event) {

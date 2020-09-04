@@ -72,7 +72,7 @@ class Main extends Component {
           <HeaderComponent loginmodal={this.state.loginmodal} toggleModal={this.toggleModal} user={this.props.auth.user} signin={this.props.signin} signup={this.props.signup} logout={this.props.logout} />  
           <Switch>
                 <Route path="/home" component={()=><HomeComponent auth={this.props.auth} loginmodal={this.state.loginmodal} toggleModal={this.toggleModal} />} />
-                <Route path="/aboutus" component={Aboutus} />
+                <Route exact path="/aboutus" component={Aboutus} />
                 <PrivateRoute exact path="/menu" component={()=><MenuComponet editDishWI={this.props.editDishWI} addDishWI={this.props.addDishWI} deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
                 <PrivateRoute exact path="/order" component={()=> <OrderPanel orders={this.props.orders} acceptOrder={this.props.acceptOrder} rejectOrder={this.props.rejectOrder} completeOrder={this.props.completeOrder} />} />
                 <Redirect to="/home" />
