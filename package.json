@@ -1,28 +1,46 @@
 {
-  "name": "reactapp",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "bootstrap": "^4.4.1",
-    "bootstrap-social": "^5.1.1",
-    "font-awesome": "^4.7.0",
-    "jquery": "^3.4.1",
-    "lite-server": "^2.5.4",
-    "node-sass": "^4.14.1",
-    "popper.js": "^1.16.1"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "akash",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/akashg3627/greasyspoon.git"
-  },
-  "bugs": {
-    "url": "https://github.com/akashg3627/greasyspoon/issues"
-  },
-  "homepage": "https://github.com/akashg3627/greasyspoon#readme"
+    "name": "src",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "server": "nodemon app.js",
+        "client-user": "npm start --prefix gsuser",
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix gsuser && npm run build --prefix gsuser",
+        "client-install": "npm install --prefix gsuser",
+        "start": "node app.js",
+        "client": "npm start --prefix gsuser",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "concurrently": "^5.3.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-csp-header": "^4.0.0",
+        "express-session": "^1.17.1",
+        "express-validator": "^6.6.1",
+        "google-auth-library": "^6.0.6",
+        "helmet": "^4.1.0",
+        "jsonwebtoken": "^8.5.1",
+        "lodash": "^4.17.19",
+        "mongoose": "^5.9.27",
+        "mongoose-currency": "^0.2.0",
+        "mongoose-schema-extend": "^0.2.2",
+        "multer": "^1.4.2",
+        "nodemon": "^2.0.4",
+        "passport": "^0.4.1",
+        "passport-custom": "^1.1.1",
+        "passport-google-oauth20": "^2.0.0",
+        "passport-local": "^1.0.0"
+    },
+    "devDependencies": {
+        "concurrently": "^5.3.0"
+    }
 }
