@@ -22,7 +22,7 @@ router.get('/', ensureUser, async(req, res) => {
         var cart = await Cart.findOne({
             user_id: req.user._id
         }).exec();
-        if (cart) {
+        if (cart && cart.total_price !== 0) {
             return res.status(200).json(cart);
         } else {
             return res.status(404).json({
@@ -152,7 +152,8 @@ router.post('/', ensureUser, async(req, res) => {
                     user_name,
                     total_price: Number(dish.price),
                     dishes: [tobepushed],
-                    cafe_name, user_name
+                    cafe_name,
+                    user_name
                 });
 
                 try {
@@ -214,11 +215,20 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
             let cart = await Cart.findOne({
                 user_id: req.user._id
             });
-            return res.status(200).json({
 
-                error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
-                cart
-            });
+            if (cart.total_price === 0) {
+                return res.status(404).json({
+
+                    error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
+                    cart
+                });
+            } else {
+                return res.status(200).json({
+
+                    error: 'Cart is unchanged. Please check if the dish exists or dishid is correct',
+                    cart
+                });
+            }
         }
         let resp2 = await Cart.findOneAndUpdate({
             user_id: req.user._id
@@ -239,11 +249,19 @@ router.delete('/:dish_id/', ensureUser, async(req, res) => {
 
         };
         resp2.total_price = resp2.dishes.reduce(reducer, 0);
+
         let newCart = await resp2.save();
-        res.json({
-            message: 'removed one instance of the dish',
-            cart: newCart
-        })
+        if (newCart.total_price === 0) {
+            console.log('No dish found in cart')
+            return res.status(404).json({
+                error: 'Unable to find cart'
+            })
+        } else {
+            return res.json({
+                message: 'removed one instance of the dish',
+                cart: newCart
+            })
+        }
     } catch (err) {
         console.log(err);
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Form, LocalForm, Control } from 'react-redux-form';
-import { FormGroup, Label, Card, CardBody, Button, FormText } from 'reactstrap';
+import { CardBody} from 'reactstrap';
 export default class SignUp extends React.Component {
   constructor(props) {
     super(props);

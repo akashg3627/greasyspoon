@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, CardHeader, CardFooter, CardBody, Button, Table } from 'reactstrap';
-import { baseUrl } from '../shared/baseUrl';
 import { Link } from 'react-router-dom'
 import { Loading } from './LoadingComponent';
 
@@ -33,7 +32,7 @@ function RenderUserProfile({ user }) {
 function RenderOrder(props) {
   if (props.orders.isLoading) {
     return (
-      <div>
+      <div className="Error">
         <Loading />
       </div>
     )
@@ -167,9 +166,9 @@ function OrderPanel(props) {
   }
 
   return (
-    <div className="container gs-container">
-      <div className="row mt-1">
-        <div className="col col-md-6">
+    <div className="container-fluid gs-container">
+      <div className="row">
+        <div className="col-12 col-md-6 mt-1">
           {
             props.auth.user != null ?
               <Card>
@@ -178,7 +177,7 @@ function OrderPanel(props) {
               : null
           }
         </div>
-        <div className="col col-md-6">
+        <div className="col-12 col-md-6 mt-1">
           <Card className="cartinner">
             <CardHeader>Cart</CardHeader>
             <RenderCart cart={props.cart} />

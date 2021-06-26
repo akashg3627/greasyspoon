@@ -6,49 +6,47 @@ import {
 //import axios from 'axios';
 
 
-export const checkauth =() =>(dispatch)=>{
-const token = localStorage.getItem('token');
-return fetch(baseUrl+ 'api/profile/check',{
-    method: 'GET',
-    headers:{
-        'Content-Type': 'application/json',
-        'X-Auth-Token': token
-    }
-})
-.then(response => {
-    if (response.ok) {
-        return response;
-    } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-    }
-},
-error => {
-    throw error;
-})
-.then(response => response.json())
-.then(response => {
-if (!response.isAuthorized) {
-    // If login was successful, set the token in local storage
-    localStorage.clear();
-    var error = new Error('Error: Session Expired' );
-    error.response = response;
-    throw error;
-}
-else{
-    if(response.cafe){
-        console.log("Authorized cafe");
-        localStorage.clear();
-    }
-    else if(response.user){
-        console.log("Authorized User");
-        dispatch(fetchCart());
-        dispatch(fetchOrder());
-    }
-} 
-})
-.catch(error => dispatch(loginError(error.message)))
+export const checkauth = () => (dispatch) => {
+    const token = localStorage.getItem('token');
+    return fetch(baseUrl + 'api/profile/check', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Token': token
+            }
+        })
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                throw error;
+            })
+        .then(response => response.json())
+        .then(response => {
+            if (!response.isAuthorized) {
+                // If login was successful, set the token in local storage
+                localStorage.clear();
+                var error = new Error('Error: Session Expired');
+                error.response = response;
+                throw error;
+            } else {
+                if (response.cafe) {
+                    console.log("Authorized cafe");
+                    localStorage.clear();
+                } else if (response.user) {
+                    console.log("Authorized User");
+                    dispatch(fetchCart());
+                    dispatch(fetchOrder());
+                }
+            }
+        })
+        .catch(error => dispatch(loginError(error.message)))
 }
 
 export const requestLogin = () => {
@@ -104,7 +102,7 @@ export const loginGoogleUser = (creds) => (dispatch) => {
                 localStorage.setItem('token', response.token);
                 const creds = JSON.stringify(response.user);
                 localStorage.setItem('creds', creds);
-                
+
                 // Dispatch the success action
                 dispatch(receiveLogin(response.token, response.user));
                 dispatch(fetchCart());
@@ -281,7 +279,7 @@ export const postCart = (dishId, cafeId) => (dispatch) => {
         dish_id: dishId,
         cafe_id: cafeId
     }
-    console.log("cart request", newCart);
+    console.log("cart request");
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart', {
@@ -308,15 +306,15 @@ export const postCart = (dishId, cafeId) => (dispatch) => {
             })
         .then(response => response.json())
         .then(response => {
-            console.log('Cart Added', response.cart);
+            console.log('Cart Added');
             dispatch(addCart(response.cart));
         })
         .catch(error => dispatch(cartFailed(error.message)));
 }
 
 export const reduceCartdish = (dishId) => (dispatch) => {
-dispatch(cartLoading());
-console.log("Deleting dish")
+    dispatch(cartLoading());
+    console.log("Deleting dish")
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId, {
@@ -341,14 +339,14 @@ console.log("Deleting dish")
             })
         .then(response => response.json())
         .then(response => {
-            console.log('Updated Cart', response.cart);
+            console.log('Updated Cart');
             dispatch(addCart(response.cart));
         })
         .catch(error => dispatch(cartFailed(error.message)));
 };
 
 export const deleteCartdish = (dishId) => (dispatch) => {
-dispatch(cartLoading());
+    dispatch(cartLoading());
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/cart/' + dishId + '/all', {
@@ -373,7 +371,7 @@ dispatch(cartLoading());
             })
         .then(response => response.json())
         .then(response => {
-            console.log('Updated Cart', response.cart);
+            console.log('Updated Cart');
             dispatch(addCart(response.cart));
         })
         .catch(error => dispatch(cartFailed(error.message)));
@@ -419,21 +417,21 @@ export const addcafelist = (cafeList) => ({
 });
 
 
-export const orderLoading = ()=>({
+export const orderLoading = () => ({
     type: ActionTypes.ORDER_LOADING
 });
 
-export const orderFailed = (message)=>({
+export const orderFailed = (message) => ({
     type: ActionTypes.ORDER_FAILED,
     payload: message
 });
 
-export const addOrder = (order)=>({
+export const addOrder = (order) => ({
     type: ActionTypes.ADD_ORDER,
     payload: order
 });
 
-export const fetchOrder = () =>(dispatch)=>{
+export const fetchOrder = () => (dispatch) => {
     dispatch(orderLoading());
     const token = localStorage.getItem('token');
     const bearer = 'Bearer ' + localStorage.getItem('token');
@@ -467,7 +465,7 @@ export const fetchOrder = () =>(dispatch)=>{
         .catch(error => dispatch(orderFailed(error.message)));
 }
 
-export const postOrder = () =>(dispatch)=>{
+export const postOrder = () => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const token = localStorage.getItem('token');
     return fetch(baseUrl + 'api/order', {
@@ -498,4 +496,3 @@ export const postOrder = () =>(dispatch)=>{
         })
         .catch(error => console.log(error));
 };
-

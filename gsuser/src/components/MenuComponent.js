@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, CardImg } from 'reactstrap';
+import { Button, Media, Card, CardHeader, CardFooter, CardBody, ButtonGroup, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
-import { reduceCartdish } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl'
 
 
@@ -11,11 +10,11 @@ function RenderCafe({ cafe }) {
 
     if (cafe != null)
         return (
-            <Media className="media-menu col-12 justify-content-center">
-                <Media heading className="text-align-center">
+            
+                <div className="gs-cafe-name">
                     {cafe.name}
-                </Media>
-            </Media>
+                </div>
+            
         );
     else return (<div>
         cafe detail not found
@@ -35,21 +34,21 @@ function RenderMenuItem({ dish, reduceCartdish, postCart }) {
             <Media left className="mr-2">
                 <Media object src={baseUrl + dish.pictureURL} alt={dish.dish_name} className="menuImage" />
             </Media>
-           
-                    <Media middle body className=" ml-5">
-                        <Media heading>
-                            {dish.dish_name}
-                        </Media>
-                        {dish.category}
-                    Price  Rs {dish.price / 100}
-                    </Media>
 
-                    <Media right className="mr-5">
-                        <ButtonGroup size="sm">
-                            <Button onClick={handledelete} color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
-                            <Button onClick={handlepost} color="success"><span className="fa fa-plus fa-lg"> </span></Button>
-                        </ButtonGroup>
-                    </Media>
+            <Media middle body className=" ml-5" >
+                <Media heading style={{ fontWeight: 'bold', fontFamily: 'Raleway' }}>
+                    {dish.dish_name}
+                </Media>
+                {dish.category}
+                    Price  Rs {dish.price / 100}
+            </Media>
+
+            <Media right className="mr-5">
+                <ButtonGroup size="sm">
+                    <Button onClick={handledelete} color="danger"><span className="fa fa-minus fa-lg"> </span></Button>
+                    <Button onClick={handlepost} color="light"><span className="fa fa-plus fa-lg"> </span></Button>
+                </ButtonGroup>
+            </Media>
         </Media >
     );
 }
@@ -79,10 +78,10 @@ function RenderCart({ cart }) {
         });
         return (
             <div>
-               <CardBody className="cartinner">
-                   {AddedDish}
-               </CardBody>
-               <CardFooter className="bg-success">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0} <Link to="/order"><Button className="btn float-right" color="success">Order</Button></Link> </CardFooter> 
+                <CardBody className="cartinner">
+                    {AddedDish}
+                </CardBody>
+                <CardFooter className="cartinner"><Row><Col className="text-center mb-1">Total Price    Rs. {cart.cart != null ? cart.cart.total_price / 100 : 0}</Col> </Row><Row><Col><Link to="/order"><Button className="btn float-right" block color="primary">Order</Button></Link></Col></Row> </CardFooter>
             </div>
         );
     }
@@ -96,9 +95,9 @@ function RenderCart({ cart }) {
 const MenuComponent = (props) => {
     if (props.isLoading) {
         return (
-            <div className="container">
+            <div className="container-fluid">
                 <RenderCafe cafe={props.cafe} />
-                <div className="row">
+                <div className="row Error">
                     <Loading />
                 </div>
             </div>
@@ -113,7 +112,7 @@ const MenuComponent = (props) => {
             );
         });
         return (
-            <div className="container gs-container">
+            <div className="container-fluid gs-container">
                 <div className="row"><RenderCafe cafe={props.cafe} /></div>
                 <div className="row">
                     <div className="col-12 col-sm-7 offset-md-1 mt-2">
@@ -121,8 +120,8 @@ const MenuComponent = (props) => {
                     </div>
                     <div className="col-12 col-sm-4 mt-2">
                         <Card>
-                            <CardHeader className="bg-success">Cart</CardHeader>
-                                <RenderCart cart={props.cart} />
+                            <CardHeader className="cartinner" style={{ fontWeight: 'bold', fontSize: '30px' }}>Cart</CardHeader>
+                            <RenderCart cart={props.cart} />
                         </Card>
                     </div>
                 </div>
@@ -130,7 +129,7 @@ const MenuComponent = (props) => {
         );
     }
     else return (
-        <div className="container">
+        <div className="container-fluid">
             <RenderCafe cafe={props.cafe} />
             <div className="row">
                 <h4> No Dish Found</h4>

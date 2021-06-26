@@ -4,9 +4,12 @@ import { baseUrl } from '../shared/baseUrl';
 function EditDish(props) {
     const [dish_name, setName] = useState(props.dish.dish_name);
     const [price, setPrice] = useState(props.dish.price / 100);
-    const [description, setDescription] = useState(props.dish.description);
-    const [featured, setFeatured] = useState(props.dish.featured);
-    const [category, setCategory] = useState(props.dish.category);
+    const idescription = props.dish.description ? props.dish.description : '';
+    const [description, setDescription] = useState(idescription);
+    const ifeatured = props.dish.featured ? props.dish.featured : false;
+    const [featured, setFeatured] = useState(ifeatured);
+    const icategory = props.dish.category ? props.dish.category : '';
+    const [category, setCategory] = useState(icategory);
     const [dishImage, setImage] = useState(null);
 
     function handleSubmit(event) {
@@ -67,7 +70,7 @@ function EditDish(props) {
                     </div>
                 </div>
                 <div className="row">
-                    <img alt="No image found" src={baseUrl + props.dish.pictureURL} height="256" width="256" className="rounded float-right" ></img>
+                    <img src={baseUrl + props.dish.pictureURL} height="256" width="256" className="rounded float-right" alt="Dish Image"></img>
                 </div>
                 <button type="submit" className="btn btn-primary" >Add Dish</button>
             </form>

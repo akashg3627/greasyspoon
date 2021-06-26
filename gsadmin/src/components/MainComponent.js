@@ -1,21 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { actions } from 'react-redux-form';
-//import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import HeaderComponent from './HeaderComponent';
 import HomeComponent from './HomeComponent';
 import MenuComponet from './MenuComponent';
-import LoginComponent from './Login';
-import SignUp from './SignUp';
-
-import {DISHES} from '../shared/dishes';
 import Footer from './Footer';
 
 import {signin, signup, logout, fetchMenu, deleteDish, checkauth, addDishWI, editDishWI, acceptOrder, rejectOrder, completeOrder} from '../redux/ActionCreators';
 import OrderPanel from './OrderPanel';
+import Aboutus from './Aboutus';
 
 const mapStateToProps =(state)=>{
   return{
@@ -41,7 +36,16 @@ completeOrder: (orderId)=>dispatch(completeOrder(orderId)),
 });
 
 class Main extends Component {
-
+  constructor(props){
+    super(props);
+    this.state={
+      loginmodal: false
+    }
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+ toggleModal(){
+   this.setState({loginmodal: !this.state.loginmodal});
+ }
   componentDidMount(){
     if(localStorage.getItem('token') != null)
     {
@@ -50,6 +54,7 @@ class Main extends Component {
   }
   
   render(){
+    
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
       <Route {...rest} render={(props) => (
@@ -64,13 +69,12 @@ class Main extends Component {
 
       return (
         <div>
-          <HeaderComponent user={this.props.auth.user} signin={this.props.signin} signup={this.props.signup} logout={this.props.logout} />  
+          <HeaderComponent loginmodal={this.state.loginmodal} toggleModal={this.toggleModal} user={this.props.auth.user} signin={this.props.signin} signup={this.props.signup} logout={this.props.logout} />  
           <Switch>
-                <Route path="/home" component={HomeComponent} />
+                <Route path="/home" component={()=><HomeComponent auth={this.props.auth} loginmodal={this.state.loginmodal} toggleModal={this.toggleModal} />} />
+                <Route exact path="/aboutus" component={Aboutus} />
                 <PrivateRoute exact path="/menu" component={()=><MenuComponet editDishWI={this.props.editDishWI} addDishWI={this.props.addDishWI} deleteDish={this.props.deleteDish} menu={this.props.menu.menu} user={this.props.auth.user} fetchMenu={this.props.fetchMenu} isLoading={this.props.menu.isLoading} errMess={this.props.menu.errMess} />} />
                 <PrivateRoute exact path="/order" component={()=> <OrderPanel orders={this.props.orders} acceptOrder={this.props.acceptOrder} rejectOrder={this.props.rejectOrder} completeOrder={this.props.completeOrder} />} />
-                {/*<Route exaxt path ="/login" component={()=><LoginComponent history={this.props.history} signin={this.props.signin} signup={this.props.signup} />} />
-                */}
                 <Redirect to="/home" />
           </Switch>
               <Footer />
